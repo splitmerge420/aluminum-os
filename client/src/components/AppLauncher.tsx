@@ -16,18 +16,19 @@ const allApps: LauncherApp[] = [
   { id: "files", name: "Files", description: "Universal File Graph — alum://drive/", icon: <FolderOpen className="w-5 h-5" />, category: "System" },
   { id: "mail", name: "Mail", description: "Universal Inbox — Gmail + Outlook + iCloud", icon: <Mail className="w-5 h-5" />, category: "Communication" },
   { id: "calendar", name: "Calendar", description: "Unified Calendar — All providers", icon: <Calendar className="w-5 h-5" />, category: "Productivity" },
-  { id: "council", name: "AI Council", description: "Pantheon — 7 council members", icon: <Brain className="w-5 h-5" />, category: "Intelligence" },
+  { id: "council", name: "AI Council", description: "Pantheon — 8 council members", icon: <Brain className="w-5 h-5" />, category: "Intelligence" },
   { id: "settings", name: "Settings", description: "System configuration", icon: <Settings className="w-5 h-5" />, category: "System" },
   { id: "browser", name: "Browser", description: "Aluminum Browser", icon: <Globe className="w-5 h-5" />, category: "Web" },
   { id: "notes", name: "Notes", description: "Universal Notes — All providers", icon: <FileText className="w-5 h-5" />, category: "Productivity" },
+  { id: "sysmonitor", name: "System Monitor", description: "Ring status, agents, inference load", icon: <Cpu className="w-5 h-5" />, category: "System" },
+  { id: "governance", name: "Governance", description: "Constitutional dashboard — 15 domains", icon: <Shield className="w-5 h-5" />, category: "Core" },
+  { id: "memory", name: "SHELDONBRAIN", description: "3-tier memory viewer — Working, Long-Term, Swarm", icon: <Database className="w-5 h-5" />, category: "Core" },
   // Virtual apps (not openable but searchable)
   { id: "fusion", name: "Fusion Engine", description: "Cross-provider workflow engine", icon: <Zap className="w-5 h-5" />, category: "Core" },
-  { id: "governance", name: "Governance", description: "Constitutional runtime", icon: <Shield className="w-5 h-5" />, category: "Core" },
-  { id: "memory", name: "Memory Substrate", description: "Shared context layer", icon: <Database className="w-5 h-5" />, category: "Core" },
-  { id: "identity", name: "Identity Graph", description: "Unified sovereign identity", icon: <Cpu className="w-5 h-5" />, category: "Core" },
+  { id: "identity", name: "Identity Graph", description: "Unified sovereign identity — Janus bridge", icon: <Cpu className="w-5 h-5" />, category: "Core" },
 ];
 
-const openableApps = ["terminal", "files", "mail", "calendar", "council", "settings", "browser", "notes"];
+const openableApps = ["terminal", "files", "mail", "calendar", "council", "settings", "browser", "notes", "sysmonitor", "governance", "memory"];
 
 export default function AppLauncher() {
   const [isOpen, setIsOpen] = useState(false);

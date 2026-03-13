@@ -10,6 +10,9 @@ import {
   Settings,
   Globe,
   StickyNote,
+  Activity,
+  Shield,
+  Database,
 } from "lucide-react";
 
 export interface DockApp {
@@ -77,6 +80,27 @@ const dockApps: DockApp[] = [
     color: "#ffd700",
     gradient: "from-yellow-400/40 to-amber-600/20",
   },
+  {
+    id: "sysmonitor",
+    name: "System Monitor",
+    icon: <Activity className="w-5 h-5" />,
+    color: "#ff6b35",
+    gradient: "from-orange-400/40 to-red-600/20",
+  },
+  {
+    id: "governance",
+    name: "Governance",
+    icon: <Shield className="w-5 h-5" />,
+    color: "#00ff88",
+    gradient: "from-green-400/40 to-emerald-700/20",
+  },
+  {
+    id: "memory",
+    name: "SHELDONBRAIN",
+    icon: <Database className="w-5 h-5" />,
+    color: "#9b59b6",
+    gradient: "from-violet-400/40 to-purple-700/20",
+  },
 ];
 
 export default function Dock() {
@@ -103,12 +127,18 @@ export default function Dock() {
       settings: "System Settings",
       browser: "Aluminum Browser",
       notes: "Notes",
+      sysmonitor: "System Monitor — Ring Status",
+      governance: "Governance — Constitutional Dashboard",
+      memory: "SHELDONBRAIN — Memory Viewer",
     };
     const sizes: Record<string, [number, number]> = {
       terminal: [850, 500],
       council: [950, 650],
       browser: [1000, 650],
       settings: [750, 550],
+      sysmonitor: [900, 600],
+      governance: [900, 600],
+      memory: [900, 600],
     };
     const [w, h] = sizes[app.id] || [800, 550];
     openWindow(app.id, titles[app.id] || app.name, app.id, w, h);

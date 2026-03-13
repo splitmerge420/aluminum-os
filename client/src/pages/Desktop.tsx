@@ -10,6 +10,9 @@ import CalendarApp from "@/components/apps/CalendarApp";
 import SettingsApp from "@/components/apps/SettingsApp";
 import BrowserApp from "@/components/apps/BrowserApp";
 import NotesApp from "@/components/apps/NotesApp";
+import SystemMonitorApp from "@/components/apps/SystemMonitorApp";
+import GovernanceApp from "@/components/apps/GovernanceApp";
+import MemoryApp from "@/components/apps/MemoryApp";
 import ContextMenu from "@/components/ContextMenu";
 import AppLauncher from "@/components/AppLauncher";
 import { AnimatePresence, motion } from "framer-motion";
@@ -26,6 +29,9 @@ const appComponents: Record<string, React.FC> = {
   settings: SettingsApp,
   browser: BrowserApp,
   notes: NotesApp,
+  sysmonitor: SystemMonitorApp,
+  governance: GovernanceApp,
+  memory: MemoryApp,
 };
 
 const bootSteps = [
@@ -34,8 +40,11 @@ const bootSteps = [
   { text: "Connecting providers: Google...", duration: 180 },
   { text: "Connecting providers: Microsoft...", duration: 180 },
   { text: "Connecting providers: Apple...", duration: 150 },
-  { text: "Initializing AI Council...", duration: 250 },
-  { text: "Loading Fusion Engine...", duration: 200 },
+  { text: "Ring 0 — Forge Core initialized", duration: 150 },
+  { text: "Ring 1 — Inference Engine online", duration: 150 },
+  { text: "Ring 2 — SHELDONBRAIN memory loaded", duration: 150 },
+  { text: "Ring 3 — Pantheon Council quorum achieved", duration: 200 },
+  { text: "Ring 4 — Noosphere experience layer ready", duration: 200 },
   { text: "Starting Obsidian Glass UI...", duration: 300 },
   { text: "Welcome, Daavud.", duration: 400 },
 ];
@@ -166,7 +175,7 @@ function DesktopWidgets() {
           </div>
           <div className="flex items-center justify-between gap-6">
             <span className="text-[10px] text-foreground/35">Council</span>
-            <span className="text-[10px] text-cyan-400/70 font-[family-name:var(--font-mono)]">6/7 active</span>
+            <span className="text-[10px] text-cyan-400/70 font-[family-name:var(--font-mono)]">7/8 active</span>
           </div>
           <div className="flex items-center justify-between gap-6">
             <span className="text-[10px] text-foreground/35">Wishes</span>

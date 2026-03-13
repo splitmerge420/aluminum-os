@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { RefreshCw, Layout, Palette, Monitor, Info, Terminal, FolderOpen, Settings, Cpu } from "lucide-react";
+import { RefreshCw, Layout, Palette, Monitor, Info, Terminal, FolderOpen, Settings, Cpu, Activity, Shield } from "lucide-react";
 import { useWindows } from "@/contexts/WindowContext";
 
 interface MenuPosition {
@@ -35,6 +35,8 @@ export default function ContextMenu() {
     { label: "Open Terminal", icon: <Terminal className="w-3.5 h-3.5" />, action: () => openWindow("terminal", "Aluminum Terminal", "terminal") },
     { label: "Open Files", icon: <FolderOpen className="w-3.5 h-3.5" />, action: () => openWindow("files", "Files", "files") },
     { label: "Open AI Council", icon: <Cpu className="w-3.5 h-3.5" />, action: () => openWindow("council", "AI Council — Pantheon", "council") },
+    { label: "System Monitor", icon: <Activity className="w-3.5 h-3.5" />, action: () => openWindow("sysmonitor", "System Monitor", "sysmonitor") },
+    { label: "Governance", icon: <Shield className="w-3.5 h-3.5" />, action: () => openWindow("governance", "Governance", "governance") },
     "divider" as const,
     { label: "Change Wallpaper", icon: <Palette className="w-3.5 h-3.5" />, action: () => openWindow("settings", "Settings", "settings") },
     { label: "Display Settings", icon: <Monitor className="w-3.5 h-3.5" />, action: () => openWindow("settings", "Settings", "settings") },

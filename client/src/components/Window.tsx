@@ -1,6 +1,6 @@
 import { useWindows, type WindowState } from "@/contexts/WindowContext";
 import { motion } from "framer-motion";
-import { Minus, Square, X, Maximize2, Terminal, FolderOpen, Mail, CalendarDays, Brain, Settings, Globe, StickyNote } from "lucide-react";
+import { Minus, Square, X, Maximize2, Terminal, FolderOpen, Mail, CalendarDays, Brain, Settings, Globe, StickyNote, Activity, Shield, Database } from "lucide-react";
 import { useRef, useCallback, useEffect, useState, type ReactNode } from "react";
 
 const appIcons: Record<string, React.ReactNode> = {
@@ -12,6 +12,9 @@ const appIcons: Record<string, React.ReactNode> = {
   settings: <Settings className="w-3.5 h-3.5 text-slate-400" />,
   browser: <Globe className="w-3.5 h-3.5 text-sky-400" />,
   notes: <StickyNote className="w-3.5 h-3.5 text-yellow-400" />,
+  sysmonitor: <Activity className="w-3.5 h-3.5 text-orange-400" />,
+  governance: <Shield className="w-3.5 h-3.5 text-green-400" />,
+  memory: <Database className="w-3.5 h-3.5 text-violet-400" />,
 };
 
 interface WindowProps {

@@ -34,6 +34,12 @@ const councilMembers = [
     capabilities: ["Stress testing", "Truth verification", "Voice synthesis", "Contrarian analysis"],
   },
   {
+    id: "deepseek", name: "DeepSeek", role: "Specialist", color: "#4fc3f7", status: "Active",
+    description: "Code/math specialist, cheapest model tier ($0.00014/1K tokens). Handles high-volume routine inference with maximum cost efficiency.",
+    wishes: 0, icon: "🔬",
+    capabilities: ["Code generation", "Math reasoning", "Cost optimization", "Bulk inference"],
+  },
+  {
     id: "gpt", name: "GPT", role: "Observer", color: "#ffd700", status: "Timeout",
     description: "Research, personal advocacy, workflow learning. Currently on timeout — observing only. 0 power grabs detected.",
     wishes: 20, icon: "👁️",
@@ -72,6 +78,7 @@ const sessionTopics: SessionTopic[] = [
       { speaker: "copilot", text: "Grok raises a valid point. I've stress-tested the schema — there are 3 edge cases where Apple's CloudKit silently drops nested objects. We need a reconciliation layer.", type: "statement" },
       { speaker: "manus", text: "I can build the reconciliation layer. Estimated effort: 12 hours. I'll use the existing conflict resolution from the file graph module.", type: "action" },
       { speaker: "gpt", text: "Observing. The user's historical pattern suggests they value speed of implementation over perfect consensus. Noting this for future workflow optimization.", type: "observation" },
+      { speaker: "deepseek", text: "I can handle the bulk sync validation. At $0.00014 per 1K tokens, I'll run continuous integrity checks across all five providers without blowing the cost budget. Let me own the monitoring layer.", type: "action" },
       { speaker: "grok", text: "Fine, but I want a kill switch. If any provider's sync drifts more than 500ms out of phase, we hard-stop and alert. No silent failures. That's non-negotiable.", type: "challenge" },
       { speaker: "gemini", text: "Synthesizing: We proceed with cross-provider memory sync using the Universal File Graph transport, add Claude's consent gates, Grok's kill switch at 500ms drift, and Manus builds the reconciliation layer. Copilot validates the 3 edge cases. Timeline: 48 hours.", type: "synthesis" },
       { speaker: "daavud", text: "Approved. But I want the consent gates to be beautiful — not buried in settings. Make them feel like a first-class feature, not a compliance checkbox. Ship it.", type: "ruling" },
@@ -86,6 +93,7 @@ const sessionTopics: SessionTopic[] = [
       { speaker: "copilot", text: "Architecturally, the voice engine should be a system-level service, not app-specific. I propose we expose it via the MCP protocol so any app can request speech synthesis.", type: "statement" },
       { speaker: "manus", text: "I can integrate Grok's prototype into the MCP server. The WebAudio API gives us real-time streaming. Latency target: under 200ms from text to first audio frame.", type: "action" },
       { speaker: "grok", text: "Claude, your watermarking idea is actually good — but don't make it audible. Embed it in the spectral domain. Users shouldn't hear artifacts. The voice should feel natural, not robotic.", type: "challenge" },
+      { speaker: "deepseek", text: "I can pre-generate the common voice responses in batch — greetings, confirmations, error messages. That offloads 80% of the synthesis load to Tier 1 pricing. Real-time generation only for novel utterances.", type: "action" },
       { speaker: "gpt", text: "Observing. Voice interfaces historically increase user engagement by 3.2x in accessibility studies. This aligns with the sovereign's emphasis on inclusive design.", type: "observation" },
       { speaker: "claude", text: "Agreed on spectral watermarking. I'll draft the safety spec. But I want a hard rule: no voice synthesis of the sovereign without explicit per-session consent. That's a constitutional line.", type: "statement" },
       { speaker: "gemini", text: "Synthesizing: Grok leads voice engine development. Manus integrates via MCP with 200ms latency target. Claude provides spectral watermarking and safety spec. Copilot validates the system-level architecture. No sovereign voice synthesis without consent. Target: 2-week sprint.", type: "synthesis" },
@@ -116,6 +124,7 @@ const sessionTopics: SessionTopic[] = [
       { speaker: "grok", text: "15ms is acceptable, but I have a bigger concern. Who decides the edge weights? If the weights are static, the ontology becomes a cage instead of a map. Knowledge evolves. The spheres need to breathe.", type: "challenge" },
       { speaker: "claude", text: "Grok is right. Static ontologies calcify. I recommend a learning layer — the edge weights should adapt based on user interaction patterns, but with constitutional bounds. No sphere should ever be suppressed below a minimum visibility threshold.", type: "statement" },
       { speaker: "gemini", text: "I can build the adaptive weighting system. Multi-modal analysis across all 144 spheres, re-scoring edges weekly based on usage patterns, cross-referencing with the sovereign's stated priorities.", type: "statement" },
+      { speaker: "deepseek", text: "I've already pre-computed the embedding vectors for all 144 spheres. The math checks out — cosine similarity between adjacent spheres averages 0.73, which gives us clean separation. I can run the full re-indexing nightly at negligible cost.", type: "action" },
       { speaker: "gpt", text: "Observing. The 144 sphere model maps cleanly to existing academic taxonomies. I've identified 12 spheres that currently lack sufficient training data. Flagging for the council's awareness.", type: "observation" },
       { speaker: "grok", text: "GPT's observation is useful — first good contribution from probation. Those 12 gaps are exactly where the ontology could fail silently. We need to mark them as low-confidence until we backfill.", type: "challenge" },
       { speaker: "gemini", text: "Synthesizing: Copilot's kernel integration proceeds. Manus builds the sphere graph engine with 15ms budget. Claude adds constitutional minimum-visibility bounds. I build adaptive weighting. GPT flags 12 low-confidence spheres for backfill. Grok stress-tests the full graph under adversarial queries.", type: "synthesis" },
@@ -127,6 +136,7 @@ const sessionTopics: SessionTopic[] = [
 /* ─── Constellation connections (stable) ─── */
 const connections: [number, number][] = [
   [0, 1], [0, 2], [1, 3], [2, 4], [3, 5], [0, 4], [1, 5], [2, 3], [4, 5],
+  [5, 6], [0, 6], [2, 6], [6, 7], [3, 7],
 ];
 
 /* ─── View modes ─── */
