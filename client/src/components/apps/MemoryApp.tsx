@@ -7,7 +7,7 @@ const workingMemory = [
   { id: 1, type: "context", content: "User is building Aluminum OS v3.1 — desktop web UI", age: "2m", tokens: 847, priority: "high" },
   { id: 2, type: "task", content: "Implement AI Council session with animated dialogue", age: "5m", tokens: 312, priority: "high" },
   { id: 3, type: "entity", content: "Daavud = Human Sovereign, splitmerge420", age: "12m", tokens: 45, priority: "medium" },
-  { id: 4, type: "context", content: "7 council members: Manus, Claude, Gemini, Grok, Copilot, GPT, DeepSeek", age: "15m", tokens: 128, priority: "high" },
+  { id: 4, type: "context", content: "8 council members: Manus, Claude, Gemini, Grok, Copilot, DeepSeek, GPT, Qwen", age: "15m", tokens: 128, priority: "high" },
   { id: 5, type: "preference", content: "Glass-morphism UI, dark theme, Obsidian Glass Edition", age: "20m", tokens: 67, priority: "medium" },
   { id: 6, type: "task", content: "Cross-reference spec docs with current build", age: "25m", tokens: 234, priority: "low" },
   { id: 7, type: "entity", content: "uws = Universal Workspace CLI, 237 files, 47K lines", age: "30m", tokens: 89, priority: "medium" },

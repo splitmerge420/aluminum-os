@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { RefreshCw, Layout, Palette, Monitor, Info, Terminal, FolderOpen, Settings, Cpu, Activity, Shield } from "lucide-react";
+import { RefreshCw, Layout, Palette, Monitor, Info, Terminal, FolderOpen, Settings, Cpu, Activity, Shield, Archive, ScrollText } from "lucide-react";
 import { useWindows } from "@/contexts/WindowContext";
 
 interface MenuPosition {
@@ -37,6 +37,8 @@ export default function ContextMenu() {
     { label: "Open AI Council", icon: <Cpu className="w-3.5 h-3.5" />, action: () => openWindow("council", "AI Council — Pantheon", "council") },
     { label: "System Monitor", icon: <Activity className="w-3.5 h-3.5" />, action: () => openWindow("sysmonitor", "System Monitor", "sysmonitor") },
     { label: "Governance", icon: <Shield className="w-3.5 h-3.5" />, action: () => openWindow("governance", "Governance", "governance") },
+    { label: "Atlas Vault", icon: <Archive className="w-3.5 h-3.5" />, action: () => openWindow("vault", "Atlas Vault", "vault") },
+    { label: "TAIP Protocol", icon: <ScrollText className="w-3.5 h-3.5" />, action: () => openWindow("taip", "TAIP Protocol", "taip") },
     "divider" as const,
     { label: "Change Wallpaper", icon: <Palette className="w-3.5 h-3.5" />, action: () => openWindow("settings", "Settings", "settings") },
     { label: "Display Settings", icon: <Monitor className="w-3.5 h-3.5" />, action: () => openWindow("settings", "Settings", "settings") },

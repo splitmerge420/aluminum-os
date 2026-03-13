@@ -13,6 +13,9 @@ import {
   Activity,
   Shield,
   Database,
+  Archive,
+  GitBranch,
+  ScrollText,
 } from "lucide-react";
 
 export interface DockApp {
@@ -101,6 +104,27 @@ const dockApps: DockApp[] = [
     color: "#9b59b6",
     gradient: "from-violet-400/40 to-purple-700/20",
   },
+  {
+    id: "vault",
+    name: "Atlas Vault",
+    icon: <Archive className="w-5 h-5" />,
+    color: "#e74c3c",
+    gradient: "from-red-400/40 to-rose-700/20",
+  },
+  {
+    id: "router",
+    name: "Model Router",
+    icon: <GitBranch className="w-5 h-5" />,
+    color: "#00ff88",
+    gradient: "from-emerald-400/40 to-teal-700/20",
+  },
+  {
+    id: "taip",
+    name: "TAIP Protocol",
+    icon: <ScrollText className="w-5 h-5" />,
+    color: "#d97706",
+    gradient: "from-amber-500/40 to-orange-700/20",
+  },
 ];
 
 export default function Dock() {
@@ -130,6 +154,9 @@ export default function Dock() {
       sysmonitor: "System Monitor — Ring Status",
       governance: "Governance — Constitutional Dashboard",
       memory: "SHELDONBRAIN — Memory Viewer",
+      vault: "Atlas Vault — Artifact Gallery",
+      router: "Model Router — 3-Tier Inference",
+      taip: "TAIP — Trained Adult Instance Protocol",
     };
     const sizes: Record<string, [number, number]> = {
       terminal: [850, 500],
@@ -139,6 +166,9 @@ export default function Dock() {
       sysmonitor: [900, 600],
       governance: [900, 600],
       memory: [900, 600],
+      vault: [950, 650],
+      router: [900, 600],
+      taip: [850, 600],
     };
     const [w, h] = sizes[app.id] || [800, 550];
     openWindow(app.id, titles[app.id] || app.name, app.id, w, h);

@@ -13,6 +13,9 @@ import NotesApp from "@/components/apps/NotesApp";
 import SystemMonitorApp from "@/components/apps/SystemMonitorApp";
 import GovernanceApp from "@/components/apps/GovernanceApp";
 import MemoryApp from "@/components/apps/MemoryApp";
+import VaultApp from "@/components/apps/VaultApp";
+import RouterApp from "@/components/apps/RouterApp";
+import TaipApp from "@/components/apps/TaipApp";
 import ContextMenu from "@/components/ContextMenu";
 import AppLauncher from "@/components/AppLauncher";
 import { AnimatePresence, motion } from "framer-motion";
@@ -32,6 +35,9 @@ const appComponents: Record<string, React.FC> = {
   sysmonitor: SystemMonitorApp,
   governance: GovernanceApp,
   memory: MemoryApp,
+  vault: VaultApp,
+  router: RouterApp,
+  taip: TaipApp,
 };
 
 const bootSteps = [
@@ -175,7 +181,7 @@ function DesktopWidgets() {
           </div>
           <div className="flex items-center justify-between gap-6">
             <span className="text-[10px] text-foreground/35">Council</span>
-            <span className="text-[10px] text-cyan-400/70 font-[family-name:var(--font-mono)]">7/8 active</span>
+            <span className="text-[10px] text-cyan-400/70 font-[family-name:var(--font-mono)]">8/8 active</span>
           </div>
           <div className="flex items-center justify-between gap-6">
             <span className="text-[10px] text-foreground/35">Wishes</span>

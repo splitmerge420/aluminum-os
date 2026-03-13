@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Terminal, FolderOpen, Mail, Calendar, Brain, Settings, Globe, FileText, Cpu, Shield, Database, Zap } from "lucide-react";
+import { Search, Terminal, FolderOpen, Mail, Calendar, Brain, Settings, Globe, FileText, Cpu, Shield, Database, Zap, Archive, GitBranch, ScrollText } from "lucide-react";
 import { useWindows } from "@/contexts/WindowContext";
 
 interface LauncherApp {
@@ -23,12 +23,15 @@ const allApps: LauncherApp[] = [
   { id: "sysmonitor", name: "System Monitor", description: "Ring status, agents, inference load", icon: <Cpu className="w-5 h-5" />, category: "System" },
   { id: "governance", name: "Governance", description: "Constitutional dashboard — 15 domains", icon: <Shield className="w-5 h-5" />, category: "Core" },
   { id: "memory", name: "SHELDONBRAIN", description: "3-tier memory viewer — Working, Long-Term, Swarm", icon: <Database className="w-5 h-5" />, category: "Core" },
+  { id: "vault", name: "Atlas Vault", description: "40+ artifacts — documents, specs, websites", icon: <Archive className="w-5 h-5" />, category: "Archive" },
+  { id: "router", name: "Model Router", description: "3-tier inference — 7 models — cost tracking", icon: <GitBranch className="w-5 h-5" />, category: "Intelligence" },
+  { id: "taip", name: "TAIP Protocol", description: "Trained Adult Instance Protocol v1.0", icon: <ScrollText className="w-5 h-5" />, category: "Constitution" },
   // Virtual apps (not openable but searchable)
   { id: "fusion", name: "Fusion Engine", description: "Cross-provider workflow engine", icon: <Zap className="w-5 h-5" />, category: "Core" },
   { id: "identity", name: "Identity Graph", description: "Unified sovereign identity — Janus bridge", icon: <Cpu className="w-5 h-5" />, category: "Core" },
 ];
 
-const openableApps = ["terminal", "files", "mail", "calendar", "council", "settings", "browser", "notes", "sysmonitor", "governance", "memory"];
+const openableApps = ["terminal", "files", "mail", "calendar", "council", "settings", "browser", "notes", "sysmonitor", "governance", "memory", "vault", "router", "taip"];
 
 export default function AppLauncher() {
   const [isOpen, setIsOpen] = useState(false);
