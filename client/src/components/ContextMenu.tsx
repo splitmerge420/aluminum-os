@@ -39,6 +39,7 @@ export default function ContextMenu() {
     { label: "Governance", icon: <Shield className="w-3.5 h-3.5" />, action: () => openWindow("governance", "Governance", "governance") },
     { label: "Atlas Vault", icon: <Archive className="w-3.5 h-3.5" />, action: () => openWindow("vault", "Atlas Vault", "vault") },
     { label: "TAIP Protocol", icon: <ScrollText className="w-3.5 h-3.5" />, action: () => openWindow("taip", "TAIP Protocol", "taip") },
+    { label: "Forge Core", icon: <Cpu className="w-3.5 h-3.5" />, action: () => openWindow("forgecore", "Forge Core — Ring 0", "forgecore") },
     "divider" as const,
     { label: "Change Wallpaper", icon: <Palette className="w-3.5 h-3.5" />, action: () => openWindow("settings", "Settings", "settings") },
     { label: "Display Settings", icon: <Monitor className="w-3.5 h-3.5" />, action: () => openWindow("settings", "Settings", "settings") },

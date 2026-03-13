@@ -16,6 +16,7 @@ import {
   Archive,
   GitBranch,
   ScrollText,
+  Cpu,
 } from "lucide-react";
 
 export interface DockApp {
@@ -125,6 +126,13 @@ const dockApps: DockApp[] = [
     color: "#d97706",
     gradient: "from-amber-500/40 to-orange-700/20",
   },
+  {
+    id: "forgecore",
+    name: "Forge Core",
+    icon: <Cpu className="w-5 h-5" />,
+    color: "#ff4444",
+    gradient: "from-red-500/40 to-orange-700/20",
+  },
 ];
 
 export default function Dock() {
@@ -157,6 +165,7 @@ export default function Dock() {
       vault: "Atlas Vault — Artifact Gallery",
       router: "Model Router — 3-Tier Inference",
       taip: "TAIP — Trained Adult Instance Protocol",
+      forgecore: "Forge Core — Ring 0 Kernel Viewer",
     };
     const sizes: Record<string, [number, number]> = {
       terminal: [850, 500],
@@ -169,6 +178,7 @@ export default function Dock() {
       vault: [950, 650],
       router: [900, 600],
       taip: [850, 600],
+      forgecore: [950, 650],
     };
     const [w, h] = sizes[app.id] || [800, 550];
     openWindow(app.id, titles[app.id] || app.name, app.id, w, h);
