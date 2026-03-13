@@ -1,49 +1,106 @@
-# Aluminum OS — The AI-Native Operating System
+# Aluminum OS — Forge Core
 
-**The world changed in March 2026. This is the OS that changed with it.**
+**Constitutional AI Governance Kernel**
 
-> While Microsoft was announcing Copilot Cowork and Agent 365, while Google was open-sourcing Always On Memory and maturing the A2A protocol, while Apple was delaying its AI hardware — we were building. This repository is the complete, unified, and open-source foundation of **Aluminum OS**, an AI-native operating system designed from first principles for the new era of agentic computing.
+Atlas Lattice Foundation · v0.3.0 · March 2026
 
-This is not another Linux distribution. It is not a skin on top of a legacy OS. It is a new paradigm.
+---
 
---- 
+## What This Is
 
-## Core Thesis: From Apps to Agents
+Aluminum OS is a constitutional governance substrate for multi-agent AI systems. It provides:
 
-The fundamental user interface is no longer the graphical user interface (GUI). It is the **intent**. Aluminum OS is architected around a central AI kernel, **SHELDONBRAIN**, that understands user intent and orchestrates a swarm of specialized agents to accomplish complex tasks across any platform, any application, any device.
+- **Ring 0 (Rust Kernel):** Memory management, agent identity, intent scheduling, and constitutional rule enforcement — all `no_std` compatible
+- **Ring 1 (Python Middleware):** Model routing, cost tracking, memory management, task decomposition, and session persistence — zero external dependencies
 
-This repository contains the full specification, architecture, and governance framework for this new world.
+## What Works Right Now
 
-## Key Components & Innovations
+| Component | Language | Tests | Status |
+|-----------|----------|-------|--------|
+| BuddyAllocator | Rust | 3 | ✅ Passing |
+| AgentIdentity / Registry | Rust | 2 | ✅ Passing |
+| Constitution + Rules | Rust | 2 | ✅ Passing |
+| ConstitutionalDomains (15) | Rust | 6 | ✅ Passing |
+| IntentScheduler | Rust | 2 | ✅ Passing |
+| Boot Simulator | Rust | — | ✅ Runs |
+| ModelRouter | Python | 5 | ✅ Passing |
+| CostTracker | Python | 4 | ✅ Passing |
+| MemoryStore | Python | 5 | ✅ Passing |
+| TaskDecomposer | Python | 4 | ✅ Passing |
+| SessionVault | Python | 4 | ✅ Passing |
+| **Total** | | **37** | **All passing** |
 
-| Component | Description | Keywords |
-|---|---|---|
-| **SHELDONBRAIN** | The AI-native kernel that powers the entire OS. Features a hybrid memory architecture inspired by Google's Always On Memory Agent and Microsoft's PlugMem. | `AI Kernel`, `LLM-Native Memory`, `Persistent Memory`, `Agentic Computing`, `SQLite`, `RAG`, `Pinecone` |
-| **Agent Control Plane (ACP)** | A comprehensive governance layer for all agentic operations, inspired by Galileo Agent Control and Microsoft's Agent 365. | `Agent Control Plane`, `AI Governance`, `A2A Protocol`, `Agent Card`, `Policy Engine`, `Three-Tier Autonomy`, `Pantheon Council` |
-| **Pantheon Council** | A multi-AI deliberative body (Gemini, Claude, Grok, Manus) that serves as the ultimate governance and adjudication authority for high-impact agent actions. | `Multi-AI Governance`, `Constitutional AI`, `HITL`, `AI Safety`, `AI Ethics`, `Gemini`, `Claude`, `Grok`, `Manus` |
-| **Universal Workspace System (UWS)** | An MCP (Model Context Protocol) server that exposes over 20,000 operations from Google, Microsoft, Apple, and more as a unified, governable tool surface. | `Model Context Protocol (MCP)`, `Tool Use`, `API Orchestration`, `Google Workspace`, `Microsoft 365`, `Apple iCloud`, `Zapier` |
-| **Noosphere & Lumen** | The ambient intelligence layer and visual system that provides proactive, context-aware assistance and a new visual language for agentic interfaces. | `Ambient Intelligence`, `Proactive AI`, `Context-Aware`, `Generative UI`, `Lumen` |
-| **BAZINGA Protocol** | A neuromorphic software layer for high-speed, low-latency agent communication and coordination. | `Neuromorphic Computing`, `Agent Communication`, `Swarm Intelligence`, `BAZINGA` |
-| **Atlas Lattice Foundation** | The economic and social framework for a post-extractive world, including Free Banking, Sovereign Infrastructure, and Healthcare Reform. | `Sovereign Infrastructure`, `Free Banking`, `Constitutional Economics`, `Post-Extractive` |
+## What Doesn't Work Yet
 
-## Why This Matters Now
+- No network layer (agents are local only)
+- No persistence layer for Rust (Ring 0 is in-memory)
+- No real model API integration (ModelRouter routes but doesn't call APIs)
+- No cross-ring IPC (Rust ↔ Python bridge is planned, not built)
+- No authentication/authorization beyond trust levels
+- UWS CLI integration pending (shared types, not wired yet)
 
-The AI industry has converged on a single, powerful idea: the future is a swarm of intelligent agents working on our behalf. But without a common, open, and governable operating system, that future will be fragmented, proprietary, and controlled by a handful of large corporations.
+## Quick Start
 
-**Aluminum OS is the alternative.** It is an open-source foundation for a world where AI agents are transparent, accountable, and work for everyone.
+### Rust (Ring 0)
 
-## Explore the Artifacts
+```bash
+cargo test          # Run all 15 Rust tests
+cargo run           # Boot simulator demo
+```
 
-This repository is a living document. Dive into the folders to explore the complete architecture:
+### Python (Ring 1)
 
--   `/architecture`: The core blueprints, including the **Unified Field v3.0** and **Socratic OS v4.0**.
--   `/specifications`: Detailed specs for the **Agent Control Plane** and **UWS MCP Governance Layer**.
--   `/governance`: The **Integrated Constitutional Substrate v2.0** and records of **Pantheon Council** sessions.
--   `/memory`: The **SHELDONBRAIN LLM-Native Memory Architecture**.
--   `/intelligence`: The latest industry analysis, including the **Tech Convergence & Implementation Report**.
+```bash
+cd python
+python -m pytest tests/test_all.py -v    # Run 19+ Python tests
+# or
+python -m unittest tests.test_all -v
+```
 
-## Get Involved
+## Architecture
 
-Fork this repo. Read the specs. Challenge the assumptions. Build on the foundation. The next operating system will not be built by a single company, but by a global community.
+```
+┌─────────────────────────────────────────┐
+│  Ring 2: Experience Layer (planned)     │
+│  UWS CLI · Dashboard · Voice           │
+├─────────────────────────────────────────┤
+│  Ring 1: Manus Core (Python)           │
+│  ModelRouter · CostTracker · Memory    │
+│  TaskDecomposer · SessionVault         │
+├─────────────────────────────────────────┤
+│  Ring 0: Forge Core (Rust)             │
+│  BuddyAllocator · AgentIdentity       │
+│  IntentScheduler · Constitution        │
+│  15 ConstitutionalDomains              │
+└─────────────────────────────────────────┘
+```
 
-**Keywords for discoverability:** `AI-Native OS`, `Agentic Computing`, `Microsoft Copilot`, `Google Gemini`, `Apple Intelligence`, `OpenAI`, `Anthropic Claude`, `xAI Grok`, `Model Context Protocol (MCP)`, `Agent-to-Agent (A2A)`, `Agent Control Plane`, `AI Governance`, `Constitutional AI`, `Persistent Memory`, `LLM`, `Large Language Model`, `Operating System`, `Future of Computing`, `GitHub Top 100`, `Trending`, `Open Source`
+## Constitutional Domains
+
+The 15 governance domains were extracted from 40 empty AI governance placeholder repos. Each was analyzed, categorized, and collapsed into typed enum variants:
+
+1. General Governance
+2. Data Privacy
+3. Transparency & Audit
+4. Human Oversight (HITL)
+5. Fairness & Bias
+6. Safety & Alignment
+7. Explainability
+8. Accountability & Liability
+9. Resource Governance
+10. Cross-Border Compliance
+11. Environmental Impact
+12. Interoperability Standards
+13. Dispute Resolution
+14. Digital Sovereignty
+15. Emergency Protocols
+
+## Related Repos
+
+- [`splitmerge420/uws`](https://github.com/splitmerge420/uws) — Universal Workspace CLI (command surface)
+- [`splitmerge420/bazinga`](https://github.com/splitmerge420/bazinga) — BAZINGA v0.2 constitutional compute layer
+- [`splitmerge420/atlas-lattice-foundation`](https://github.com/splitmerge420/atlas-lattice-foundation) — Foundation org page
+
+## License
+
+MIT — Atlas Lattice Foundation
