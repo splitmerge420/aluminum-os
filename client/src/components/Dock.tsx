@@ -5,7 +5,8 @@
  * 
  * Layout: [Core Apps] | [Council Innovation Slots] | [All Apps]
  * 
- * Core: Agent Shell, Files, Council, Browser, 144 Spheres, Governance, Vault, Healthcare, Settings
+ * Core: Files, Council, Browser, 144 Spheres, Governance, Vault, Healthcare, Settings
+ * AI Button: Provider-neutral, opens Agent Shell — first icon, always visible
  * Innovation Slots: 1-2 per Council member, user-customizable
  * All Apps: grid button opens AppLauncher
  */
@@ -18,7 +19,7 @@ import {
   Shield, Archive, Hospital, TerminalSquare, Grid3X3,
   Sparkles, Workflow, GitBranch, Zap, Eye,
   Mic, Database, Hexagon, HeartPulse,
-  GripVertical, X, Plus, ChevronDown,
+  GripVertical, X, Plus, ChevronDown, MessageCircle,
 } from "lucide-react";
 
 export interface DockApp {
@@ -29,9 +30,8 @@ export interface DockApp {
   gradient: string;
 }
 
-/* ── Core 9: the AI-native essentials ── */
+/* ── Core 8: the AI-native essentials (Agent Shell is now the AI button) ── */
 const coreApps: DockApp[] = [
-  { id: "agentshell", name: "Agent Shell", icon: <TerminalSquare className="w-5 h-5" />, color: "#00ffcc", gradient: "from-teal-400/40 to-cyan-700/20" },
   { id: "files", name: "Files", icon: <FolderOpen className="w-5 h-5" />, color: "#ffb347", gradient: "from-amber-400/40 to-orange-600/20" },
   { id: "council", name: "AI Council", icon: <Brain className="w-5 h-5" />, color: "#9b59b6", gradient: "from-purple-400/40 to-violet-700/20" },
   { id: "browser", name: "Browser", icon: <Globe className="w-5 h-5" />, color: "#0078D4", gradient: "from-sky-400/40 to-indigo-600/20" },
@@ -187,6 +187,56 @@ export default function Dock() {
         aria-label="Application dock"
       >
         <div className="glass-heavy rounded-2xl px-2.5 py-2 flex items-end gap-1.5 border border-white/[0.08]">
+
+          {/* ── AI Button — Provider-neutral, opens Agent Shell ── */}
+          <motion.button
+            animate={{
+              scale: hasHover && hoveredIndex === -1 ? 1.4 : 1,
+              y: hasHover && hoveredIndex === -1 ? -10 : 0,
+            }}
+            transition={{ type: "spring", stiffness: 400, damping: 25 }}
+            onMouseEnter={hasHover ? () => setHoveredIndex(-1) : undefined}
+            onMouseLeave={hasHover ? () => setHoveredIndex(null) : undefined}
+            onClick={() => handleClick("agentshell", "AI — Aluminum Intelligence", 1000, 650)}
+            className="relative flex flex-col items-center group flex-shrink-0 touch-feedback"
+            aria-label="AI — Talk to your AI"
+            tabIndex={0}
+            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); handleClick("agentshell", "AI — Aluminum Intelligence", 1000, 650); } }}
+          >
+            <motion.div
+              animate={{
+                boxShadow: [
+                  "0 0 12px rgba(0,212,255,0.3), 0 0 24px rgba(0,212,255,0.1)",
+                  "0 0 20px rgba(0,212,255,0.5), 0 0 40px rgba(0,212,255,0.15)",
+                  "0 0 12px rgba(0,212,255,0.3), 0 0 24px rgba(0,212,255,0.1)",
+                ],
+              }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              className={`${iconSize} ${iconRadius} flex items-center justify-center bg-gradient-to-br from-cyan-400/50 to-blue-600/40 border-2 border-cyan-400/40`}
+            >
+              <span className="text-white font-bold text-sm font-[family-name:var(--font-display)] tracking-tight">AI</span>
+            </motion.div>
+            {windows.some(w => w.appId === "agentshell") && (
+              <div className="absolute -bottom-1.5 w-1 h-1 rounded-full bg-cyan-400" style={{ boxShadow: "0 0 4px #00d4ff" }} />
+            )}
+            {hasHover && (
+              <AnimatePresence>
+                {hoveredIndex === -1 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 5 }}
+                    className="absolute -top-9 px-2.5 py-1 rounded-lg glass-heavy text-[11px] font-medium text-cyan-300 whitespace-nowrap font-[family-name:var(--font-display)] border border-cyan-400/20 pointer-events-none"
+                  >
+                    AI
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            )}
+          </motion.button>
+
+          {/* ── Divider after AI ── */}
+          <div className="w-px h-8 bg-cyan-400/15 mx-0.5 self-center flex-shrink-0" />
 
           {/* ── Core Apps ── */}
           {coreApps.map((app, i) => {
