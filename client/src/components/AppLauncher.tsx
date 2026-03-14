@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Terminal, FolderOpen, Mail, Calendar, Brain, Settings, Globe, FileText, Cpu, Shield, Database, Zap, Archive, GitBranch, ScrollText } from "lucide-react";
+import { Search, Terminal, FolderOpen, Mail, Calendar, Brain, Settings, Globe, FileText, Cpu, Shield, Database, Zap, Archive, GitBranch, ScrollText, TerminalSquare } from "lucide-react";
 import { useWindows } from "@/contexts/WindowContext";
 
 interface LauncherApp {
@@ -27,12 +27,13 @@ const allApps: LauncherApp[] = [
   { id: "router", name: "Model Router", description: "3-tier inference — 7 models — cost tracking", icon: <GitBranch className="w-5 h-5" />, category: "Intelligence" },
   { id: "taip", name: "TAIP Protocol", description: "Trained Adult Instance Protocol v1.0", icon: <ScrollText className="w-5 h-5" />, category: "Constitution" },
   { id: "forgecore", name: "Forge Core", description: "Ring 0 Kernel — BuddyAllocator, AgentRegistry, IntentScheduler", icon: <Cpu className="w-5 h-5" />, category: "Core" },
+  { id: "agentshell", name: "Agent Shell", description: "Universal Agent Shell — 8 harnesses, governance, cross-app orchestration", icon: <TerminalSquare className="w-5 h-5" />, category: "Core" },
   // Virtual apps (not openable but searchable)
   { id: "fusion", name: "Fusion Engine", description: "Cross-provider workflow engine", icon: <Zap className="w-5 h-5" />, category: "Core" },
   { id: "identity", name: "Identity Graph", description: "Unified sovereign identity — Janus bridge", icon: <Cpu className="w-5 h-5" />, category: "Core" },
 ];
 
-const openableApps = ["terminal", "files", "mail", "calendar", "council", "settings", "browser", "notes", "sysmonitor", "governance", "memory", "vault", "router", "taip", "forgecore"];
+const openableApps = ["terminal", "files", "mail", "calendar", "council", "settings", "browser", "notes", "sysmonitor", "governance", "memory", "vault", "router", "taip", "forgecore", "agentshell"];
 
 export default function AppLauncher() {
   const [isOpen, setIsOpen] = useState(false);

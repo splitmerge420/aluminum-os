@@ -17,6 +17,7 @@ import VaultApp from "@/components/apps/VaultApp";
 import RouterApp from "@/components/apps/RouterApp";
 import TaipApp from "@/components/apps/TaipApp";
 import ForgeCoreApp from "@/components/apps/ForgeCoreApp";
+import AgentShellApp from "@/components/apps/AgentShellApp";
 import ContextMenu from "@/components/ContextMenu";
 import AppLauncher from "@/components/AppLauncher";
 import { AnimatePresence, motion } from "framer-motion";
@@ -40,6 +41,7 @@ const appComponents: Record<string, React.FC> = {
   router: RouterApp,
   taip: TaipApp,
   forgecore: ForgeCoreApp,
+  agentshell: AgentShellApp,
 };
 
 const bootSteps = [

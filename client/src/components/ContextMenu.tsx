@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { RefreshCw, Layout, Palette, Monitor, Info, Terminal, FolderOpen, Settings, Cpu, Activity, Shield, Archive, ScrollText } from "lucide-react";
+import { RefreshCw, Layout, Palette, Monitor, Info, Terminal, FolderOpen, Settings, Cpu, Activity, Shield, Archive, ScrollText, TerminalSquare } from "lucide-react";
 import { useWindows } from "@/contexts/WindowContext";
 
 interface MenuPosition {
@@ -40,6 +40,7 @@ export default function ContextMenu() {
     { label: "Atlas Vault", icon: <Archive className="w-3.5 h-3.5" />, action: () => openWindow("vault", "Atlas Vault", "vault") },
     { label: "TAIP Protocol", icon: <ScrollText className="w-3.5 h-3.5" />, action: () => openWindow("taip", "TAIP Protocol", "taip") },
     { label: "Forge Core", icon: <Cpu className="w-3.5 h-3.5" />, action: () => openWindow("forgecore", "Forge Core — Ring 0", "forgecore") },
+    { label: "Agent Shell", icon: <TerminalSquare className="w-3.5 h-3.5" />, action: () => openWindow("agentshell", "Universal Agent Shell", "agentshell", 1000, 650) },
     "divider" as const,
     { label: "Change Wallpaper", icon: <Palette className="w-3.5 h-3.5" />, action: () => openWindow("settings", "Settings", "settings") },
     { label: "Display Settings", icon: <Monitor className="w-3.5 h-3.5" />, action: () => openWindow("settings", "Settings", "settings") },

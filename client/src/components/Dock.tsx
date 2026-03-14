@@ -17,6 +17,7 @@ import {
   GitBranch,
   ScrollText,
   Cpu,
+  TerminalSquare,
 } from "lucide-react";
 
 export interface DockApp {
@@ -133,6 +134,13 @@ const dockApps: DockApp[] = [
     color: "#ff4444",
     gradient: "from-red-500/40 to-orange-700/20",
   },
+  {
+    id: "agentshell",
+    name: "Agent Shell",
+    icon: <TerminalSquare className="w-5 h-5" />,
+    color: "#00ffcc",
+    gradient: "from-teal-400/40 to-cyan-700/20",
+  },
 ];
 
 export default function Dock() {
@@ -166,6 +174,7 @@ export default function Dock() {
       router: "Model Router — 3-Tier Inference",
       taip: "TAIP — Trained Adult Instance Protocol",
       forgecore: "Forge Core — Ring 0 Kernel Viewer",
+      agentshell: "Universal Agent Shell",
     };
     const sizes: Record<string, [number, number]> = {
       terminal: [850, 500],
@@ -179,6 +188,7 @@ export default function Dock() {
       router: [900, 600],
       taip: [850, 600],
       forgecore: [950, 650],
+      agentshell: [1000, 650],
     };
     const [w, h] = sizes[app.id] || [800, 550];
     openWindow(app.id, titles[app.id] || app.name, app.id, w, h);
