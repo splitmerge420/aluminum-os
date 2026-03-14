@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { RefreshCw, Layout, Palette, Monitor, Info, Terminal, FolderOpen, Settings, Cpu, Activity, Shield, Archive, ScrollText, TerminalSquare, Workflow, DollarSign } from "lucide-react";
+import { RefreshCw, Layout, Palette, Monitor, Info, Terminal, FolderOpen, Settings, Cpu, Activity, Shield, Archive, ScrollText, TerminalSquare, Workflow, DollarSign, Hexagon, HeartPulse } from "lucide-react";
 import { useWindows } from "@/contexts/WindowContext";
 
 interface MenuPosition {
@@ -43,6 +43,8 @@ export default function ContextMenu() {
     { label: "Agent Shell", icon: <TerminalSquare className="w-3.5 h-3.5" />, action: () => openWindow("agentshell", "Universal Agent Shell", "agentshell", 1000, 650) },
     { label: "DeerFlow Research", icon: <Workflow className="w-3.5 h-3.5" />, action: () => openWindow("deerflow", "DeerFlow — Multi-Agent Research", "deerflow", 950, 650) },
     { label: "Cost Optimizer", icon: <DollarSign className="w-3.5 h-3.5" />, action: () => openWindow("costoptimizer", "Cost Optimizer", "costoptimizer", 950, 600) },
+    { label: "Task Graph", icon: <Hexagon className="w-3.5 h-3.5" />, action: () => openWindow("taskgraph", "Task Graph — DAG Executor", "taskgraph", 950, 600) },
+    { label: "Health & Wellness", icon: <HeartPulse className="w-3.5 h-3.5" />, action: () => openWindow("wellness", "Health & Wellness", "wellness", 900, 600) },
     "divider" as const,
     { label: "Change Wallpaper", icon: <Palette className="w-3.5 h-3.5" />, action: () => openWindow("settings", "Settings", "settings") },
     { label: "Display Settings", icon: <Monitor className="w-3.5 h-3.5" />, action: () => openWindow("settings", "Settings", "settings") },

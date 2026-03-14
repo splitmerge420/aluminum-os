@@ -20,6 +20,8 @@ import ForgeCoreApp from "@/components/apps/ForgeCoreApp";
 import AgentShellApp from "@/components/apps/AgentShellApp";
 import DeerFlowApp from "@/components/apps/DeerFlowApp";
 import CostOptimizerApp from "@/components/apps/CostOptimizerApp";
+import TaskGraphApp from "@/components/apps/TaskGraphApp";
+import WellnessApp from "@/components/apps/WellnessApp";
 import ContextMenu from "@/components/ContextMenu";
 import AppLauncher from "@/components/AppLauncher";
 import { AnimatePresence, motion } from "framer-motion";
@@ -46,21 +48,24 @@ const appComponents: Record<string, React.FC> = {
   agentshell: AgentShellApp,
   deerflow: DeerFlowApp,
   costoptimizer: CostOptimizerApp,
+  taskgraph: TaskGraphApp,
+  wellness: WellnessApp,
 };
 
 const bootSteps = [
-  { text: "Initializing kernel...", duration: 150 },
-  { text: "Loading AluminumKernel...", duration: 200 },
-  { text: "Connecting providers: Google...", duration: 180 },
-  { text: "Connecting providers: Microsoft...", duration: 180 },
-  { text: "Connecting providers: Apple...", duration: 150 },
-  { text: "Ring 0 — Forge Core initialized", duration: 150 },
-  { text: "Ring 1 — Inference Engine online", duration: 150 },
-  { text: "Ring 2 — SHELDONBRAIN memory loaded", duration: 150 },
-  { text: "Ring 3 — Pantheon Council quorum achieved", duration: 200 },
-  { text: "Ring 4 — Noosphere experience layer ready", duration: 200 },
-  { text: "Starting Obsidian Glass UI...", duration: 300 },
-  { text: "Welcome, Daavud.", duration: 400 },
+  { text: "Initializing kernel...", duration: 100 },
+  { text: "Loading AluminumKernel v0.3.0...", duration: 120 },
+  { text: "Connecting providers: Google, Microsoft, Apple...", duration: 150 },
+  { text: "Ring 0 \u2014 Forge Core initialized (BuddyAllocator, AgentRegistry)", duration: 100 },
+  { text: "Ring 1 \u2014 Inference Engine online (7 models, 3 tiers)", duration: 100 },
+  { text: "Ring 2 \u2014 SHELDONBRAIN memory loaded (25.2 GB)", duration: 100 },
+  { text: "Ring 3 \u2014 Pantheon Council quorum: 8/8 members", duration: 120 },
+  { text: "Ring 4 \u2014 Noosphere: 20 apps, 53 artifacts, 14 rules", duration: 120 },
+  { text: "Constitutional substrate: 15 domains verified", duration: 100 },
+  { text: "DeerFlow research engine: 17 skills online", duration: 80 },
+  { text: "Agent Shell: 8 harnesses, governance active", duration: 80 },
+  { text: "Starting Obsidian Glass UI...", duration: 200 },
+  { text: "Welcome, Daavud.", duration: 300 },
 ];
 
 function BootScreen({ onComplete }: { onComplete: () => void }) {
@@ -119,7 +124,8 @@ function BootScreen({ onComplete }: { onComplete: () => void }) {
         <h1 className="text-xl font-bold font-[family-name:var(--font-display)] text-foreground/90 text-glow mb-1">
           Aluminum OS
         </h1>
-        <p className="text-[10px] text-foreground/30 mb-6 font-[family-name:var(--font-mono)]">Obsidian Glass Edition — v1.0.0</p>
+        <p className="text-[10px] text-foreground/30 mb-2 font-[family-name:var(--font-mono)]">Obsidian Glass Edition — v1.0.0</p>
+        <p className="text-[8px] text-cyan-400/40 mb-5 font-[family-name:var(--font-mono)]">Not a wrapper. Infrastructure.</p>
         <div className="flex items-center gap-4 mb-6">
           {providers.map((p, i) => (
             <motion.div
@@ -192,9 +198,33 @@ function DesktopWidgets() {
             <span className="text-[10px] text-cyan-400/70 font-[family-name:var(--font-mono)]">8/8 active</span>
           </div>
           <div className="flex items-center justify-between gap-6">
-            <span className="text-[10px] text-foreground/35">Wishes</span>
-            <span className="text-[10px] text-foreground/50 font-[family-name:var(--font-mono)]">110/110</span>
+            <span className="text-[10px] text-foreground/35">Apps</span>
+            <span className="text-[10px] text-violet-400/70 font-[family-name:var(--font-mono)]">20 loaded</span>
           </div>
+          <div className="flex items-center justify-between gap-6">
+            <span className="text-[10px] text-foreground/35">Artifacts</span>
+            <span className="text-[10px] text-amber-400/70 font-[family-name:var(--font-mono)]">53 indexed</span>
+          </div>
+          <div className="flex items-center justify-between gap-6">
+            <span className="text-[10px] text-foreground/35">Constitution</span>
+            <span className="text-[10px] text-red-400/70 font-[family-name:var(--font-mono)]">14 rules</span>
+          </div>
+        </div>
+      </motion.div>
+      <motion.div
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.9 }}
+        className="glass-light rounded-xl px-4 py-3"
+      >
+        <p className="text-[9px] uppercase tracking-wider text-cyan-400/30 font-[family-name:var(--font-display)] mb-1.5">Not a Wrapper</p>
+        <div className="space-y-1">
+          <p className="text-[8px] text-foreground/30 leading-relaxed">
+            Aluminum OS is infrastructure: constitutional governance, 5-ring kernel, multi-provider memory fabric, sovereign identity.
+          </p>
+          <p className="text-[8px] text-foreground/20 leading-relaxed">
+            ChatGPT/Copilot/Claude reset per session. We persist across 60 days, 8 agents, 53 artifacts.
+          </p>
         </div>
       </motion.div>
     </div>

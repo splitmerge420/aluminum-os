@@ -1,6 +1,6 @@
 import { useWindows, type WindowState } from "@/contexts/WindowContext";
 import { motion } from "framer-motion";
-import { Minus, Square, X, Maximize2, Terminal, FolderOpen, Mail, CalendarDays, Brain, Settings, Globe, StickyNote, Activity, Shield, Database, Archive, GitBranch, ScrollText, Cpu, TerminalSquare, Workflow, DollarSign } from "lucide-react";
+import { Minus, Square, X, Maximize2, Terminal, FolderOpen, Mail, CalendarDays, Brain, Settings, Globe, StickyNote, Activity, Shield, Database, Archive, GitBranch, ScrollText, Cpu, TerminalSquare, Workflow, DollarSign, Hexagon, HeartPulse } from "lucide-react";
 import { useRef, useCallback, useEffect, useState, type ReactNode } from "react";
 
 const appIcons: Record<string, React.ReactNode> = {
@@ -22,6 +22,8 @@ const appIcons: Record<string, React.ReactNode> = {
   agentshell: <TerminalSquare className="w-3.5 h-3.5 text-teal-400" />,
   deerflow: <Workflow className="w-3.5 h-3.5 text-violet-400" />,
   costoptimizer: <DollarSign className="w-3.5 h-3.5 text-green-400" />,
+  taskgraph: <Hexagon className="w-3.5 h-3.5 text-purple-400" />,
+  wellness: <HeartPulse className="w-3.5 h-3.5 text-rose-400" />,
 };
 
 interface WindowProps {

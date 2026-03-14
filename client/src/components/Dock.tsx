@@ -20,6 +20,8 @@ import {
   TerminalSquare,
   Workflow,
   DollarSign,
+  Hexagon,
+  HeartPulse,
 } from "lucide-react";
 
 export interface DockApp {
@@ -157,6 +159,20 @@ const dockApps: DockApp[] = [
     color: "#22c55e",
     gradient: "from-green-500/40 to-emerald-800/20",
   },
+  {
+    id: "taskgraph",
+    name: "Task Graph",
+    icon: <Hexagon className="w-5 h-5" />,
+    color: "#a855f7",
+    gradient: "from-purple-500/40 to-violet-800/20",
+  },
+  {
+    id: "wellness",
+    name: "Health & Wellness",
+    icon: <HeartPulse className="w-5 h-5" />,
+    color: "#ef4444",
+    gradient: "from-rose-500/40 to-red-800/20",
+  },
 ];
 
 export default function Dock() {
@@ -193,6 +209,8 @@ export default function Dock() {
       agentshell: "Universal Agent Shell",
       deerflow: "DeerFlow — Multi-Agent Research",
       costoptimizer: "Cost Optimizer — Spend Governance",
+      taskgraph: "Task Graph — DAG Executor",
+      wellness: "Health & Wellness — System Panel",
     };
     const sizes: Record<string, [number, number]> = {
       terminal: [850, 500],
@@ -209,6 +227,8 @@ export default function Dock() {
       agentshell: [1000, 650],
       deerflow: [950, 650],
       costoptimizer: [950, 600],
+      taskgraph: [950, 600],
+      wellness: [900, 600],
     };
     const [w, h] = sizes[app.id] || [800, 550];
     openWindow(app.id, titles[app.id] || app.name, app.id, w, h);
