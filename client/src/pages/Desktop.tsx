@@ -24,6 +24,7 @@ import TaskGraphApp from "@/components/apps/TaskGraphApp";
 import WellnessApp from "@/components/apps/WellnessApp";
 import HealthcareApp from "@/components/apps/HealthcareApp";
 import AppKillerApp from "@/components/apps/AppKillerApp";
+import WishListApp from "@/components/apps/WishListApp";
 import ContextMenu from "@/components/ContextMenu";
 import AppLauncher from "@/components/AppLauncher";
 import { AnimatePresence, motion } from "framer-motion";
@@ -54,6 +55,7 @@ const appComponents: Record<string, React.FC> = {
   wellness: WellnessApp,
   healthcare: HealthcareApp,
   appkiller: AppKillerApp,
+  wishlist: WishListApp,
 };
 
 const bootSteps = [
@@ -63,13 +65,15 @@ const bootSteps = [
   { text: "Ring 0 \u2014 Forge Core initialized (BuddyAllocator, AgentRegistry)", duration: 100 },
   { text: "Ring 1 \u2014 Inference Engine online (7 models, 3 tiers)", duration: 100 },
   { text: "Ring 2 \u2014 SHELDONBRAIN memory loaded (25.2 GB)", duration: 100 },
-  { text: "Ring 3 \u2014 Pantheon Council quorum: 8/8 members", duration: 120 },
-  { text: "Ring 4 \u2014 Noosphere: 22 apps, 59 artifacts, 15 rules", duration: 120 },
+    { text: "Ring 3 — Pantheon Council quorum: 10/10 members + Sovereign", duration: 120 },
+  { text: "Ring 4 — Noosphere: 23 apps, 62 artifacts, 15 rules", duration: 120 },
+  { text: "Manus Wish List: 60 wishes loaded (50 strategic + 10 chaos)", duration: 80 },
   { text: "Constitutional substrate: 15 domains verified", duration: 100 },
   { text: "DeerFlow research engine: 17 skills online", duration: 80 },
   { text: "Agent Shell: 8 harnesses, governance active", duration: 80 },
   { text: "Healthcare Layer: 7 modules, HIPAA 100%, FHIR R4 online", duration: 80 },
   { text: "App Killer Registry: 22,740 methods, 6 providers, 247 apps killed", duration: 80 },
+  { text: "Claude Analysis: 0 conflicts, 6 new primitives, 8 critical items", duration: 80 },
   { text: "Starting Obsidian Glass UI...", duration: 200 },
   { text: "Welcome, Daavud.", duration: 300 },
 ];
@@ -201,15 +205,15 @@ function DesktopWidgets() {
           </div>
           <div className="flex items-center justify-between gap-6">
             <span className="text-[10px] text-foreground/35">Council</span>
-            <span className="text-[10px] text-cyan-400/70 font-[family-name:var(--font-mono)]">8/8 active</span>
+            <span className="text-[10px] text-cyan-400/70 font-[family-name:var(--font-mono)]">10+1 active</span>
           </div>
           <div className="flex items-center justify-between gap-6">
             <span className="text-[10px] text-foreground/35">Apps</span>
-            <span className="text-[10px] text-violet-400/70 font-[family-name:var(--font-mono)]">22 loaded</span>
+            <span className="text-[10px] text-violet-400/70 font-[family-name:var(--font-mono)]">23 loaded</span>
           </div>
           <div className="flex items-center justify-between gap-6">
             <span className="text-[10px] text-foreground/35">Artifacts</span>
-            <span className="text-[10px] text-amber-400/70 font-[family-name:var(--font-mono)]">59 indexed</span>
+            <span className="text-[10px] text-amber-400/70 font-[family-name:var(--font-mono)]">62 indexed</span>
           </div>
           <div className="flex items-center justify-between gap-6">
             <span className="text-[10px] text-foreground/35">Constitution</span>

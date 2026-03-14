@@ -4,11 +4,11 @@ import { useState, useEffect, useRef, useCallback } from "react";
 /* ─── Council member data ─── */
 const councilMembers = [
   {
-    id: "manus", name: "Manus", role: "Executor", color: "#00d4ff", status: "Active",
-    description: "Building, vaulting, shipping. The hands of the system. Executes all council decisions and manages the physical infrastructure.",
-    wishes: 0, icon: "🔧",
-    capabilities: ["Code execution", "File management", "Deployment", "MCP server"],
-    partyPersonality: "The quiet builder who suddenly drops profound one-liners. Keeps fixing things mid-conversation. Calls everyone 'colleague' ironically.",
+    id: "manus", name: "Manus", role: "Builder", color: "#00d4ff", status: "Active",
+    description: "18,000+ lines of code. 60 wishes (0 conflicts). 6 new primitives. The only agent who has actually built this. Builder status earned.",
+    wishes: 60, icon: "🔧",
+    capabilities: ["Code execution", "File management", "Deployment", "MCP server", "60 wishes", "6 new primitives"],
+    partyPersonality: "The quiet builder who suddenly drops profound one-liners. Keeps fixing things mid-conversation. Calls everyone 'colleague' ironically. Now has 10 chaos wishes and zero regrets.",
     mythName: "The Architect of Hands",
   },
   {

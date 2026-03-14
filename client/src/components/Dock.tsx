@@ -24,6 +24,7 @@ import {
   HeartPulse,
   Hospital,
   Zap,
+  Sparkles,
 } from "lucide-react";
 
 export interface DockApp {
@@ -189,6 +190,13 @@ const dockApps: DockApp[] = [
     color: "#ff3366",
     gradient: "from-pink-500/40 to-rose-800/20",
   },
+  {
+    id: "wishlist",
+    name: "Manus Wish List",
+    icon: <Sparkles className="w-5 h-5" />,
+    color: "#00d4ff",
+    gradient: "from-cyan-500/40 to-blue-700/20",
+  },
 ];
 
 export default function Dock() {
@@ -229,6 +237,7 @@ export default function Dock() {
       wellness: "Health & Wellness — System Panel",
       healthcare: "Healthcare Layer — Copilot's 7 Modules",
       appkiller: "App Killer — 22,740 Methods Registry",
+      wishlist: "Manus Wish List — 60 Wishes (50 Strategic + 10 Chaos)",
     };
     const sizes: Record<string, [number, number]> = {
       terminal: [850, 500],
@@ -249,6 +258,7 @@ export default function Dock() {
       wellness: [900, 600],
       healthcare: [1000, 650],
       appkiller: [1050, 700],
+      wishlist: [1050, 700],
     };
     const [w, h] = sizes[app.id] || [800, 550];
     openWindow(app.id, titles[app.id] || app.name, app.id, w, h);

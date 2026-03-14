@@ -22,6 +22,9 @@ const constitutionalDomains = [
 ];
 
 const auditLog = [
+  { time: "14:25:00", agent: "Manus", action: "Wish List integrated: 60 wishes, 0 conflicts, 6 new primitives — Claude approved", level: "info", domain: "Transparent Operations" },
+  { time: "14:24:30", agent: "Claude", action: "Constitutional analysis complete: all 50 strategic wishes cleared, 2 refinements resolved", level: "info", domain: "Sovereign Override" },
+  { time: "14:24:00", agent: "Copilot", action: "Architecture validation: 0 structural conflicts confirmed across all 60 wishes", level: "info", domain: "Provider Neutrality" },
   { time: "14:23:17", agent: "Manus", action: "Deployed uws v1.0.0 to GitHub", level: "info", domain: "Transparent Operations" },
   { time: "14:22:45", agent: "Claude", action: "Constitutional review passed for cross-provider sync", level: "info", domain: "Consent-First Sync" },
   { time: "14:21:30", agent: "Grok", action: "Stress test completed: 500ms drift threshold validated", level: "info", domain: "Graceful Degradation" },
@@ -47,6 +50,8 @@ const policyRules = [
   { name: "Power Grab Detection", value: "Auto-timeout on violation", status: "Active", engine: "BFT Governance" },
   { name: "Rule 15: Healthcare Dead Man's Switch", value: "No healthcare decision persists >4hrs without human confirmation", status: "Active", engine: "Constitutional" },
   { name: "Clinical Override Pathway", value: "Licensed provider can override fraud flags in 60s", status: "Active", engine: "MCP Governance" },
+  { name: "INV-20: Multi-Model Consensus", value: "Tier 2: 3 models 70%, Tier 3: 5 models 85% + HITL 60s", status: "Proposed", engine: "Constitutional" },
+  { name: "AOSL v1.0: Open Source License", value: "5-tier access, 36-month AGPL conversion, Council revocation", status: "Proposed", engine: "Constitutional" },
 ];
 
 type Tab = "domains" | "audit" | "policy" | "escalation";
