@@ -33,40 +33,24 @@ import { useState, useEffect, useCallback } from "react";
 const WALLPAPER_URL = "https://d2xsxph8kpxj0f.cloudfront.net/310419663032278456/Hh5ewk9S7tZhGC5LJu4CmG/aluminum-wallpaper-main_9ae15f6a.png";
 
 const appComponents: Record<string, React.FC> = {
-  terminal: TerminalApp,
-  council: CouncilApp,
-  files: FilesApp,
-  mail: MailApp,
-  calendar: CalendarApp,
-  settings: SettingsApp,
-  browser: BrowserApp,
-  notes: NotesApp,
-  sysmonitor: SystemMonitorApp,
-  governance: GovernanceApp,
-  memory: MemoryApp,
-  vault: VaultApp,
-  router: RouterApp,
-  taip: TaipApp,
-  forgecore: ForgeCoreApp,
-  agentshell: AgentShellApp,
-  deerflow: DeerFlowApp,
-  costoptimizer: CostOptimizerApp,
-  taskgraph: TaskGraphApp,
-  wellness: WellnessApp,
-  healthcare: HealthcareApp,
-  appkiller: AppKillerApp,
-  wishlist: WishListApp,
+  terminal: TerminalApp, council: CouncilApp, files: FilesApp, mail: MailApp,
+  calendar: CalendarApp, settings: SettingsApp, browser: BrowserApp, notes: NotesApp,
+  sysmonitor: SystemMonitorApp, governance: GovernanceApp, memory: MemoryApp,
+  vault: VaultApp, router: RouterApp, taip: TaipApp, forgecore: ForgeCoreApp,
+  agentshell: AgentShellApp, deerflow: DeerFlowApp, costoptimizer: CostOptimizerApp,
+  taskgraph: TaskGraphApp, wellness: WellnessApp, healthcare: HealthcareApp,
+  appkiller: AppKillerApp, wishlist: WishListApp,
 };
 
 const bootSteps = [
   { text: "Initializing kernel...", duration: 100 },
   { text: "Loading AluminumKernel v0.3.0...", duration: 120 },
-  { text: "Connecting providers: Google, Microsoft, Apple...", duration: 150 },
+  { text: "Connecting providers: Google, Microsoft, Apple, Amazon...", duration: 150 },
   { text: "Ring 0 \u2014 Forge Core initialized (BuddyAllocator, AgentRegistry)", duration: 100 },
-  { text: "Ring 1 \u2014 Inference Engine online (7 models, 3 tiers)", duration: 100 },
+  { text: "Ring 1 \u2014 Inference Engine online (10 models, 3 tiers)", duration: 100 },
   { text: "Ring 2 \u2014 SHELDONBRAIN memory loaded (25.2 GB)", duration: 100 },
-    { text: "Ring 3 — Pantheon Council quorum: 10/10 members + Sovereign", duration: 120 },
-  { text: "Ring 4 — Noosphere: 23 apps, 62 artifacts, 15 rules", duration: 120 },
+  { text: "Ring 3 \u2014 Pantheon Council quorum: 10/10 members + Sovereign", duration: 120 },
+  { text: "Ring 4 \u2014 Noosphere: 23 apps, 62 artifacts, 15 rules", duration: 120 },
   { text: "Manus Wish List: 60 wishes loaded (50 strategic + 10 chaos)", duration: 80 },
   { text: "Constitutional substrate: 15 domains verified", duration: 100 },
   { text: "DeerFlow research engine: 17 skills online", duration: 80 },
@@ -74,13 +58,14 @@ const bootSteps = [
   { text: "Healthcare Layer: 7 modules, HIPAA 100%, FHIR R4 online", duration: 80 },
   { text: "App Killer Registry: 22,740 methods, 6 providers, 247 apps killed", duration: 80 },
   { text: "Claude Analysis: 0 conflicts, 6 new primitives, 8 critical items", duration: 80 },
+  { text: "Cross-platform UX: macOS, Windows, ChromeOS, iOS, Android, Pixel", duration: 80 },
   { text: "Starting Obsidian Glass UI...", duration: 200 },
   { text: "Welcome, Daavud.", duration: 300 },
 ];
 
 function BootScreen({ onComplete }: { onComplete: () => void }) {
   const [step, setStep] = useState(0);
-  const [providerStatus, setProviderStatus] = useState<boolean[]>([false, false, false, false, false]);
+  const [providerStatus, setProviderStatus] = useState<boolean[]>([false, false, false, false, false, false]);
 
   useEffect(() => {
     const timers: ReturnType<typeof setTimeout>[] = [];
@@ -89,10 +74,10 @@ function BootScreen({ onComplete }: { onComplete: () => void }) {
       timers.push(setTimeout(() => setStep(i), elapsed));
       elapsed += s.duration;
     });
-    [0, 1, 2, 3, 4].forEach((idx, i) => {
+    [0, 1, 2, 3, 4, 5].forEach((idx, i) => {
       timers.push(setTimeout(() => {
         setProviderStatus(prev => { const next = [...prev]; next[idx] = true; return next; });
-      }, 400 + i * 180));
+      }, 400 + i * 150));
     });
     timers.push(setTimeout(onComplete, elapsed + 300));
     return () => timers.forEach(clearTimeout);
@@ -100,17 +85,17 @@ function BootScreen({ onComplete }: { onComplete: () => void }) {
   }, []);
 
   const progress = Math.min(((step + 1) / bootSteps.length) * 100, 100);
-  const providers = ["Google", "Microsoft", "Apple", "Android", "Chrome"];
-  const providerColors = ["#4285F4", "#0078D4", "#999", "#3DDC84", "#4285F4"];
+  const providers = ["Google", "Microsoft", "Apple", "Amazon", "Android", "Chrome"];
+  const providerColors = ["#4285F4", "#0078D4", "#999", "#FF9900", "#3DDC84", "#4285F4"];
 
   return (
     <motion.div
       exit={{ opacity: 0 }}
       transition={{ duration: 0.8 }}
-      className="fixed inset-0 z-[99999] bg-[#060610] flex flex-col items-center justify-center"
+      className="fixed inset-0 z-[99999] bg-[#060610] flex flex-col items-center justify-center px-6"
     >
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-10"
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(600px,100vw)] h-[min(600px,100vw)] rounded-full opacity-10"
           style={{ background: "radial-gradient(circle, #00d4ff 0%, transparent 70%)" }}
         />
       </div>
@@ -118,25 +103,26 @@ function BootScreen({ onComplete }: { onComplete: () => void }) {
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ type: "spring", stiffness: 200, damping: 20 }}
-        className="flex flex-col items-center relative z-10"
+        className="flex flex-col items-center relative z-10 w-full max-w-sm"
       >
         <motion.div
           animate={{ boxShadow: ["0 0 30px rgba(0,212,255,0.2)", "0 0 60px rgba(0,212,255,0.3)", "0 0 30px rgba(0,212,255,0.2)"] }}
           transition={{ duration: 2, repeat: Infinity }}
-          className="w-20 h-20 rounded-2xl bg-gradient-to-br from-cyan-400/20 to-blue-600/20 flex items-center justify-center mb-6 border border-cyan-500/20"
+          className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-cyan-400/20 to-blue-600/20 flex items-center justify-center mb-4 sm:mb-6 border border-cyan-500/20"
         >
           <img
             src="https://d2xsxph8kpxj0f.cloudfront.net/310419663032278456/Hh5ewk9S7tZhGC5LJu4CmG/aluminum-logo_a619fe4a.png"
             alt="Aluminum OS"
-            className="w-12 h-12 rounded-lg"
+            className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
           />
         </motion.div>
-        <h1 className="text-xl font-bold font-[family-name:var(--font-display)] text-foreground/90 text-glow mb-1">
+        <h1 className="text-lg sm:text-xl font-bold font-[family-name:var(--font-display)] text-foreground/90 text-glow mb-1">
           Aluminum OS
         </h1>
-        <p className="text-[10px] text-foreground/30 mb-2 font-[family-name:var(--font-mono)]">Obsidian Glass Edition — v1.0.0</p>
-        <p className="text-[8px] text-cyan-400/40 mb-5 font-[family-name:var(--font-mono)]">Not a wrapper. Infrastructure.</p>
-        <div className="flex items-center gap-4 mb-6">
+        <p className="text-[9px] sm:text-[10px] text-foreground/30 mb-1.5 sm:mb-2 font-[family-name:var(--font-mono)]">Obsidian Glass Edition — v1.0.0</p>
+        <p className="text-[7px] sm:text-[8px] text-cyan-400/40 mb-4 sm:mb-5 font-[family-name:var(--font-mono)]">Not a wrapper. Infrastructure.</p>
+        {/* Provider dots — wrap on small screens */}
+        <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6 flex-wrap justify-center">
           {providers.map((p, i) => (
             <motion.div
               key={p}
@@ -150,11 +136,11 @@ function BootScreen({ onComplete }: { onComplete: () => void }) {
                 className="w-2 h-2 rounded-full"
                 style={{ background: providerStatus[i] ? providerColors[i] : "rgba(255,255,255,0.2)" }}
               />
-              <span className="text-[8px] text-foreground/30">{p}</span>
+              <span className="text-[7px] sm:text-[8px] text-foreground/30">{p}</span>
             </motion.div>
           ))}
         </div>
-        <div className="w-72 h-1 rounded-full bg-white/5 overflow-hidden mb-3">
+        <div className="w-full max-w-72 h-1 rounded-full bg-white/5 overflow-hidden mb-3">
           <motion.div
             className="h-full rounded-full"
             style={{ background: "linear-gradient(90deg, #00d4ff, #0078D4)" }}
@@ -162,7 +148,7 @@ function BootScreen({ onComplete }: { onComplete: () => void }) {
             transition={{ duration: 0.2, ease: "easeOut" }}
           />
         </div>
-        <p className="text-[10px] text-foreground/40 font-[family-name:var(--font-mono)] h-4">
+        <p className="text-[9px] sm:text-[10px] text-foreground/40 font-[family-name:var(--font-mono)] h-4 text-center truncate max-w-full">
           {bootSteps[step]?.text}
         </p>
       </motion.div>
@@ -172,12 +158,25 @@ function BootScreen({ onComplete }: { onComplete: () => void }) {
 
 function DesktopWidgets() {
   const [time, setTime] = useState(new Date());
+  const [isMobile, setIsMobile] = useState(false);
+
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  // Hide widgets on mobile — they overlap with windows
+  if (isMobile) return null;
+
   return (
-    <div className="absolute top-12 right-6 flex flex-col gap-3 z-10 pointer-events-none">
+    <div className="absolute top-12 right-6 flex flex-col gap-3 z-10 pointer-events-none max-w-[200px]">
       <motion.div
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
@@ -201,7 +200,7 @@ function DesktopWidgets() {
         <div className="space-y-1">
           <div className="flex items-center justify-between gap-6">
             <span className="text-[10px] text-foreground/35">Providers</span>
-            <span className="text-[10px] text-green-400/70 font-[family-name:var(--font-mono)]">5/5 online</span>
+            <span className="text-[10px] text-green-400/70 font-[family-name:var(--font-mono)]">6/6 online</span>
           </div>
           <div className="flex items-center justify-between gap-6">
             <span className="text-[10px] text-foreground/35">Council</span>
@@ -233,7 +232,7 @@ function DesktopWidgets() {
             Aluminum OS is infrastructure: constitutional governance, 5-ring kernel, multi-provider memory fabric, sovereign identity.
           </p>
           <p className="text-[8px] text-foreground/20 leading-relaxed">
-            ChatGPT/Copilot/Claude reset per session. We persist across 60 days, 8 agents, 57 artifacts. Healthcare-grade governance.
+            ChatGPT/Copilot/Claude reset per session. We persist across 60 days, 10 agents, 62 artifacts. Healthcare-grade governance.
           </p>
         </div>
       </motion.div>

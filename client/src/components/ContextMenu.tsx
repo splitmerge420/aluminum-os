@@ -1,37 +1,99 @@
-import { useState, useEffect, useCallback } from "react";
+/*
+ * ContextMenu — Cross-platform adaptive
+ * Desktop: right-click to open
+ * Touch: long-press (500ms) to open
+ * All: viewport-clamped position, keyboard navigable, scrollable overflow
+ */
+import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { RefreshCw, Layout, Palette, Monitor, Info, Terminal, FolderOpen, Settings, Cpu, Activity, Shield, Archive, ScrollText, TerminalSquare, Workflow, DollarSign, Hexagon, HeartPulse, Hospital, Zap, Sparkles } from "lucide-react";
+import {
+  RefreshCw, Layout, Palette, Monitor, Info, Terminal, FolderOpen,
+  Cpu, Activity, Shield, Archive, ScrollText, TerminalSquare, Workflow,
+  DollarSign, Hexagon, HeartPulse, Hospital, Zap, Sparkles,
+} from "lucide-react";
 import { useWindows } from "@/contexts/WindowContext";
 
-interface MenuPosition {
-  x: number;
-  y: number;
-}
+interface MenuPosition { x: number; y: number; }
+
+type MenuItem = { label: string; icon: React.ReactNode; action: () => void } | "divider";
 
 export default function ContextMenu() {
   const [pos, setPos] = useState<MenuPosition | null>(null);
   const { openWindow } = useWindows();
+  const menuRef = useRef<HTMLDivElement>(null);
+  const longPressRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const longPressPos = useRef<MenuPosition | null>(null);
 
-  const handleContextMenu = useCallback((e: MouseEvent) => {
-    const target = e.target as HTMLElement;
-    // Only show on desktop background, not on windows or dock
-    if (target.closest('[data-window]') || target.closest('[data-dock]') || target.closest('[data-topbar]')) return;
-    e.preventDefault();
-    setPos({ x: e.clientX, y: e.clientY });
+  // Clamp menu position to viewport
+  const clampPosition = useCallback((x: number, y: number) => {
+    const menuW = 220;
+    const menuH = 500; // approximate max
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    return {
+      x: Math.min(x, vw - menuW - 8),
+      y: Math.min(y, vh - menuH - 8),
+    };
   }, []);
 
-  const handleClick = useCallback(() => setPos(null), []);
+  // Right-click handler (desktop)
+  const handleContextMenu = useCallback((e: MouseEvent) => {
+    const target = e.target as HTMLElement;
+    if (target.closest("[data-window]") || target.closest("[data-dock]") || target.closest("[data-topbar]")) return;
+    e.preventDefault();
+    setPos(clampPosition(e.clientX, e.clientY));
+  }, [clampPosition]);
+
+  // Long-press handlers (touch)
+  const handleTouchStart = useCallback((e: TouchEvent) => {
+    const target = e.target as HTMLElement;
+    if (target.closest("[data-window]") || target.closest("[data-dock]") || target.closest("[data-topbar]")) return;
+    const t = e.touches[0];
+    longPressPos.current = { x: t.clientX, y: t.clientY };
+    longPressRef.current = setTimeout(() => {
+      if (longPressPos.current) {
+        setPos(clampPosition(longPressPos.current.x, longPressPos.current.y));
+      }
+    }, 500);
+  }, [clampPosition]);
+
+  const handleTouchMove = useCallback(() => {
+    // Cancel long press if finger moves
+    if (longPressRef.current) { clearTimeout(longPressRef.current); longPressRef.current = null; }
+  }, []);
+
+  const handleTouchEnd = useCallback(() => {
+    if (longPressRef.current) { clearTimeout(longPressRef.current); longPressRef.current = null; }
+  }, []);
+
+  const handleClick = useCallback((e: MouseEvent) => {
+    if (menuRef.current && menuRef.current.contains(e.target as Node)) return;
+    setPos(null);
+  }, []);
+
+  // Keyboard navigation
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (e.key === "Escape") setPos(null);
+  }, []);
 
   useEffect(() => {
     window.addEventListener("contextmenu", handleContextMenu);
     window.addEventListener("click", handleClick);
+    window.addEventListener("touchstart", handleTouchStart, { passive: true });
+    window.addEventListener("touchmove", handleTouchMove, { passive: true });
+    window.addEventListener("touchend", handleTouchEnd, { passive: true });
+    window.addEventListener("keydown", handleKeyDown);
     return () => {
       window.removeEventListener("contextmenu", handleContextMenu);
       window.removeEventListener("click", handleClick);
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchend", handleTouchEnd);
+      window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [handleContextMenu, handleClick]);
+  }, [handleContextMenu, handleClick, handleTouchStart, handleTouchMove, handleTouchEnd, handleKeyDown]);
 
-  const menuItems = [
+  const menuItems: MenuItem[] = [
     { label: "Open Terminal", icon: <Terminal className="w-3.5 h-3.5" />, action: () => openWindow("terminal", "Aluminum Terminal", "terminal") },
     { label: "Open Files", icon: <FolderOpen className="w-3.5 h-3.5" />, action: () => openWindow("files", "Files", "files") },
     { label: "Open AI Council", icon: <Cpu className="w-3.5 h-3.5" />, action: () => openWindow("council", "AI Council — Pantheon", "council") },
@@ -48,44 +110,51 @@ export default function ContextMenu() {
     { label: "Healthcare Layer", icon: <Hospital className="w-3.5 h-3.5" />, action: () => openWindow("healthcare", "Healthcare Layer", "healthcare", 1000, 650) },
     { label: "App Killer Registry", icon: <Zap className="w-3.5 h-3.5" />, action: () => openWindow("appkiller", "App Killer — 22,740 Methods", "appkiller", 1050, 700) },
     { label: "Manus Wish List", icon: <Sparkles className="w-3.5 h-3.5" />, action: () => openWindow("wishlist", "Manus Wish List — 60 Wishes", "wishlist", 1050, 700) },
-    "divider" as const,
+    "divider",
     { label: "Change Wallpaper", icon: <Palette className="w-3.5 h-3.5" />, action: () => openWindow("settings", "Settings", "settings") },
     { label: "Display Settings", icon: <Monitor className="w-3.5 h-3.5" />, action: () => openWindow("settings", "Settings", "settings") },
     { label: "Arrange Windows", icon: <Layout className="w-3.5 h-3.5" />, action: () => {} },
     { label: "Refresh", icon: <RefreshCw className="w-3.5 h-3.5" />, action: () => window.location.reload() },
-    "divider" as const,
+    "divider",
     { label: "About Aluminum OS", icon: <Info className="w-3.5 h-3.5" />, action: () => openWindow("settings", "Settings", "settings") },
   ];
 
   return (
     <AnimatePresence>
       {pos && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.92 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.92 }}
-          transition={{ duration: 0.12 }}
-          className="fixed z-[99999] glass-heavy rounded-xl border border-white/[0.08] py-1.5 px-1 min-w-[200px] shadow-2xl"
-          style={{ left: pos.x, top: pos.y }}
-        >
-          {menuItems.map((item, i) =>
-            item === "divider" ? (
-              <div key={i} className="my-1 mx-2 border-t border-white/[0.06]" />
-            ) : (
-              <button
-                key={i}
-                onClick={() => {
-                  (item as any).action();
-                  setPos(null);
-                }}
-                className="w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-xs text-foreground/70 hover:bg-white/8 hover:text-foreground/90 transition-colors"
-              >
-                <span className="text-foreground/40">{(item as any).icon}</span>
-                <span>{(item as any).label}</span>
-              </button>
-            )
-          )}
-        </motion.div>
+        <>
+          {/* Backdrop for touch dismiss */}
+          <div className="fixed inset-0 z-[99998]" onClick={() => setPos(null)} onTouchEnd={() => setPos(null)} />
+          <motion.div
+            ref={menuRef}
+            data-context-menu
+            initial={{ opacity: 0, scale: 0.92 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.92 }}
+            transition={{ duration: 0.12 }}
+            className="fixed z-[99999] glass-heavy rounded-xl border border-white/[0.08] py-1.5 px-1 min-w-[200px] max-h-[70vh] overflow-y-auto scroll-container shadow-2xl"
+            style={{ left: pos.x, top: pos.y }}
+            role="menu"
+            aria-label="Context menu"
+          >
+            {menuItems.map((item, i) =>
+              item === "divider" ? (
+                <div key={i} className="my-1 mx-2 border-t border-white/[0.06]" role="separator" />
+              ) : (
+                <button
+                  key={i}
+                  onClick={() => { item.action(); setPos(null); }}
+                  className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs text-foreground/70 hover:bg-white/8 active:bg-white/12 hover:text-foreground/90 transition-colors"
+                  role="menuitem"
+                  tabIndex={0}
+                >
+                  <span className="text-foreground/40 flex-shrink-0">{item.icon}</span>
+                  <span className="truncate">{item.label}</span>
+                </button>
+              )
+            )}
+          </motion.div>
+        </>
       )}
     </AnimatePresence>
   );

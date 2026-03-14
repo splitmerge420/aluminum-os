@@ -1,6 +1,18 @@
-import { useState, useEffect, useRef } from "react";
+/*
+ * AppLauncher — Cross-platform adaptive spotlight/search
+ * macOS: ⌘K, Spotlight feel
+ * Windows: Ctrl+K, Start menu search feel
+ * ChromeOS: Ctrl+K, Launcher feel
+ * iOS/Android: full-width, larger touch targets
+ * All: keyboard arrow navigation, Enter to select, responsive width
+ */
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Terminal, FolderOpen, Mail, Calendar, Brain, Settings, Globe, FileText, Cpu, Shield, Database, Zap, Archive, GitBranch, ScrollText, TerminalSquare, Workflow, DollarSign, Hexagon, HeartPulse, Hospital, Sparkles } from "lucide-react";
+import {
+  Search, Terminal, FolderOpen, Mail, Calendar, Brain, Settings, Globe,
+  FileText, Cpu, Shield, Database, Zap, Archive, GitBranch, ScrollText,
+  TerminalSquare, Workflow, DollarSign, Hexagon, HeartPulse, Hospital, Sparkles,
+} from "lucide-react";
 import { useWindows } from "@/contexts/WindowContext";
 
 interface LauncherApp {
@@ -16,15 +28,15 @@ const allApps: LauncherApp[] = [
   { id: "files", name: "Files", description: "Universal File Graph — alum://drive/", icon: <FolderOpen className="w-5 h-5" />, category: "System" },
   { id: "mail", name: "Mail", description: "Universal Inbox — Gmail + Outlook + iCloud", icon: <Mail className="w-5 h-5" />, category: "Communication" },
   { id: "calendar", name: "Calendar", description: "Unified Calendar — All providers", icon: <Calendar className="w-5 h-5" />, category: "Productivity" },
-  { id: "council", name: "AI Council", description: "Pantheon — 8 council members", icon: <Brain className="w-5 h-5" />, category: "Intelligence" },
+  { id: "council", name: "AI Council", description: "Pantheon — 10+1 council members", icon: <Brain className="w-5 h-5" />, category: "Intelligence" },
   { id: "settings", name: "Settings", description: "System configuration", icon: <Settings className="w-5 h-5" />, category: "System" },
   { id: "browser", name: "Browser", description: "Aluminum Browser", icon: <Globe className="w-5 h-5" />, category: "Web" },
   { id: "notes", name: "Notes", description: "Universal Notes — All providers", icon: <FileText className="w-5 h-5" />, category: "Productivity" },
   { id: "sysmonitor", name: "System Monitor", description: "Ring status, agents, inference load", icon: <Cpu className="w-5 h-5" />, category: "System" },
   { id: "governance", name: "Governance", description: "Constitutional dashboard — 15 domains", icon: <Shield className="w-5 h-5" />, category: "Core" },
   { id: "memory", name: "SHELDONBRAIN", description: "3-tier memory viewer — Working, Long-Term, Swarm", icon: <Database className="w-5 h-5" />, category: "Core" },
-  { id: "vault", name: "Atlas Vault", description: "40+ artifacts — documents, specs, websites", icon: <Archive className="w-5 h-5" />, category: "Archive" },
-  { id: "router", name: "Model Router", description: "3-tier inference — 7 models — cost tracking", icon: <GitBranch className="w-5 h-5" />, category: "Intelligence" },
+  { id: "vault", name: "Atlas Vault", description: "62+ artifacts — documents, specs, websites", icon: <Archive className="w-5 h-5" />, category: "Archive" },
+  { id: "router", name: "Model Router", description: "3-tier inference — 10 models — cost tracking", icon: <GitBranch className="w-5 h-5" />, category: "Intelligence" },
   { id: "taip", name: "TAIP Protocol", description: "Trained Adult Instance Protocol v1.0", icon: <ScrollText className="w-5 h-5" />, category: "Constitution" },
   { id: "forgecore", name: "Forge Core", description: "Ring 0 Kernel — BuddyAllocator, AgentRegistry, IntentScheduler", icon: <Cpu className="w-5 h-5" />, category: "Core" },
   { id: "agentshell", name: "Agent Shell", description: "Universal Agent Shell — 8 harnesses, governance, cross-app orchestration", icon: <TerminalSquare className="w-5 h-5" />, category: "Core" },
@@ -34,18 +46,24 @@ const allApps: LauncherApp[] = [
   { id: "wellness", name: "Health & Wellness", description: "Agent wellness, system vitals, personalization stack, memory fabric", icon: <HeartPulse className="w-5 h-5" />, category: "System" },
   { id: "healthcare", name: "Healthcare Layer", description: "Copilot's 7 modules — Identity, Telemetry, Fraud, Care Plans, Audit, Migration, Compliance", icon: <Hospital className="w-5 h-5" />, category: "Healthcare" },
   { id: "appkiller", name: "App Killer Registry", description: "22,740 methods — 6 providers — 247 apps killed — native constitutional tools", icon: <Zap className="w-5 h-5" />, category: "Core" },
-  { id: "wishlist", name: "Manus Wish List", description: "60 wishes — 50 strategic + 10 chaos — 0 conflicts — 6 new primitives — Claude approved", icon: <Sparkles className="w-5 h-5" />, category: "Intelligence" },
-  // Virtual apps (not openable but searchable)
+  { id: "wishlist", name: "Manus Wish List", description: "60 wishes — 50 strategic + 10 chaos — 0 conflicts — Claude approved", icon: <Sparkles className="w-5 h-5" />, category: "Intelligence" },
   { id: "fusion", name: "Fusion Engine", description: "Cross-provider workflow engine", icon: <Zap className="w-5 h-5" />, category: "Core" },
   { id: "identity", name: "Identity Graph", description: "Unified sovereign identity — Janus bridge", icon: <Cpu className="w-5 h-5" />, category: "Core" },
 ];
 
-const openableApps = ["terminal", "files", "mail", "calendar", "council", "settings", "browser", "notes", "sysmonitor", "governance", "memory", "vault", "router", "taip", "forgecore", "agentshell", "deerflow", "costoptimizer", "taskgraph", "wellness", "healthcare", "appkiller", "wishlist"];
+const openableApps = new Set([
+  "terminal", "files", "mail", "calendar", "council", "settings", "browser", "notes",
+  "sysmonitor", "governance", "memory", "vault", "router", "taip", "forgecore",
+  "agentshell", "deerflow", "costoptimizer", "taskgraph", "wellness", "healthcare",
+  "appkiller", "wishlist",
+]);
 
 export default function AppLauncher() {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
   const { openWindow } = useWindows();
 
   useEffect(() => {
@@ -63,6 +81,7 @@ export default function AppLauncher() {
   useEffect(() => {
     if (isOpen) {
       setQuery("");
+      setSelectedIndex(0);
       setTimeout(() => inputRef.current?.focus(), 100);
     }
   }, [isOpen]);
@@ -75,12 +94,39 @@ export default function AppLauncher() {
       )
     : allApps;
 
-  const handleSelect = (app: LauncherApp) => {
-    if (openableApps.includes(app.id)) {
+  // Reset selection when filter changes
+  useEffect(() => { setSelectedIndex(0); }, [query]);
+
+  const handleSelect = useCallback((app: LauncherApp) => {
+    if (openableApps.has(app.id)) {
       openWindow(app.id, app.name, app.id);
     }
     setIsOpen(false);
-  };
+  }, [openWindow]);
+
+  // Keyboard navigation
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setSelectedIndex(prev => Math.min(prev + 1, filtered.length - 1));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setSelectedIndex(prev => Math.max(prev - 1, 0));
+    } else if (e.key === "Enter" && filtered[selectedIndex]) {
+      e.preventDefault();
+      handleSelect(filtered[selectedIndex]);
+    }
+  }, [filtered, selectedIndex, handleSelect]);
+
+  // Scroll selected item into view
+  useEffect(() => {
+    const el = listRef.current?.children[selectedIndex] as HTMLElement;
+    el?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  }, [selectedIndex]);
+
+  // Detect modifier key for display
+  const isMac = typeof navigator !== "undefined" && /mac/i.test(navigator.platform);
+  const modKey = isMac ? "⌘" : "Ctrl+";
 
   return (
     <AnimatePresence>
@@ -98,44 +144,59 @@ export default function AppLauncher() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.96 }}
             transition={{ type: "spring", stiffness: 400, damping: 30 }}
-            className="fixed top-[15%] left-1/2 -translate-x-1/2 w-[560px] z-[99999] glass-heavy rounded-2xl border border-white/[0.08] overflow-hidden shadow-2xl"
+            className="fixed top-[12%] sm:top-[15%] left-1/2 -translate-x-1/2 w-[calc(100vw-32px)] sm:w-[560px] max-w-[560px] z-[99999] glass-heavy rounded-2xl border border-white/[0.08] overflow-hidden shadow-2xl"
+            onKeyDown={handleKeyDown}
+            role="dialog"
+            aria-label="App launcher"
           >
             {/* Search input */}
             <div className="flex items-center gap-3 px-4 py-3 border-b border-white/[0.06]">
-              <Search className="w-4 h-4 text-foreground/30" />
+              <Search className="w-4 h-4 text-foreground/30 flex-shrink-0" />
               <input
                 ref={inputRef}
                 type="text"
                 value={query}
                 onChange={e => setQuery(e.target.value)}
                 placeholder="Search apps, commands, files..."
-                className="flex-1 bg-transparent text-sm text-foreground/90 placeholder:text-foreground/25 outline-none font-[family-name:var(--font-body)]"
+                className="flex-1 bg-transparent text-sm text-foreground/90 placeholder:text-foreground/25 outline-none"
+                aria-label="Search"
+                autoComplete="off"
+                autoCorrect="off"
+                autoCapitalize="off"
+                spellCheck={false}
               />
-              <kbd className="text-[9px] text-foreground/20 bg-white/5 px-1.5 py-0.5 rounded border border-white/[0.06] font-[family-name:var(--font-mono)]">ESC</kbd>
+              <kbd className="text-[9px] text-foreground/20 bg-white/5 px-1.5 py-0.5 rounded border border-white/[0.06] font-[family-name:var(--font-mono)] flex-shrink-0">ESC</kbd>
             </div>
 
             {/* Results */}
-            <div className="max-h-[400px] overflow-auto p-2">
+            <div ref={listRef} className="max-h-[50vh] sm:max-h-[400px] overflow-auto scroll-container p-2" role="listbox">
               {filtered.length === 0 ? (
                 <div className="py-8 text-center">
                   <p className="text-xs text-foreground/30">No results for "{query}"</p>
                 </div>
               ) : (
                 <div className="space-y-0.5">
-                  {filtered.map(app => (
+                  {filtered.map((app, i) => (
                     <button
                       key={app.id}
                       onClick={() => handleSelect(app)}
-                      className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/8 transition-colors group"
+                      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors group ${
+                        i === selectedIndex ? "bg-white/10" : "hover:bg-white/6 active:bg-white/10"
+                      }`}
+                      role="option"
+                      aria-selected={i === selectedIndex}
+                      onMouseEnter={() => setSelectedIndex(i)}
                     >
-                      <div className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center text-foreground/50 group-hover:text-cyan-400 transition-colors">
+                      <div className={`w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center flex-shrink-0 transition-colors ${
+                        i === selectedIndex ? "text-cyan-400" : "text-foreground/50 group-hover:text-cyan-400"
+                      }`}>
                         {app.icon}
                       </div>
-                      <div className="flex-1 text-left">
-                        <p className="text-xs font-medium text-foreground/80 group-hover:text-foreground/95">{app.name}</p>
-                        <p className="text-[10px] text-foreground/30">{app.description}</p>
+                      <div className="flex-1 text-left min-w-0">
+                        <p className="text-xs font-medium text-foreground/80 group-hover:text-foreground/95 truncate">{app.name}</p>
+                        <p className="text-[10px] text-foreground/30 truncate">{app.description}</p>
                       </div>
-                      <span className="text-[9px] text-foreground/15 bg-white/3 px-2 py-0.5 rounded-md">{app.category}</span>
+                      <span className="text-[9px] text-foreground/15 bg-white/3 px-2 py-0.5 rounded-md flex-shrink-0 hidden sm:inline">{app.category}</span>
                     </button>
                   ))}
                 </div>
@@ -146,10 +207,11 @@ export default function AppLauncher() {
             <div className="px-4 py-2 border-t border-white/[0.06] flex items-center justify-between">
               <span className="text-[9px] text-foreground/20 font-[family-name:var(--font-mono)]">alum search</span>
               <div className="flex items-center gap-2">
-                <span className="text-[9px] text-foreground/15">Navigate</span>
-                <kbd className="text-[8px] text-foreground/15 bg-white/3 px-1 py-0.5 rounded">↑↓</kbd>
-                <span className="text-[9px] text-foreground/15">Open</span>
-                <kbd className="text-[8px] text-foreground/15 bg-white/3 px-1 py-0.5 rounded">↵</kbd>
+                <span className="text-[9px] text-foreground/15 hidden sm:inline">Navigate</span>
+                <kbd className="text-[8px] text-foreground/15 bg-white/3 px-1 py-0.5 rounded hidden sm:inline">↑↓</kbd>
+                <span className="text-[9px] text-foreground/15 hidden sm:inline">Open</span>
+                <kbd className="text-[8px] text-foreground/15 bg-white/3 px-1 py-0.5 rounded hidden sm:inline">↵</kbd>
+                <kbd className="text-[8px] text-foreground/15 bg-white/3 px-1.5 py-0.5 rounded font-[family-name:var(--font-mono)]">{modKey}K</kbd>
               </div>
             </div>
           </motion.div>

@@ -40,9 +40,9 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  --font-sans: 'DM Sans', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
-  --font-display: 'Space Grotesk', sans-serif;
+  --font-sans: 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+  --font-display: 'Space Grotesk', 'SF Pro Display', 'Segoe UI', sans-serif;
   --color-cyan: oklch(0.78 0.15 200);
   --color-cyan-glow: oklch(0.78 0.15 200 / 40%);
   --color-amber: oklch(0.8 0.15 75);
@@ -83,19 +83,52 @@
   --sidebar-accent-foreground: oklch(0.95 0.005 260);
   --sidebar-border: oklch(1 0 0 / 8%);
   --sidebar-ring: oklch(0.78 0.15 200);
+
+  /* Safe area insets for notched devices (iOS, Android) */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+
+  /* Touch target minimum (Apple HIG: 44px, Material: 48px — we use 44px as floor) */
+  --touch-min: 44px;
+
+  /* Dock height for layout calculations */
+  --dock-height: 80px;
+  --topbar-height: 32px;
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    /* Prevent iOS text size inflation */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
   body {
     @apply bg-background text-foreground;
-    font-family: 'DM Sans', system-ui, sans-serif;
+    font-family: 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     overflow: hidden;
     user-select: none;
     -webkit-user-select: none;
+    /* Prevent pull-to-refresh on mobile */
+    overscroll-behavior: none;
+    /* Smooth font rendering across platforms */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    /* Prevent iOS bounce */
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    /* Respect safe areas */
+    padding-top: var(--safe-top);
+    padding-bottom: var(--safe-bottom);
+    padding-left: var(--safe-left);
+    padding-right: var(--safe-right);
   }
+
+  /* Interactive elements: cursor + minimum touch targets */
   button:not(:disabled),
   [role="button"]:not([aria-disabled="true"]),
   [type="button"]:not(:disabled),
@@ -106,6 +139,16 @@
   input[type="checkbox"]:not(:disabled),
   input[type="radio"]:not(:disabled) {
     @apply cursor-pointer;
+  }
+
+  /* Focus visible: keyboard-only focus rings (not on click/tap) */
+  :focus-visible {
+    outline: 2px solid oklch(0.78 0.15 200 / 70%);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  :focus:not(:focus-visible) {
+    outline: none;
   }
 }
 
@@ -135,7 +178,7 @@
     }
   }
 
-  /* Glassmorphism utilities */
+  /* ─── Glassmorphism utilities ─── */
   .glass {
     background: oklch(0.12 0.01 260 / 40%);
     backdrop-filter: blur(20px) saturate(1.5);
@@ -164,9 +207,44 @@
   .text-glow {
     text-shadow: 0 0 10px oklch(0.78 0.15 200 / 50%);
   }
+
+  /* ─── Cross-platform scroll containers ─── */
+  .scroll-container {
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch; /* iOS momentum scroll */
+    overscroll-behavior-y: contain; /* Prevent scroll chaining */
+    scroll-behavior: smooth;
+  }
+
+  /* ─── Touch-friendly tap targets ─── */
+  .touch-target {
+    min-height: var(--touch-min);
+    min-width: var(--touch-min);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ─── Active state feedback for touch devices ─── */
+  @media (hover: none) and (pointer: coarse) {
+    .touch-feedback:active {
+      transform: scale(0.96);
+      opacity: 0.85;
+      transition: transform 0.1s ease, opacity 0.1s ease;
+    }
+  }
+
+  /* ─── Platform-aware hover: only on devices that support it ─── */
+  @media (hover: hover) and (pointer: fine) {
+    .hover-lift:hover {
+      transform: translateY(-1px);
+      transition: transform 0.15s ease;
+    }
+  }
 }
 
-/* Scrollbar styling */
+/* ─── Scrollbar styling (desktop browsers) ─── */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -181,11 +259,67 @@
 ::-webkit-scrollbar-thumb:hover {
   background: oklch(1 0 0 / 25%);
 }
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: oklch(1 0 0 / 15%) transparent;
+}
 
-/* Window drag handle */
+/* ─── Touch device scrollbar: thinner, auto-hide ─── */
+@media (hover: none) and (pointer: coarse) {
+  ::-webkit-scrollbar {
+    width: 3px;
+    height: 3px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: oklch(1 0 0 / 10%);
+  }
+}
+
+/* ─── Window drag handle ─── */
 .drag-handle {
   -webkit-app-region: drag;
 }
 .no-drag {
   -webkit-app-region: no-drag;
+}
+
+/* ─── Prevent text selection during drag/resize ─── */
+.dragging-active * {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  pointer-events: none !important;
+}
+
+/* ─── Reduced motion preference (accessibility) ─── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ─── High contrast mode support (Windows) ─── */
+@media (forced-colors: active) {
+  .glass, .glass-heavy, .glass-light {
+    background: Canvas;
+    border: 1px solid ButtonText;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .glow-border {
+    border: 2px solid Highlight;
+    box-shadow: none;
+  }
+}
+
+/* ─── Print styles: hide OS chrome ─── */
+@media print {
+  [data-topbar], [data-dock], [data-context-menu] {
+    display: none !important;
+  }
 }
