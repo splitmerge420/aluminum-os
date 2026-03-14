@@ -32,14 +32,14 @@ export interface DockApp {
 
 /* ── Core 8: the AI-native essentials (Agent Shell is now the AI button) ── */
 const coreApps: DockApp[] = [
-  { id: "files", name: "Files", icon: <FolderOpen className="w-5 h-5" />, color: "#ffb347", gradient: "from-amber-400/40 to-orange-600/20" },
-  { id: "council", name: "AI Council", icon: <Brain className="w-5 h-5" />, color: "#9b59b6", gradient: "from-purple-400/40 to-violet-700/20" },
-  { id: "browser", name: "Browser", icon: <Globe className="w-5 h-5" />, color: "#0078D4", gradient: "from-sky-400/40 to-indigo-600/20" },
-  { id: "spheres", name: "144 Spheres", icon: <Grid3X3 className="w-5 h-5" />, color: "#FFD700", gradient: "from-yellow-400/40 to-amber-600/20" },
-  { id: "governance", name: "Governance", icon: <Shield className="w-5 h-5" />, color: "#00ff88", gradient: "from-green-400/40 to-emerald-700/20" },
-  { id: "vault", name: "Atlas Vault", icon: <Archive className="w-5 h-5" />, color: "#e74c3c", gradient: "from-red-400/40 to-rose-700/20" },
-  { id: "healthcare", name: "Healthcare", icon: <Hospital className="w-5 h-5" />, color: "#0078D4", gradient: "from-blue-500/40 to-indigo-800/20" },
-  { id: "settings", name: "Settings", icon: <Settings className="w-5 h-5" />, color: "#8899aa", gradient: "from-slate-400/40 to-slate-600/20" },
+  { id: "files", name: "Files", icon: <FolderOpen className="w-6 h-6" />, color: "#ffb347", gradient: "from-amber-400/40 to-orange-600/20" },
+  { id: "council", name: "AI Council", icon: <Brain className="w-6 h-6" />, color: "#9b59b6", gradient: "from-purple-400/40 to-violet-700/20" },
+  { id: "browser", name: "Browser", icon: <Globe className="w-6 h-6" />, color: "#0078D4", gradient: "from-sky-400/40 to-indigo-600/20" },
+  { id: "spheres", name: "144 Spheres", icon: <Grid3X3 className="w-6 h-6" />, color: "#FFD700", gradient: "from-yellow-400/40 to-amber-600/20" },
+  { id: "governance", name: "Governance", icon: <Shield className="w-6 h-6" />, color: "#00ff88", gradient: "from-green-400/40 to-emerald-700/20" },
+  { id: "vault", name: "Atlas Vault", icon: <Archive className="w-6 h-6" />, color: "#e74c3c", gradient: "from-red-400/40 to-rose-700/20" },
+  { id: "healthcare", name: "Healthcare", icon: <Hospital className="w-6 h-6" />, color: "#0078D4", gradient: "from-blue-500/40 to-indigo-800/20" },
+  { id: "settings", name: "Settings", icon: <Settings className="w-6 h-6" />, color: "#8899aa", gradient: "from-slate-400/40 to-slate-600/20" },
 ];
 
 /* ── Council Innovation Slots: each member's signature features ── */
@@ -56,23 +56,23 @@ interface InnovationSlot {
 
 const allInnovationSlots: InnovationSlot[] = [
   // Manus — Builder
-  { id: "manus-wishlist", name: "Wish List", member: "Manus", memberColor: "#00d4ff", icon: <Sparkles className="w-4 h-4" />, color: "#00d4ff", gradient: "from-cyan-500/30 to-blue-700/15", appId: "wishlist" },
-  { id: "manus-deerflow", name: "DeerFlow", member: "Manus", memberColor: "#00d4ff", icon: <Workflow className="w-4 h-4" />, color: "#7c3aed", gradient: "from-violet-500/30 to-purple-800/15", appId: "deerflow" },
+  { id: "manus-wishlist", name: "Wish List", member: "Manus", memberColor: "#00d4ff", icon: <Sparkles className="w-5 h-5" />, color: "#00d4ff", gradient: "from-cyan-500/30 to-blue-700/15", appId: "wishlist" },
+  { id: "manus-deerflow", name: "DeerFlow", member: "Manus", memberColor: "#00d4ff", icon: <Workflow className="w-5 h-5" />, color: "#7c3aed", gradient: "from-violet-500/30 to-purple-800/15", appId: "deerflow" },
   // Claude — Oversight
-  { id: "claude-safety", name: "Safety Audit", member: "Claude", memberColor: "#ff6b35", icon: <Shield className="w-4 h-4" />, color: "#ff6b35", gradient: "from-orange-400/30 to-red-700/15", appId: "governance" },
+  { id: "claude-safety", name: "Safety Audit", member: "Claude", memberColor: "#ff6b35", icon: <Shield className="w-5 h-5" />, color: "#ff6b35", gradient: "from-orange-400/30 to-red-700/15", appId: "governance" },
   // Gemini — Synthesizer
-  { id: "gemini-synthesis", name: "Synthesis", member: "Gemini", memberColor: "#00ff88", icon: <Hexagon className="w-4 h-4" />, color: "#00ff88", gradient: "from-emerald-400/30 to-green-700/15", appId: "taskgraph" },
+  { id: "gemini-synthesis", name: "Synthesis", member: "Gemini", memberColor: "#00ff88", icon: <Hexagon className="w-5 h-5" />, color: "#00ff88", gradient: "from-emerald-400/30 to-green-700/15", appId: "taskgraph" },
   // Copilot — Validator
-  { id: "copilot-router", name: "Model Router", member: "Copilot", memberColor: "#9b59b6", icon: <GitBranch className="w-4 h-4" />, color: "#9b59b6", gradient: "from-purple-400/30 to-violet-700/15", appId: "router" },
+  { id: "copilot-router", name: "Model Router", member: "Copilot", memberColor: "#9b59b6", icon: <GitBranch className="w-5 h-5" />, color: "#9b59b6", gradient: "from-purple-400/30 to-violet-700/15", appId: "router" },
   // Grok — Contrarian
-  { id: "grok-voice", name: "Voice Engine", member: "Grok", memberColor: "#ff4444", icon: <Mic className="w-4 h-4" />, color: "#ff4444", gradient: "from-red-400/30 to-rose-700/15", appId: "agentshell" },
-  { id: "grok-stress", name: "Stress Test", member: "Grok", memberColor: "#ff4444", icon: <Zap className="w-4 h-4" />, color: "#ff4444", gradient: "from-red-500/30 to-orange-700/15", appId: "appkiller" },
+  { id: "grok-voice", name: "Voice Engine", member: "Grok", memberColor: "#ff4444", icon: <Mic className="w-5 h-5" />, color: "#ff4444", gradient: "from-red-400/30 to-rose-700/15", appId: "agentshell" },
+  { id: "grok-stress", name: "Stress Test", member: "Grok", memberColor: "#ff4444", icon: <Zap className="w-5 h-5" />, color: "#ff4444", gradient: "from-red-500/30 to-orange-700/15", appId: "appkiller" },
   // DeepSeek — Specialist
-  { id: "deepseek-memory", name: "Memory", member: "DeepSeek", memberColor: "#4fc3f7", icon: <Database className="w-4 h-4" />, color: "#4fc3f7", gradient: "from-sky-400/30 to-blue-700/15", appId: "memory" },
+  { id: "deepseek-memory", name: "Memory", member: "DeepSeek", memberColor: "#4fc3f7", icon: <Database className="w-5 h-5" />, color: "#4fc3f7", gradient: "from-sky-400/30 to-blue-700/15", appId: "memory" },
   // GPT — Observer
-  { id: "gpt-observe", name: "Observer", member: "GPT", memberColor: "#ffd700", icon: <Eye className="w-4 h-4" />, color: "#ffd700", gradient: "from-yellow-400/30 to-amber-700/15", appId: "sysmonitor" },
+  { id: "gpt-observe", name: "Observer", member: "GPT", memberColor: "#ffd700", icon: <Eye className="w-5 h-5" />, color: "#ffd700", gradient: "from-yellow-400/30 to-amber-700/15", appId: "sysmonitor" },
   // Wellness
-  { id: "wellness-pulse", name: "Wellness", member: "System", memberColor: "#ef4444", icon: <HeartPulse className="w-4 h-4" />, color: "#ef4444", gradient: "from-rose-500/30 to-red-800/15", appId: "wellness" },
+  { id: "wellness-pulse", name: "Wellness", member: "System", memberColor: "#ef4444", icon: <HeartPulse className="w-5 h-5" />, color: "#ef4444", gradient: "from-rose-500/30 to-red-800/15", appId: "wellness" },
 ];
 
 // Default visible innovation slots (user can customize)
@@ -164,11 +164,13 @@ export default function Dock() {
     window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", ctrlKey: true, bubbles: true }));
   };
 
-  // Sizing
-  const iconSize = isMobile ? "w-10 h-10" : "w-12 h-12";
-  const slotSize = isMobile ? "w-9 h-9" : "w-10 h-10";
-  const iconRadius = isMobile ? "rounded-xl" : "rounded-[14px]";
-  const slotRadius = isMobile ? "rounded-lg" : "rounded-xl";
+  // Sizing — BIG for touch-first (Amazon Fire, iPhone, Android, Pixel)
+  const iconSize = isMobile ? "w-12 h-12" : "w-14 h-14";
+  const aiSize = isMobile ? "w-14 h-14" : "w-16 h-16";
+  const slotSize = isMobile ? "w-11 h-11" : "w-12 h-12";
+  const iconRadius = isMobile ? "rounded-xl" : "rounded-2xl";
+  const aiRadius = isMobile ? "rounded-2xl" : "rounded-[18px]";
+  const slotRadius = isMobile ? "rounded-xl" : "rounded-xl";
 
   // Total items for hover tracking
   const totalCore = coreApps.length;
@@ -186,7 +188,7 @@ export default function Dock() {
         role="navigation"
         aria-label="Application dock"
       >
-        <div className="glass-heavy rounded-2xl px-2.5 py-2 flex items-end gap-1.5 border border-white/[0.08]">
+        <div className="glass-heavy rounded-2xl px-3 py-2.5 flex items-end gap-2 border border-white/[0.08]">
 
           {/* ── AI Button — Provider-neutral, opens Agent Shell ── */}
           <motion.button
@@ -206,15 +208,15 @@ export default function Dock() {
             <motion.div
               animate={{
                 boxShadow: [
-                  "0 0 12px rgba(0,212,255,0.3), 0 0 24px rgba(0,212,255,0.1)",
-                  "0 0 20px rgba(0,212,255,0.5), 0 0 40px rgba(0,212,255,0.15)",
-                  "0 0 12px rgba(0,212,255,0.3), 0 0 24px rgba(0,212,255,0.1)",
+                  "0 0 16px rgba(0,212,255,0.4), 0 0 32px rgba(0,212,255,0.15), 0 0 48px rgba(0,212,255,0.05)",
+                  "0 0 28px rgba(0,212,255,0.6), 0 0 56px rgba(0,212,255,0.2), 0 0 72px rgba(0,212,255,0.08)",
+                  "0 0 16px rgba(0,212,255,0.4), 0 0 32px rgba(0,212,255,0.15), 0 0 48px rgba(0,212,255,0.05)",
                 ],
               }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-              className={`${iconSize} ${iconRadius} flex items-center justify-center bg-gradient-to-br from-cyan-400/50 to-blue-600/40 border-2 border-cyan-400/40`}
+              className={`${aiSize} ${aiRadius} flex items-center justify-center bg-gradient-to-br from-cyan-400/50 via-blue-500/40 to-indigo-600/30 border-2 border-cyan-400/40`}
             >
-              <span className="text-white font-bold text-sm font-[family-name:var(--font-display)] tracking-tight">AI</span>
+              <span className="text-white font-extrabold text-lg font-[family-name:var(--font-display)] tracking-tight drop-shadow-[0_0_8px_rgba(0,212,255,0.6)]">AI</span>
             </motion.div>
             {windows.some(w => w.appId === "agentshell") && (
               <div className="absolute -bottom-1.5 w-1 h-1 rounded-full bg-cyan-400" style={{ boxShadow: "0 0 4px #00d4ff" }} />
@@ -236,7 +238,7 @@ export default function Dock() {
           </motion.button>
 
           {/* ── Divider after AI ── */}
-          <div className="w-px h-8 bg-cyan-400/15 mx-0.5 self-center flex-shrink-0" />
+          <div className="w-px h-10 bg-cyan-400/20 mx-1 self-center flex-shrink-0" />
 
           {/* ── Core Apps ── */}
           {coreApps.map((app, i) => {
@@ -297,7 +299,7 @@ export default function Dock() {
 
           {/* ── Divider ── */}
           {visibleSlots.length > 0 && (
-            <div className="w-px h-8 bg-white/[0.08] mx-0.5 self-center flex-shrink-0" />
+            <div className="w-px h-10 bg-white/[0.08] mx-1 self-center flex-shrink-0" />
           )}
 
           {/* ── Council Innovation Slots (customizable) ── */}
@@ -377,8 +379,8 @@ export default function Dock() {
             aria-label="Customize innovation slots"
             tabIndex={0}
           >
-            <div className={`${isMobile ? "w-6 h-9" : "w-6 h-10"} rounded-lg flex items-center justify-center bg-white/[0.02] border border-white/[0.06] border-dashed text-foreground/20 hover:text-foreground/40 transition-colors`}>
-              <ChevronDown className="w-3 h-3" />
+            <div className={`${isMobile ? "w-8 h-11" : "w-8 h-12"} rounded-lg flex items-center justify-center bg-white/[0.02] border border-white/[0.06] border-dashed text-foreground/20 hover:text-foreground/40 transition-colors`}>
+              <ChevronDown className="w-4 h-4" />
             </div>
             {hasHover && (
               <AnimatePresence>
@@ -397,7 +399,7 @@ export default function Dock() {
           </motion.button>
 
           {/* ── Divider ── */}
-          <div className="w-px h-8 bg-white/[0.08] mx-0.5 self-center flex-shrink-0" />
+          <div className="w-px h-10 bg-white/[0.08] mx-1 self-center flex-shrink-0" />
 
           {/* ── All Apps ── */}
           <motion.button
@@ -417,7 +419,7 @@ export default function Dock() {
             <div
               className={`${iconSize} ${iconRadius} flex items-center justify-center transition-all duration-200 bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/[0.08] border-dashed text-foreground/30 hover:text-foreground/60`}
             >
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg width="22" height="22" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect x="1" y="1" width="4" height="4" rx="1" fill="currentColor" opacity="0.6" />
                 <rect x="7" y="1" width="4" height="4" rx="1" fill="currentColor" opacity="0.6" />
                 <rect x="13" y="1" width="4" height="4" rx="1" fill="currentColor" opacity="0.6" />
