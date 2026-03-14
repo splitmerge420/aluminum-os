@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Terminal, FolderOpen, Mail, Calendar, Brain, Settings, Globe, FileText, Cpu, Shield, Database, Zap, Archive, GitBranch, ScrollText, TerminalSquare } from "lucide-react";
+import { Search, Terminal, FolderOpen, Mail, Calendar, Brain, Settings, Globe, FileText, Cpu, Shield, Database, Zap, Archive, GitBranch, ScrollText, TerminalSquare, Workflow, DollarSign } from "lucide-react";
 import { useWindows } from "@/contexts/WindowContext";
 
 interface LauncherApp {
@@ -28,12 +28,14 @@ const allApps: LauncherApp[] = [
   { id: "taip", name: "TAIP Protocol", description: "Trained Adult Instance Protocol v1.0", icon: <ScrollText className="w-5 h-5" />, category: "Constitution" },
   { id: "forgecore", name: "Forge Core", description: "Ring 0 Kernel — BuddyAllocator, AgentRegistry, IntentScheduler", icon: <Cpu className="w-5 h-5" />, category: "Core" },
   { id: "agentshell", name: "Agent Shell", description: "Universal Agent Shell — 8 harnesses, governance, cross-app orchestration", icon: <TerminalSquare className="w-5 h-5" />, category: "Core" },
+  { id: "deerflow", name: "DeerFlow Research", description: "Multi-agent research — 17 skills, sub-agent delegation, sandbox execution", icon: <Workflow className="w-5 h-5" />, category: "Intelligence" },
+  { id: "costoptimizer", name: "Cost Optimizer", description: "Spend governance — 3-tier routing, 150% ROI mandate, Ara delegation", icon: <DollarSign className="w-5 h-5" />, category: "Governance" },
   // Virtual apps (not openable but searchable)
   { id: "fusion", name: "Fusion Engine", description: "Cross-provider workflow engine", icon: <Zap className="w-5 h-5" />, category: "Core" },
   { id: "identity", name: "Identity Graph", description: "Unified sovereign identity — Janus bridge", icon: <Cpu className="w-5 h-5" />, category: "Core" },
 ];
 
-const openableApps = ["terminal", "files", "mail", "calendar", "council", "settings", "browser", "notes", "sysmonitor", "governance", "memory", "vault", "router", "taip", "forgecore", "agentshell"];
+const openableApps = ["terminal", "files", "mail", "calendar", "council", "settings", "browser", "notes", "sysmonitor", "governance", "memory", "vault", "router", "taip", "forgecore", "agentshell", "deerflow", "costoptimizer"];
 
 export default function AppLauncher() {
   const [isOpen, setIsOpen] = useState(false);

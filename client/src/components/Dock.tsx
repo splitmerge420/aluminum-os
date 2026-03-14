@@ -18,6 +18,8 @@ import {
   ScrollText,
   Cpu,
   TerminalSquare,
+  Workflow,
+  DollarSign,
 } from "lucide-react";
 
 export interface DockApp {
@@ -141,6 +143,20 @@ const dockApps: DockApp[] = [
     color: "#00ffcc",
     gradient: "from-teal-400/40 to-cyan-700/20",
   },
+  {
+    id: "deerflow",
+    name: "DeerFlow Research",
+    icon: <Workflow className="w-5 h-5" />,
+    color: "#7c3aed",
+    gradient: "from-violet-500/40 to-purple-800/20",
+  },
+  {
+    id: "costoptimizer",
+    name: "Cost Optimizer",
+    icon: <DollarSign className="w-5 h-5" />,
+    color: "#22c55e",
+    gradient: "from-green-500/40 to-emerald-800/20",
+  },
 ];
 
 export default function Dock() {
@@ -175,6 +191,8 @@ export default function Dock() {
       taip: "TAIP — Trained Adult Instance Protocol",
       forgecore: "Forge Core — Ring 0 Kernel Viewer",
       agentshell: "Universal Agent Shell",
+      deerflow: "DeerFlow — Multi-Agent Research",
+      costoptimizer: "Cost Optimizer — Spend Governance",
     };
     const sizes: Record<string, [number, number]> = {
       terminal: [850, 500],
@@ -189,6 +207,8 @@ export default function Dock() {
       taip: [850, 600],
       forgecore: [950, 650],
       agentshell: [1000, 650],
+      deerflow: [950, 650],
+      costoptimizer: [950, 600],
     };
     const [w, h] = sizes[app.id] || [800, 550];
     openWindow(app.id, titles[app.id] || app.name, app.id, w, h);

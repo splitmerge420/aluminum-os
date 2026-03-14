@@ -18,6 +18,8 @@ import RouterApp from "@/components/apps/RouterApp";
 import TaipApp from "@/components/apps/TaipApp";
 import ForgeCoreApp from "@/components/apps/ForgeCoreApp";
 import AgentShellApp from "@/components/apps/AgentShellApp";
+import DeerFlowApp from "@/components/apps/DeerFlowApp";
+import CostOptimizerApp from "@/components/apps/CostOptimizerApp";
 import ContextMenu from "@/components/ContextMenu";
 import AppLauncher from "@/components/AppLauncher";
 import { AnimatePresence, motion } from "framer-motion";
@@ -42,6 +44,8 @@ const appComponents: Record<string, React.FC> = {
   taip: TaipApp,
   forgecore: ForgeCoreApp,
   agentshell: AgentShellApp,
+  deerflow: DeerFlowApp,
+  costoptimizer: CostOptimizerApp,
 };
 
 const bootSteps = [
