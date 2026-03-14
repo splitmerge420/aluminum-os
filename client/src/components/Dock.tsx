@@ -23,6 +23,7 @@ import {
   Hexagon,
   HeartPulse,
   Hospital,
+  Zap,
 } from "lucide-react";
 
 export interface DockApp {
@@ -181,6 +182,13 @@ const dockApps: DockApp[] = [
     color: "#0078D4",
     gradient: "from-blue-500/40 to-indigo-800/20",
   },
+  {
+    id: "appkiller",
+    name: "App Killer Registry",
+    icon: <Zap className="w-5 h-5" />,
+    color: "#ff3366",
+    gradient: "from-pink-500/40 to-rose-800/20",
+  },
 ];
 
 export default function Dock() {
@@ -220,6 +228,7 @@ export default function Dock() {
       taskgraph: "Task Graph — DAG Executor",
       wellness: "Health & Wellness — System Panel",
       healthcare: "Healthcare Layer — Copilot's 7 Modules",
+      appkiller: "App Killer — 22,740 Methods Registry",
     };
     const sizes: Record<string, [number, number]> = {
       terminal: [850, 500],
@@ -239,6 +248,7 @@ export default function Dock() {
       taskgraph: [950, 600],
       wellness: [900, 600],
       healthcare: [1000, 650],
+      appkiller: [1050, 700],
     };
     const [w, h] = sizes[app.id] || [800, 550];
     openWindow(app.id, titles[app.id] || app.name, app.id, w, h);

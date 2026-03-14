@@ -33,12 +33,13 @@ const allApps: LauncherApp[] = [
   { id: "taskgraph", name: "Task Graph", description: "DAG-based task execution — constitutional pre-screening, cost-aware routing", icon: <Hexagon className="w-5 h-5" />, category: "Intelligence" },
   { id: "wellness", name: "Health & Wellness", description: "Agent wellness, system vitals, personalization stack, memory fabric", icon: <HeartPulse className="w-5 h-5" />, category: "System" },
   { id: "healthcare", name: "Healthcare Layer", description: "Copilot's 7 modules — Identity, Telemetry, Fraud, Care Plans, Audit, Migration, Compliance", icon: <Hospital className="w-5 h-5" />, category: "Healthcare" },
+  { id: "appkiller", name: "App Killer Registry", description: "22,740 methods — 6 providers — 247 apps killed — native constitutional tools", icon: <Zap className="w-5 h-5" />, category: "Core" },
   // Virtual apps (not openable but searchable)
   { id: "fusion", name: "Fusion Engine", description: "Cross-provider workflow engine", icon: <Zap className="w-5 h-5" />, category: "Core" },
   { id: "identity", name: "Identity Graph", description: "Unified sovereign identity — Janus bridge", icon: <Cpu className="w-5 h-5" />, category: "Core" },
 ];
 
-const openableApps = ["terminal", "files", "mail", "calendar", "council", "settings", "browser", "notes", "sysmonitor", "governance", "memory", "vault", "router", "taip", "forgecore", "agentshell", "deerflow", "costoptimizer", "taskgraph", "wellness", "healthcare"];
+const openableApps = ["terminal", "files", "mail", "calendar", "council", "settings", "browser", "notes", "sysmonitor", "governance", "memory", "vault", "router", "taip", "forgecore", "agentshell", "deerflow", "costoptimizer", "taskgraph", "wellness", "healthcare", "appkiller"];
 
 export default function AppLauncher() {
   const [isOpen, setIsOpen] = useState(false);

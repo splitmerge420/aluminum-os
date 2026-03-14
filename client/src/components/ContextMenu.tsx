@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { RefreshCw, Layout, Palette, Monitor, Info, Terminal, FolderOpen, Settings, Cpu, Activity, Shield, Archive, ScrollText, TerminalSquare, Workflow, DollarSign, Hexagon, HeartPulse, Hospital } from "lucide-react";
+import { RefreshCw, Layout, Palette, Monitor, Info, Terminal, FolderOpen, Settings, Cpu, Activity, Shield, Archive, ScrollText, TerminalSquare, Workflow, DollarSign, Hexagon, HeartPulse, Hospital, Zap } from "lucide-react";
 import { useWindows } from "@/contexts/WindowContext";
 
 interface MenuPosition {
@@ -46,6 +46,7 @@ export default function ContextMenu() {
     { label: "Task Graph", icon: <Hexagon className="w-3.5 h-3.5" />, action: () => openWindow("taskgraph", "Task Graph — DAG Executor", "taskgraph", 950, 600) },
     { label: "Health & Wellness", icon: <HeartPulse className="w-3.5 h-3.5" />, action: () => openWindow("wellness", "Health & Wellness", "wellness", 900, 600) },
     { label: "Healthcare Layer", icon: <Hospital className="w-3.5 h-3.5" />, action: () => openWindow("healthcare", "Healthcare Layer", "healthcare", 1000, 650) },
+    { label: "App Killer Registry", icon: <Zap className="w-3.5 h-3.5" />, action: () => openWindow("appkiller", "App Killer — 22,740 Methods", "appkiller", 1050, 700) },
     "divider" as const,
     { label: "Change Wallpaper", icon: <Palette className="w-3.5 h-3.5" />, action: () => openWindow("settings", "Settings", "settings") },
     { label: "Display Settings", icon: <Monitor className="w-3.5 h-3.5" />, action: () => openWindow("settings", "Settings", "settings") },
