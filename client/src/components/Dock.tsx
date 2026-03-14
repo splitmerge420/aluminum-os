@@ -22,6 +22,7 @@ import {
   DollarSign,
   Hexagon,
   HeartPulse,
+  Hospital,
 } from "lucide-react";
 
 export interface DockApp {
@@ -173,6 +174,13 @@ const dockApps: DockApp[] = [
     color: "#ef4444",
     gradient: "from-rose-500/40 to-red-800/20",
   },
+  {
+    id: "healthcare",
+    name: "Healthcare Layer",
+    icon: <Hospital className="w-5 h-5" />,
+    color: "#0078D4",
+    gradient: "from-blue-500/40 to-indigo-800/20",
+  },
 ];
 
 export default function Dock() {
@@ -211,6 +219,7 @@ export default function Dock() {
       costoptimizer: "Cost Optimizer — Spend Governance",
       taskgraph: "Task Graph — DAG Executor",
       wellness: "Health & Wellness — System Panel",
+      healthcare: "Healthcare Layer — Copilot's 7 Modules",
     };
     const sizes: Record<string, [number, number]> = {
       terminal: [850, 500],
@@ -229,6 +238,7 @@ export default function Dock() {
       costoptimizer: [950, 600],
       taskgraph: [950, 600],
       wellness: [900, 600],
+      healthcare: [1000, 650],
     };
     const [w, h] = sizes[app.id] || [800, 550];
     openWindow(app.id, titles[app.id] || app.name, app.id, w, h);

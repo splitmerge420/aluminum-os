@@ -22,6 +22,7 @@ import DeerFlowApp from "@/components/apps/DeerFlowApp";
 import CostOptimizerApp from "@/components/apps/CostOptimizerApp";
 import TaskGraphApp from "@/components/apps/TaskGraphApp";
 import WellnessApp from "@/components/apps/WellnessApp";
+import HealthcareApp from "@/components/apps/HealthcareApp";
 import ContextMenu from "@/components/ContextMenu";
 import AppLauncher from "@/components/AppLauncher";
 import { AnimatePresence, motion } from "framer-motion";
@@ -50,6 +51,7 @@ const appComponents: Record<string, React.FC> = {
   costoptimizer: CostOptimizerApp,
   taskgraph: TaskGraphApp,
   wellness: WellnessApp,
+  healthcare: HealthcareApp,
 };
 
 const bootSteps = [
@@ -60,10 +62,11 @@ const bootSteps = [
   { text: "Ring 1 \u2014 Inference Engine online (7 models, 3 tiers)", duration: 100 },
   { text: "Ring 2 \u2014 SHELDONBRAIN memory loaded (25.2 GB)", duration: 100 },
   { text: "Ring 3 \u2014 Pantheon Council quorum: 8/8 members", duration: 120 },
-  { text: "Ring 4 \u2014 Noosphere: 20 apps, 53 artifacts, 14 rules", duration: 120 },
+  { text: "Ring 4 \u2014 Noosphere: 21 apps, 57 artifacts, 14 rules", duration: 120 },
   { text: "Constitutional substrate: 15 domains verified", duration: 100 },
   { text: "DeerFlow research engine: 17 skills online", duration: 80 },
   { text: "Agent Shell: 8 harnesses, governance active", duration: 80 },
+  { text: "Healthcare Layer: 7 modules, HIPAA 100%, FHIR R4 online", duration: 80 },
   { text: "Starting Obsidian Glass UI...", duration: 200 },
   { text: "Welcome, Daavud.", duration: 300 },
 ];
@@ -199,11 +202,11 @@ function DesktopWidgets() {
           </div>
           <div className="flex items-center justify-between gap-6">
             <span className="text-[10px] text-foreground/35">Apps</span>
-            <span className="text-[10px] text-violet-400/70 font-[family-name:var(--font-mono)]">20 loaded</span>
+            <span className="text-[10px] text-violet-400/70 font-[family-name:var(--font-mono)]">21 loaded</span>
           </div>
           <div className="flex items-center justify-between gap-6">
             <span className="text-[10px] text-foreground/35">Artifacts</span>
-            <span className="text-[10px] text-amber-400/70 font-[family-name:var(--font-mono)]">53 indexed</span>
+            <span className="text-[10px] text-amber-400/70 font-[family-name:var(--font-mono)]">57 indexed</span>
           </div>
           <div className="flex items-center justify-between gap-6">
             <span className="text-[10px] text-foreground/35">Constitution</span>
@@ -223,7 +226,7 @@ function DesktopWidgets() {
             Aluminum OS is infrastructure: constitutional governance, 5-ring kernel, multi-provider memory fabric, sovereign identity.
           </p>
           <p className="text-[8px] text-foreground/20 leading-relaxed">
-            ChatGPT/Copilot/Claude reset per session. We persist across 60 days, 8 agents, 53 artifacts.
+            ChatGPT/Copilot/Claude reset per session. We persist across 60 days, 8 agents, 57 artifacts. Healthcare-grade governance.
           </p>
         </div>
       </motion.div>

@@ -45,6 +45,8 @@ const policyRules = [
   { name: "Memory Retention", value: "30 days default, user-configurable", status: "Active", engine: "Constitutional" },
   { name: "HITL Verification", value: "Required for Level 3+ operations", status: "Active", engine: "MCP Governance" },
   { name: "Power Grab Detection", value: "Auto-timeout on violation", status: "Active", engine: "BFT Governance" },
+  { name: "Rule 15: Healthcare Dead Man's Switch", value: "No healthcare decision persists >4hrs without human confirmation", status: "Active", engine: "Constitutional" },
+  { name: "Clinical Override Pathway", value: "Licensed provider can override fraud flags in 60s", status: "Active", engine: "MCP Governance" },
 ];
 
 type Tab = "domains" | "audit" | "policy" | "escalation";

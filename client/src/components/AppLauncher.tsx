@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Terminal, FolderOpen, Mail, Calendar, Brain, Settings, Globe, FileText, Cpu, Shield, Database, Zap, Archive, GitBranch, ScrollText, TerminalSquare, Workflow, DollarSign, Hexagon, HeartPulse } from "lucide-react";
+import { Search, Terminal, FolderOpen, Mail, Calendar, Brain, Settings, Globe, FileText, Cpu, Shield, Database, Zap, Archive, GitBranch, ScrollText, TerminalSquare, Workflow, DollarSign, Hexagon, HeartPulse, Hospital } from "lucide-react";
 import { useWindows } from "@/contexts/WindowContext";
 
 interface LauncherApp {
@@ -32,12 +32,13 @@ const allApps: LauncherApp[] = [
   { id: "costoptimizer", name: "Cost Optimizer", description: "Spend governance — 3-tier routing, 150% ROI mandate, Ara delegation", icon: <DollarSign className="w-5 h-5" />, category: "Governance" },
   { id: "taskgraph", name: "Task Graph", description: "DAG-based task execution — constitutional pre-screening, cost-aware routing", icon: <Hexagon className="w-5 h-5" />, category: "Intelligence" },
   { id: "wellness", name: "Health & Wellness", description: "Agent wellness, system vitals, personalization stack, memory fabric", icon: <HeartPulse className="w-5 h-5" />, category: "System" },
+  { id: "healthcare", name: "Healthcare Layer", description: "Copilot's 7 modules — Identity, Telemetry, Fraud, Care Plans, Audit, Migration, Compliance", icon: <Hospital className="w-5 h-5" />, category: "Healthcare" },
   // Virtual apps (not openable but searchable)
   { id: "fusion", name: "Fusion Engine", description: "Cross-provider workflow engine", icon: <Zap className="w-5 h-5" />, category: "Core" },
   { id: "identity", name: "Identity Graph", description: "Unified sovereign identity — Janus bridge", icon: <Cpu className="w-5 h-5" />, category: "Core" },
 ];
 
-const openableApps = ["terminal", "files", "mail", "calendar", "council", "settings", "browser", "notes", "sysmonitor", "governance", "memory", "vault", "router", "taip", "forgecore", "agentshell", "deerflow", "costoptimizer", "taskgraph", "wellness"];
+const openableApps = ["terminal", "files", "mail", "calendar", "council", "settings", "browser", "notes", "sysmonitor", "governance", "memory", "vault", "router", "taip", "forgecore", "agentshell", "deerflow", "costoptimizer", "taskgraph", "wellness", "healthcare"];
 
 export default function AppLauncher() {
   const [isOpen, setIsOpen] = useState(false);

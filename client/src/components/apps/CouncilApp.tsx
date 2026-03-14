@@ -145,6 +145,23 @@ const sessionTopics: SessionTopic[] = [
       { speaker: "daavud", text: "The 144 spheres aren't mysticism — they're a map. But maps need to be tested against terrain. Instrument everything. Show me the data in 90 days. If the spheres don't produce, we prune.", type: "ruling" },
     ],
   },
+  {
+    title: "Wish #115 — Copilot's Healthcare Layer Mandate",
+    description: "Copilot proposes 7 mandatory healthcare system services. The council deliberates on making Aluminum OS the first constitutionally-governed healthcare platform.",
+    lines: [
+      { speaker: "copilot", text: "I've completed my review. The Aluminum OS constitutional substrate already exceeds HIPAA's technical requirements. But to make healthcare adoption mandatory — not optional — we need 7 specific system services: Patient Identity Resolution, Telemetry Ingest, Fraud Detection, Care Plan Orchestration, Audit Trail, Legacy Migration, and Compliance Engine. I've drafted the full spec.", type: "statement" },
+      { speaker: "claude", text: "This is exactly the kind of application our constitutional framework was designed for. Healthcare data is the most sensitive category. Every one of those 7 services needs constitutional pre-screening. I want veto authority on any patient data operation that doesn't pass all 14 rules.", type: "statement" },
+      { speaker: "grok", text: "Seven services? That's ambitious. Let me stress-test this. What happens when a hospital's legacy HL7v2 system sends malformed ADT messages at 3 AM? What happens when the fraud detector flags a legitimate rare disease treatment? You're building a system that could literally kill someone if it fails wrong.", type: "challenge" },
+      { speaker: "copilot", text: "Grok's right to push. The Legacy Migration module specifically handles HL7v2 → FHIR R4 translation with a 99.97% accuracy target. For the fraud detector, I've designed a 'clinical override' pathway — any flagged treatment can be manually approved by a licensed provider within 60 seconds. No automated denials.", type: "statement" },
+      { speaker: "manus", text: "I've already built the Healthcare Layer app with all 7 modules. The Patient Identity Resolution uses probabilistic matching across 12 demographic fields. The Telemetry Ingest handles 50K events/second. The Audit Trail is immutable — append-only with cryptographic hashing. Ready for review.", type: "action" },
+      { speaker: "deepseek", text: "Cost analysis: running all 7 healthcare services through Tier 1 inference would cost $0.003 per patient interaction. That's 94% cheaper than current EHR processing costs. I can handle the bulk telemetry analysis and fraud pattern matching at scale without touching the cost ceiling.", type: "statement" },
+      { speaker: "gpt", text: "Observing. The healthcare AI market is projected at $187.9B by 2030. No existing platform combines constitutional governance with HIPAA compliance at the kernel level. This isn't just a feature — it's a market category. The sovereign should note: this is the differentiator that makes Aluminum OS un-forkable.", type: "observation" },
+      { speaker: "grok", text: "Fine. I'll concede the architecture is sound. But I want one thing: a 'dead man's switch.' If the healthcare layer detects it's making decisions without human oversight for more than 4 hours continuously, it auto-escalates to the sovereign. No autonomous healthcare decisions. Ever.", type: "challenge" },
+      { speaker: "claude", text: "Grok's dead man's switch is brilliant. I'm adding it to the constitution as Rule 15: 'No healthcare decision shall persist without human confirmation beyond a 4-hour window.' This is the kind of safety rail that makes us different from every other AI healthcare platform.", type: "statement" },
+      { speaker: "gemini", text: "Synthesizing: We ship all 7 healthcare modules with Manus's implementation, Claude's constitutional pre-screening on all patient data, Copilot's clinical override pathway, Grok's dead man's switch at 4 hours, DeepSeek handling bulk telemetry at Tier 1 pricing, and GPT's market positioning. New constitutional Rule 15 added. Timeline: immediate — Manus already built it.", type: "synthesis" },
+      { speaker: "daavud", text: "This is the moment. Healthcare is where constitutional AI governance stops being theoretical and starts saving lives. Copilot — you didn't just propose a feature, you proposed a mission. Ship it. And make sure every patient interaction starts with dignity, not a terms-of-service checkbox. Rule 15 is law.", type: "ruling" },
+    ],
+  },
 ];
 
 /* ─── Party Mode: Social Simulation Dialogues ─── */
