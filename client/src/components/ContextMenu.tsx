@@ -7,7 +7,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  RefreshCw, Layout, Palette, Monitor, Info, Terminal, FolderOpen,
+  RefreshCw, Layout, Palette, Monitor, Info, Grid3X3, FolderOpen,
   Cpu, Activity, Shield, Archive, ScrollText, TerminalSquare, Workflow,
   DollarSign, Hexagon, HeartPulse, Hospital, Zap, Sparkles,
 } from "lucide-react";
@@ -94,7 +94,7 @@ export default function ContextMenu() {
   }, [handleContextMenu, handleClick, handleTouchStart, handleTouchMove, handleTouchEnd, handleKeyDown]);
 
   const menuItems: MenuItem[] = [
-    { label: "Open Terminal", icon: <Terminal className="w-3.5 h-3.5" />, action: () => openWindow("terminal", "Aluminum Terminal", "terminal") },
+    { label: "144 Spheres", icon: <Grid3X3 className="w-3.5 h-3.5" />, action: () => openWindow("spheres", "144 Spheres — Agent Matrix", "spheres", 1100, 700) },
     { label: "Open Files", icon: <FolderOpen className="w-3.5 h-3.5" />, action: () => openWindow("files", "Files", "files") },
     { label: "Open AI Council", icon: <Cpu className="w-3.5 h-3.5" />, action: () => openWindow("council", "AI Council — Pantheon", "council") },
     { label: "System Monitor", icon: <Activity className="w-3.5 h-3.5" />, action: () => openWindow("sysmonitor", "System Monitor", "sysmonitor") },

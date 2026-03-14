@@ -2,7 +2,7 @@ import { WindowProvider, useWindows } from "@/contexts/WindowContext";
 import Window from "@/components/Window";
 import TopBar from "@/components/TopBar";
 import Dock from "@/components/Dock";
-import TerminalApp from "@/components/apps/TerminalApp";
+import SpheresApp from "@/components/apps/SpheresApp";
 import CouncilApp from "@/components/apps/CouncilApp";
 import FilesApp from "@/components/apps/FilesApp";
 import MailApp from "@/components/apps/MailApp";
@@ -33,7 +33,7 @@ import { useState, useEffect, useCallback } from "react";
 const WALLPAPER_URL = "https://d2xsxph8kpxj0f.cloudfront.net/310419663032278456/Hh5ewk9S7tZhGC5LJu4CmG/aluminum-wallpaper-main_9ae15f6a.png";
 
 const appComponents: Record<string, React.FC> = {
-  terminal: TerminalApp, council: CouncilApp, files: FilesApp, mail: MailApp,
+  spheres: SpheresApp, council: CouncilApp, files: FilesApp, mail: MailApp,
   calendar: CalendarApp, settings: SettingsApp, browser: BrowserApp, notes: NotesApp,
   sysmonitor: SystemMonitorApp, governance: GovernanceApp, memory: MemoryApp,
   vault: VaultApp, router: RouterApp, taip: TaipApp, forgecore: ForgeCoreApp,

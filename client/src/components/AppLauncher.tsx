@@ -9,7 +9,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Search, Terminal, FolderOpen, Mail, Calendar, Brain, Settings, Globe,
+  Search, Grid3X3, FolderOpen, Mail, Calendar, Brain, Settings, Globe,
   FileText, Cpu, Shield, Database, Zap, Archive, GitBranch, ScrollText,
   TerminalSquare, Workflow, DollarSign, Hexagon, HeartPulse, Hospital, Sparkles,
 } from "lucide-react";
@@ -24,7 +24,7 @@ interface LauncherApp {
 }
 
 const allApps: LauncherApp[] = [
-  { id: "terminal", name: "Terminal", description: "Aluminum Shell — uws CLI", icon: <Terminal className="w-5 h-5" />, category: "System" },
+  { id: "spheres", name: "144 Spheres", description: "12×12 Agent Ontology — 17,000+ READMEs, native tools, lattice structure", icon: <Grid3X3 className="w-5 h-5" />, category: "Core" },
   { id: "files", name: "Files", description: "Universal File Graph — alum://drive/", icon: <FolderOpen className="w-5 h-5" />, category: "System" },
   { id: "mail", name: "Mail", description: "Universal Inbox — Gmail + Outlook + iCloud", icon: <Mail className="w-5 h-5" />, category: "Communication" },
   { id: "calendar", name: "Calendar", description: "Unified Calendar — All providers", icon: <Calendar className="w-5 h-5" />, category: "Productivity" },
@@ -52,7 +52,7 @@ const allApps: LauncherApp[] = [
 ];
 
 const openableApps = new Set([
-  "terminal", "files", "mail", "calendar", "council", "settings", "browser", "notes",
+  "spheres", "files", "mail", "calendar", "council", "settings", "browser", "notes",
   "sysmonitor", "governance", "memory", "vault", "router", "taip", "forgecore",
   "agentshell", "deerflow", "costoptimizer", "taskgraph", "wellness", "healthcare",
   "appkiller", "wishlist",

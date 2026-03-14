@@ -1,41 +1,34 @@
 /*
  * TopBar — Cross-platform adaptive status bar
- * macOS: menu bar feel, ⌘K shortcut display
- * Windows: taskbar tray feel, Ctrl+K shortcut display
- * ChromeOS: shelf-adjacent, clean
- * iOS: respects safe-area-inset-top, larger touch targets
- * Android/Pixel: status bar integration, Material-like touch targets
- * All: keyboard accessible, screen reader labels, responsive collapse
+ * Council dots replaced with clickable "AI Models" button
+ * Clean, minimal — only essential system features
  */
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Wifi, Battery, Volume2, BellDot, X } from "lucide-react";
-import { useState, useEffect, useMemo } from "react";
+import { Search, Wifi, Battery, Volume2, BellDot, X, Brain } from "lucide-react";
+import { useState, useEffect } from "react";
 import { usePlatform, useModifierKey } from "@/hooks/usePlatform";
-
-const councilDots = [
-  { name: "Manus", color: "#00d4ff", status: "Builder" },
-  { name: "Claude", color: "#ff6b35", status: "Active" },
-  { name: "Gemini", color: "#00ff88", status: "Active" },
-  { name: "Copilot", color: "#9b59b6", status: "Active" },
-  { name: "Grok", color: "#ff4444", status: "Active" },
-  { name: "GPT", color: "#ffd700", status: "Timeout" },
-  { name: "DeepSeek", color: "#ff8800", status: "Active" },
-  { name: "Qwen3", color: "#00aaff", status: "Active" },
-  { name: "Gangaseek", color: "#e6b800", status: "Active" },
-  { name: "Jinnseek", color: "#cc66ff", status: "Active" },
-  { name: "Daavud", color: "#ffffff", status: "Sovereign" },
-];
+import { useWindows } from "@/contexts/WindowContext";
 
 export default function TopBar() {
   const [time, setTime] = useState(new Date());
   const [showNotifs, setShowNotifs] = useState(false);
-  const [hoveredDot, setHoveredDot] = useState<string | null>(null);
+  const [aiPulse, setAiPulse] = useState(false);
   const { isMobile, hasHover, isTouchDevice } = usePlatform();
   const modKey = useModifierKey();
+  const { openWindow } = useWindows();
 
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 1000);
     return () => clearInterval(timer);
+  }, []);
+
+  // Subtle AI pulse every 8s
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setAiPulse(true);
+      setTimeout(() => setAiPulse(false), 1500);
+    }, 8000);
+    return () => clearInterval(interval);
   }, []);
 
   const formatTime = (d: Date) =>
@@ -43,19 +36,14 @@ export default function TopBar() {
   const formatDate = (d: Date) =>
     d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
 
-  // Stable random delays for council dot animations
-  const dotAnimations = useMemo(() =>
-    councilDots.map(() => ({
-      duration: 2 + Math.random() * 2,
-      delay: Math.random() * 2,
-    })), []
-  );
-
   const handleSearchClick = () => {
     window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", ctrlKey: true, bubbles: true }));
   };
 
-  // Touch-friendly sizes
+  const openAICouncil = () => {
+    openWindow("council", "AI Council — Pantheon", "council", 950, 650);
+  };
+
   const barHeight = isMobile ? "h-10" : "h-8";
   const touchPad = isTouchDevice ? "min-h-[44px]" : "";
 
@@ -110,48 +98,48 @@ export default function TopBar() {
           </span>
         </div>
 
-        {/* Right: Council Dots + System Tray */}
+        {/* Right: AI Models button + System Tray */}
         <div className="flex items-center gap-1.5 sm:gap-2 flex-1 justify-end min-w-0">
-          {/* Council dots — responsive: show fewer on small screens */}
-          <div className="flex items-center gap-0.5 mr-1 sm:mr-2 relative">
-            {councilDots.map((dot, idx) => (
-              <motion.button
-                key={dot.name}
-                animate={{
-                  scale: [1, 1.3, 1],
-                  opacity: dot.status === "Timeout" ? [0.3, 0.5, 0.3] : [0.6, 1, 0.6],
-                }}
-                transition={{
-                  duration: dotAnimations[idx].duration,
-                  repeat: Infinity,
-                  delay: dotAnimations[idx].delay,
-                }}
-                className="w-1.5 h-1.5 rounded-full p-0 border-0 bg-transparent"
-                style={{ background: dot.color }}
-                onMouseEnter={hasHover ? () => setHoveredDot(dot.name) : undefined}
-                onMouseLeave={hasHover ? () => setHoveredDot(null) : undefined}
-                onClick={isTouchDevice ? () => setHoveredDot(hoveredDot === dot.name ? null : dot.name) : undefined}
-                aria-label={`${dot.name}: ${dot.status}`}
-              />
-            ))}
-            <AnimatePresence>
-              {hoveredDot && (
-                <motion.div
-                  initial={{ opacity: 0, y: 5 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 5 }}
-                  className="absolute top-7 right-0 glass-heavy rounded-lg px-2.5 py-1.5 border border-white/[0.08] whitespace-nowrap z-50"
-                >
-                  <p className="text-[10px] font-medium" style={{ color: councilDots.find(d => d.name === hoveredDot)?.color }}>
-                    {hoveredDot}
-                  </p>
-                  <p className="text-[9px] text-foreground/40">
-                    {councilDots.find(d => d.name === hoveredDot)?.status}
-                  </p>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+
+          {/* ── AI Models Button ── */}
+          <button
+            onClick={openAICouncil}
+            className={`relative flex items-center gap-1.5 rounded-lg transition-all duration-300 border cursor-pointer ${
+              aiPulse
+                ? "border-cyan-400/30 bg-cyan-400/[0.06]"
+                : "border-white/[0.06] bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/[0.1]"
+            } ${isTouchDevice ? "px-2.5 py-1.5 min-h-[36px]" : "px-2 py-1"}`}
+            aria-label="Open AI Models Panel — 10 models active"
+          >
+            <motion.div
+              animate={aiPulse ? { scale: [1, 1.2, 1] } : {}}
+              transition={{ duration: 1.5 }}
+            >
+              <Brain className={`w-3.5 h-3.5 transition-colors duration-300 ${aiPulse ? "text-cyan-400" : "text-foreground/50"}`} />
+            </motion.div>
+            <span className={`text-[10px] font-medium transition-colors duration-300 whitespace-nowrap ${
+              aiPulse ? "text-cyan-400/90" : "text-foreground/50"
+            }`}>
+              {isMobile ? "AI" : "AI Models"}
+            </span>
+            {/* 10 model status dots — compact */}
+            <div className="flex items-center gap-[2px]">
+              {["#00d4ff", "#ff6b35", "#00ff88", "#9b59b6", "#ff4444"].map((c, i) => (
+                <div
+                  key={i}
+                  className="w-[4px] h-[4px] rounded-full transition-opacity duration-300"
+                  style={{ background: c, opacity: aiPulse ? 1 : 0.5 }}
+                />
+              ))}
+              {!isMobile && ["#ffd700", "#4fc3f7", "#00aaff", "#e6b800", "#cc66ff"].map((c, i) => (
+                <div
+                  key={i + 5}
+                  className="w-[4px] h-[4px] rounded-full transition-opacity duration-300"
+                  style={{ background: c, opacity: aiPulse ? 1 : 0.4 }}
+                />
+              ))}
+            </div>
+          </button>
 
           {/* Notification bell */}
           <button
@@ -164,7 +152,7 @@ export default function TopBar() {
             <div className="absolute top-0.5 right-0.5 w-1.5 h-1.5 rounded-full bg-cyan-400" />
           </button>
 
-          {/* System icons — hide some on mobile */}
+          {/* System icons */}
           {!isMobile && (
             <>
               <Wifi className="w-3.5 h-3.5 text-foreground/50 flex-shrink-0" aria-label="Wi-Fi connected" />
@@ -178,7 +166,7 @@ export default function TopBar() {
         </div>
       </motion.div>
 
-      {/* Notification panel — responsive width, touch-friendly items */}
+      {/* Notification panel */}
       <AnimatePresence>
         {showNotifs && (
           <>

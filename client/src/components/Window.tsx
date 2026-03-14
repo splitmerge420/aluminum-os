@@ -9,7 +9,7 @@
 import { useWindows, type WindowState } from "@/contexts/WindowContext";
 import { motion } from "framer-motion";
 import {
-  Minus, X, Maximize2, Terminal, FolderOpen, Mail, CalendarDays,
+  Minus, X, Maximize2, Grid3X3, FolderOpen, Mail, CalendarDays,
   Brain, Settings, Globe, StickyNote, Activity, Shield, Database,
   Archive, GitBranch, ScrollText, Cpu, TerminalSquare, Workflow,
   DollarSign, Hexagon, HeartPulse, Hospital, Zap, Sparkles,
@@ -17,7 +17,7 @@ import {
 import { useRef, useCallback, useEffect, useState, type ReactNode } from "react";
 
 const appIcons: Record<string, React.ReactNode> = {
-  terminal: <Terminal className="w-3.5 h-3.5 text-cyan-400" />,
+  spheres: <Grid3X3 className="w-3.5 h-3.5 text-yellow-400" />,
   files: <FolderOpen className="w-3.5 h-3.5 text-amber-400" />,
   mail: <Mail className="w-3.5 h-3.5 text-blue-400" />,
   calendar: <CalendarDays className="w-3.5 h-3.5 text-emerald-400" />,
