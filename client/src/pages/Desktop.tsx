@@ -25,6 +25,7 @@ import WellnessApp from "@/components/apps/WellnessApp";
 import HealthcareApp from "@/components/apps/HealthcareApp";
 import AppKillerApp from "@/components/apps/AppKillerApp";
 import WishListApp from "@/components/apps/WishListApp";
+import UnifiedMedicalApp from "@/components/apps/UnifiedMedicalApp";
 import ContextMenu from "@/components/ContextMenu";
 import AppLauncher from "@/components/AppLauncher";
 import { AnimatePresence, motion } from "framer-motion";
@@ -39,7 +40,7 @@ const appComponents: Record<string, React.FC> = {
   vault: VaultApp, router: RouterApp, taip: TaipApp, forgecore: ForgeCoreApp,
   agentshell: AgentShellApp, deerflow: DeerFlowApp, costoptimizer: CostOptimizerApp,
   taskgraph: TaskGraphApp, wellness: WellnessApp, healthcare: HealthcareApp,
-  appkiller: AppKillerApp, wishlist: WishListApp,
+  appkiller: AppKillerApp, wishlist: WishListApp, unifiedmedical: UnifiedMedicalApp,
 };
 
 const bootSteps = [
@@ -59,6 +60,7 @@ const bootSteps = [
   { text: "App Killer Registry: 22,740 methods, 6 providers, 247 apps killed", duration: 80 },
   { text: "Claude Analysis: 0 conflicts, 6 new primitives, 8 critical items", duration: 80 },
   { text: "Aluminum Browser: Edge+Chrome+Safari synthesis, 10-model routing, health-aware", duration: 80 },
+  { text: "Layer 5: Unified Medical Shell — One Medical + MyChart + Teams synthesis, Pandora Flow", duration: 80 },
   { text: "Cross-platform UX: macOS, Windows, ChromeOS, iOS, Android, Pixel", duration: 80 },
   { text: "Starting Obsidian Glass UI...", duration: 200 },
   { text: "Welcome, Daavud.", duration: 300 },

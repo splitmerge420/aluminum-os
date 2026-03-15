@@ -11,7 +11,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Search, Grid3X3, FolderOpen, Mail, Calendar, Brain, Settings, Globe,
   FileText, Cpu, Shield, Database, Zap, Archive, GitBranch, ScrollText,
-  TerminalSquare, Workflow, DollarSign, Hexagon, HeartPulse, Hospital, Sparkles,
+  TerminalSquare, Workflow, DollarSign, Hexagon, HeartPulse, Hospital, Sparkles, Layers,
 } from "lucide-react";
 import { useWindows } from "@/contexts/WindowContext";
 
@@ -47,6 +47,7 @@ const allApps: LauncherApp[] = [
   { id: "healthcare", name: "Healthcare Layer", description: "Copilot's 7 modules — Identity, Telemetry, Fraud, Care Plans, Audit, Migration, Compliance", icon: <Hospital className="w-5 h-5" />, category: "Healthcare" },
   { id: "appkiller", name: "App Killer Registry", description: "22,740 methods — 6 providers — 247 apps killed — native constitutional tools", icon: <Zap className="w-5 h-5" />, category: "Core" },
   { id: "wishlist", name: "Manus Wish List", description: "60 wishes — 50 strategic + 10 chaos — 0 conflicts — Claude approved", icon: <Sparkles className="w-5 h-5" />, category: "Intelligence" },
+  { id: "unifiedmedical", name: "Unified Medical Shell", description: "Layer 5 — One Medical + MyChart + Teams synthesis, Pandora Flow, Constitutional Abstraction", icon: <Layers className="w-5 h-5" />, category: "Healthcare" },
   { id: "fusion", name: "Fusion Engine", description: "Cross-provider workflow engine", icon: <Zap className="w-5 h-5" />, category: "Core" },
   { id: "identity", name: "Identity Graph", description: "Unified sovereign identity — Janus bridge", icon: <Cpu className="w-5 h-5" />, category: "Core" },
 ];
