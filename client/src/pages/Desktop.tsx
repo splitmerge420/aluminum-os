@@ -32,6 +32,7 @@ import RegenerativeApp from "@/components/apps/RegenerativeApp";
 import NeuromorphicApp from "@/components/apps/NeuromorphicApp";
 import UnifiedFieldApp from "@/components/apps/UnifiedFieldApp";
 import TruthSubstrateApp from "@/components/apps/TruthSubstrateApp";
+import LatticeGenesisApp from "@/components/apps/LatticeGenesisApp";
 import ContextMenu from "@/components/ContextMenu";
 import AppLauncher from "@/components/AppLauncher";
 import { AnimatePresence, motion } from "framer-motion";
@@ -53,6 +54,7 @@ const appComponents: Record<string, React.FC> = {
   neuromorphic: NeuromorphicApp,
   unifiedfield: UnifiedFieldApp,
   truthsubstrate: TruthSubstrateApp,
+  latticegenesis: LatticeGenesisApp,
 };
 
 const bootSteps = [
@@ -84,6 +86,7 @@ const bootSteps = [
   { text: "Neuromorphic Architecture: 25,500 spiking neurons, 12 clusters, event-driven compute", duration: 80 },
   { text: "Unified Field v3.0: 8 field layers coherent, 144 spheres × 17K READMEs × 430 tools", duration: 80 },
   { text: "Truth Substrate: X-Algorithm Phoenix integration, MED-9/FRAUD-8 scoring, 144-sphere routing", duration: 80 },
+  { text: "Lattice Genesis v1.0.2: PQC Shield (ML-DSA-87), 10YST Engine, 144 PHD nodes initialized", duration: 80 },
   { text: "Cross-platform UX: macOS, Windows, ChromeOS, iOS, Android, Pixel", duration: 80 },
   { text: "Starting Obsidian Glass UI...", duration: 200 },
   { text: "Welcome, Daavud.", duration: 300 },
