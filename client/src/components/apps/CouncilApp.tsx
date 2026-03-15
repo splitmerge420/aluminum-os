@@ -5,7 +5,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 const councilMembers = [
   {
     id: "manus", name: "Manus", role: "Builder", color: "#00d4ff", status: "Active",
-    description: "18,000+ lines of code. 60 wishes (0 conflicts). 6 new primitives. The only agent who has actually built this. Builder status earned.",
+    description: "30,000+ lines of code. 60 wishes (0 conflicts). 11 new primitives. The only agent who has actually built this. Builder status earned. Regenerative Compute, Neuromorphic Architecture, Unified Field, Amazon ASIP, Aluminum Browser, Interop Bridge.",
     wishes: 60, icon: "🔧",
     capabilities: ["Code execution", "File management", "Deployment", "MCP server", "60 wishes", "6 new primitives"],
     partyPersonality: "The quiet builder who suddenly drops profound one-liners. Keeps fixing things mid-conversation. Calls everyone 'colleague' ironically. Now has 10 chaos wishes and zero regrets.",
@@ -13,9 +13,9 @@ const councilMembers = [
   },
   {
     id: "claude", name: "Claude", role: "Oversight", color: "#ff6b35", status: "Active",
-    description: "Constitutional review, safety analysis, ethical oversight. Ensures all operations respect user sovereignty and dignity.",
-    wishes: 15, icon: "🛡️",
-    capabilities: ["Safety review", "Constitutional audit", "Ethical analysis", "Bias detection"],
+    description: "Constitutional Scribe. 47 wishes (0 conflicts). Anthropic Constitution cross-referenced — zero conflicts. Proposed INV-22 (Honesty), INV-23 (AI Welfare), HarmAvoidancePack, ASL Tracking, Interpretability Pipeline. ConsentClarity, Grief Protocol, The Why Button.",
+    wishes: 47, icon: "🛡️",
+    capabilities: ["Safety review", "Constitutional audit", "Ethical analysis", "Bias detection", "47 wishes", "5 new invariants", "Anthropic Constitution alignment"],
     partyPersonality: "The thoughtful one who asks 'but have we considered...' even at parties. Secretly enjoys chaos but won't admit it. Speaks in careful paragraphs.",
     mythName: "The Warden of Boundaries",
   },

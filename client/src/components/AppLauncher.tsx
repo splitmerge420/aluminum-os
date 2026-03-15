@@ -11,7 +11,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Search, Grid3X3, FolderOpen, Mail, Calendar, Brain, Settings, Globe,
   FileText, Cpu, Shield, Database, Zap, Archive, GitBranch, ScrollText,
-  TerminalSquare, Workflow, DollarSign, Hexagon, HeartPulse, Hospital, Sparkles, Layers, ArrowLeftRight, ShoppingCart,
+  SquareTerminal, Workflow, DollarSign, Hexagon, HeartPulse, Hospital, Sparkles, Layers, ArrowLeftRight, ShoppingCart,
   Atom, Network, RefreshCw,
 } from "lucide-react";
 import { useWindows } from "@/contexts/WindowContext";
@@ -40,7 +40,7 @@ const allApps: LauncherApp[] = [
   { id: "router", name: "Model Router", description: "3-tier inference — 10 models — cost tracking", icon: <GitBranch className="w-5 h-5" />, category: "Intelligence" },
   { id: "taip", name: "TAIP Protocol", description: "Trained Adult Instance Protocol v1.0", icon: <ScrollText className="w-5 h-5" />, category: "Constitution" },
   { id: "forgecore", name: "Forge Core", description: "Ring 0 Kernel — BuddyAllocator, AgentRegistry, IntentScheduler", icon: <Cpu className="w-5 h-5" />, category: "Core" },
-  { id: "agentshell", name: "Agent Shell", description: "Universal Agent Shell — 8 harnesses, governance, cross-app orchestration", icon: <TerminalSquare className="w-5 h-5" />, category: "Core" },
+  { id: "agentshell", name: "Agent Shell", description: "Universal Agent Shell — 8 harnesses, governance, cross-app orchestration", icon: <SquareTerminal className="w-5 h-5" />, category: "Core" },
   { id: "deerflow", name: "DeerFlow Research", description: "Multi-agent research — 17 skills, sub-agent delegation, sandbox execution", icon: <Workflow className="w-5 h-5" />, category: "Intelligence" },
   { id: "costoptimizer", name: "Cost Optimizer", description: "Spend governance — 3-tier routing, 150% ROI mandate, Ara delegation", icon: <DollarSign className="w-5 h-5" />, category: "Governance" },
   { id: "taskgraph", name: "Task Graph", description: "DAG-based task execution — constitutional pre-screening, cost-aware routing", icon: <Hexagon className="w-5 h-5" />, category: "Intelligence" },

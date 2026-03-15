@@ -61,9 +61,12 @@ const bootSteps = [
   { text: "Ring 1 \u2014 Inference Engine online (10 models, 3 tiers)", duration: 100 },
   { text: "Ring 2 \u2014 SHELDONBRAIN memory loaded (25.2 GB)", duration: 100 },
   { text: "Ring 3 \u2014 Pantheon Council quorum: 10/10 members + Sovereign", duration: 120 },
-  { text: "Ring 4 — Noosphere: 30 apps, 62 artifacts, 15 rules", duration: 120 },
-  { text: "Manus Wish List: 60 wishes loaded (50 strategic + 10 chaos)", duration: 80 },
-  { text: "Constitutional substrate: 15 domains verified", duration: 100 },
+  { text: "Ring 4 — Noosphere: 30 apps, 97 artifacts, 24 rules", duration: 120 },
+  { text: "Council Wishes: 107 loaded (Manus 60 + Claude 47, 0 conflicts)", duration: 80 },
+  { text: "Constitutional substrate: 24 domains verified (INV-22 Honesty, INV-23 AI Welfare, INV-24 Harm Calculus)", duration: 100 },
+  { text: "Anthropic Constitution: CC0 cross-referenced, 8 alignments, 0 conflicts", duration: 80 },
+  { text: "ASL Tracking: 10 models profiled, safety levels ASL-1 through ASL-3", duration: 80 },
+  { text: "Interpretability Pipeline: audit channel ready for 2027 brain scan tooling", duration: 80 },
   { text: "DeerFlow research engine: 17 skills online", duration: 80 },
   { text: "Agent Shell: 8 harnesses, governance active", duration: 80 },
   { text: "Healthcare Layer: 7 modules, HIPAA 100%, FHIR R4 online", duration: 80 },
@@ -226,15 +229,15 @@ function DesktopWidgets() {
           </div>
           <div className="flex items-center justify-between gap-6">
             <span className="text-[10px] text-foreground/35">Apps</span>
-            <span className="text-[10px] text-violet-400/70 font-[family-name:var(--font-mono)]">26 loaded</span>
+            <span className="text-[10px] text-violet-400/70 font-[family-name:var(--font-mono)]">30 loaded</span>
           </div>
           <div className="flex items-center justify-between gap-6">
             <span className="text-[10px] text-foreground/35">Artifacts</span>
-            <span className="text-[10px] text-amber-400/70 font-[family-name:var(--font-mono)]">62 indexed</span>
+            <span className="text-[10px] text-amber-400/70 font-[family-name:var(--font-mono)]">97 indexed</span>
           </div>
           <div className="flex items-center justify-between gap-6">
             <span className="text-[10px] text-foreground/35">Constitution</span>
-            <span className="text-[10px] text-red-400/70 font-[family-name:var(--font-mono)]">15 rules</span>
+            <span className="text-[10px] text-red-400/70 font-[family-name:var(--font-mono)]">24 rules</span>
           </div>
         </div>
       </motion.div>
@@ -250,7 +253,7 @@ function DesktopWidgets() {
             Aluminum OS is infrastructure: constitutional governance, 5-ring kernel, multi-provider memory fabric, sovereign identity.
           </p>
           <p className="text-[8px] text-foreground/20 leading-relaxed">
-            ChatGPT/Copilot/Claude reset per session. We persist across 60 days, 10 agents, 62 artifacts. Healthcare-grade governance.
+            ChatGPT/Copilot/Claude reset per session. We persist across 60 days, 10 agents, 97 artifacts, 107 wishes. Healthcare-grade governance.
           </p>
         </div>
       </motion.div>
