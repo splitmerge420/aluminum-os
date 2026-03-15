@@ -10,6 +10,7 @@ import {
   RefreshCw, Layout, Palette, Monitor, Info, Grid3X3, FolderOpen,
   Cpu, Activity, Shield, Archive, ScrollText, TerminalSquare, Workflow,
   DollarSign, Hexagon, HeartPulse, Hospital, Zap, Sparkles, Layers, ArrowLeftRight, ShoppingCart,
+  Atom, Network,
 } from "lucide-react";
 import { useWindows } from "@/contexts/WindowContext";
 
@@ -112,6 +113,9 @@ export default function ContextMenu() {
     { label: "App Killer Registry", icon: <Zap className="w-3.5 h-3.5" />, action: () => openWindow("appkiller", "App Killer — 22,740 Methods", "appkiller", 1050, 700) },
     { label: "Interop Bridge", icon: <ArrowLeftRight className="w-3.5 h-3.5" />, action: () => openWindow("interopbridge", "Interop Bridge — Cross-Device Sync", "interopbridge", 1050, 700) },
     { label: "Amazon ASIP", icon: <ShoppingCart className="w-3.5 h-3.5" />, action: () => openWindow("amazon", "Amazon Strategic Integration Protocol", "amazon", 1050, 700) },
+    { label: "Regenerative Compute", icon: <RefreshCw className="w-3.5 h-3.5" />, action: () => openWindow("regenerative", "Regenerative Compute Engine", "regenerative", 1050, 700) },
+    { label: "Neuromorphic Arch", icon: <Network className="w-3.5 h-3.5" />, action: () => openWindow("neuromorphic", "Neuromorphic Architecture", "neuromorphic", 1050, 700) },
+    { label: "Unified Field", icon: <Atom className="w-3.5 h-3.5" />, action: () => openWindow("unifiedfield", "Unified Field Dashboard v3.0", "unifiedfield", 1050, 700) },
     { label: "Manus Wish List", icon: <Sparkles className="w-3.5 h-3.5" />, action: () => openWindow("wishlist", "Manus Wish List — 60 Wishes", "wishlist", 1050, 700) },
     "divider",
     { label: "Change Wallpaper", icon: <Palette className="w-3.5 h-3.5" />, action: () => openWindow("settings", "Settings", "settings") },

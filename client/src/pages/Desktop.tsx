@@ -28,6 +28,9 @@ import WishListApp from "@/components/apps/WishListApp";
 import UnifiedMedicalApp from "@/components/apps/UnifiedMedicalApp";
 import InteropBridgeApp from "@/components/apps/InteropBridgeApp";
 import AmazonApp from "@/components/apps/AmazonApp";
+import RegenerativeApp from "@/components/apps/RegenerativeApp";
+import NeuromorphicApp from "@/components/apps/NeuromorphicApp";
+import UnifiedFieldApp from "@/components/apps/UnifiedFieldApp";
 import ContextMenu from "@/components/ContextMenu";
 import AppLauncher from "@/components/AppLauncher";
 import { AnimatePresence, motion } from "framer-motion";
@@ -45,6 +48,9 @@ const appComponents: Record<string, React.FC> = {
   appkiller: AppKillerApp, wishlist: WishListApp, unifiedmedical: UnifiedMedicalApp,
   interopbridge: InteropBridgeApp,
   amazon: AmazonApp,
+  regenerative: RegenerativeApp,
+  neuromorphic: NeuromorphicApp,
+  unifiedfield: UnifiedFieldApp,
 };
 
 const bootSteps = [
@@ -55,7 +61,7 @@ const bootSteps = [
   { text: "Ring 1 \u2014 Inference Engine online (10 models, 3 tiers)", duration: 100 },
   { text: "Ring 2 \u2014 SHELDONBRAIN memory loaded (25.2 GB)", duration: 100 },
   { text: "Ring 3 \u2014 Pantheon Council quorum: 10/10 members + Sovereign", duration: 120 },
-  { text: "Ring 4 \u2014 Noosphere: 23 apps, 62 artifacts, 15 rules", duration: 120 },
+  { text: "Ring 4 — Noosphere: 30 apps, 62 artifacts, 15 rules", duration: 120 },
   { text: "Manus Wish List: 60 wishes loaded (50 strategic + 10 chaos)", duration: 80 },
   { text: "Constitutional substrate: 15 domains verified", duration: 100 },
   { text: "DeerFlow research engine: 17 skills online", duration: 80 },
@@ -67,6 +73,9 @@ const bootSteps = [
   { text: "Layer 5: Unified Medical Shell — One Medical + MyChart + Teams synthesis, Pandora Flow", duration: 80 },
   { text: "Interop Bridge: Chromium↔Apple↔Android↔Amazon synthesis, 7 devices, E2E encrypted", duration: 80 },
   { text: "Amazon ASIP: Alexa+ bridge, Bedrock 12 models, 10 Fire devices, One Medical, Ring/Blink", duration: 80 },
+  { text: "Regenerative Compute: Mycelium+Coral+Whale biomimetic self-healing, 12 nodes, 99.97% uptime", duration: 80 },
+  { text: "Neuromorphic Architecture: 25,500 spiking neurons, 12 clusters, event-driven compute", duration: 80 },
+  { text: "Unified Field v3.0: 8 field layers coherent, 144 spheres × 17K READMEs × 430 tools", duration: 80 },
   { text: "Cross-platform UX: macOS, Windows, ChromeOS, iOS, Android, Pixel", duration: 80 },
   { text: "Starting Obsidian Glass UI...", duration: 200 },
   { text: "Welcome, Daavud.", duration: 300 },

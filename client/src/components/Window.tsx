@@ -13,6 +13,7 @@ import {
   Brain, Settings, Globe, StickyNote, Activity, Shield, Database,
   Archive, GitBranch, ScrollText, Cpu, TerminalSquare, Workflow,
   DollarSign, Hexagon, HeartPulse, Hospital, Zap, Sparkles, Layers, ArrowLeftRight, ShoppingCart,
+  Atom, Network, RefreshCw,
 } from "lucide-react";
 import { useRef, useCallback, useEffect, useState, type ReactNode } from "react";
 
@@ -43,6 +44,9 @@ const appIcons: Record<string, React.ReactNode> = {
   unifiedmedical: <Layers className="w-3.5 h-3.5 text-cyan-400" />,
   interopbridge: <ArrowLeftRight className="w-3.5 h-3.5 text-cyan-400" />,
   amazon: <ShoppingCart className="w-3.5 h-3.5 text-[#FF9900]" />,
+  regenerative: <RefreshCw className="w-3.5 h-3.5 text-emerald-400" />,
+  neuromorphic: <Network className="w-3.5 h-3.5 text-violet-400" />,
+  unifiedfield: <Atom className="w-3.5 h-3.5 text-indigo-400" />,
 };
 
 interface WindowProps {
