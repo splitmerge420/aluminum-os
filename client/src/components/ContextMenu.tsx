@@ -9,7 +9,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   RefreshCw, Layout, Palette, Monitor, Info, Grid3X3, FolderOpen,
   Cpu, Activity, Shield, Archive, ScrollText, TerminalSquare, Workflow,
-  DollarSign, Hexagon, HeartPulse, Hospital, Zap, Sparkles, Layers, ArrowLeftRight,
+  DollarSign, Hexagon, HeartPulse, Hospital, Zap, Sparkles, Layers, ArrowLeftRight, ShoppingCart,
 } from "lucide-react";
 import { useWindows } from "@/contexts/WindowContext";
 
@@ -111,6 +111,7 @@ export default function ContextMenu() {
     { label: "Unified Medical Shell", icon: <Layers className="w-3.5 h-3.5" />, action: () => openWindow("unifiedmedical", "Layer 5 — Unified Medical Shell", "unifiedmedical", 1050, 700) },
     { label: "App Killer Registry", icon: <Zap className="w-3.5 h-3.5" />, action: () => openWindow("appkiller", "App Killer — 22,740 Methods", "appkiller", 1050, 700) },
     { label: "Interop Bridge", icon: <ArrowLeftRight className="w-3.5 h-3.5" />, action: () => openWindow("interopbridge", "Interop Bridge — Cross-Device Sync", "interopbridge", 1050, 700) },
+    { label: "Amazon ASIP", icon: <ShoppingCart className="w-3.5 h-3.5" />, action: () => openWindow("amazon", "Amazon Strategic Integration Protocol", "amazon", 1050, 700) },
     { label: "Manus Wish List", icon: <Sparkles className="w-3.5 h-3.5" />, action: () => openWindow("wishlist", "Manus Wish List — 60 Wishes", "wishlist", 1050, 700) },
     "divider",
     { label: "Change Wallpaper", icon: <Palette className="w-3.5 h-3.5" />, action: () => openWindow("settings", "Settings", "settings") },

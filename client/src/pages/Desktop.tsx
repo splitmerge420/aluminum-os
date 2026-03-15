@@ -27,6 +27,7 @@ import AppKillerApp from "@/components/apps/AppKillerApp";
 import WishListApp from "@/components/apps/WishListApp";
 import UnifiedMedicalApp from "@/components/apps/UnifiedMedicalApp";
 import InteropBridgeApp from "@/components/apps/InteropBridgeApp";
+import AmazonApp from "@/components/apps/AmazonApp";
 import ContextMenu from "@/components/ContextMenu";
 import AppLauncher from "@/components/AppLauncher";
 import { AnimatePresence, motion } from "framer-motion";
@@ -43,6 +44,7 @@ const appComponents: Record<string, React.FC> = {
   taskgraph: TaskGraphApp, wellness: WellnessApp, healthcare: HealthcareApp,
   appkiller: AppKillerApp, wishlist: WishListApp, unifiedmedical: UnifiedMedicalApp,
   interopbridge: InteropBridgeApp,
+  amazon: AmazonApp,
 };
 
 const bootSteps = [
@@ -64,6 +66,7 @@ const bootSteps = [
   { text: "Aluminum Browser: Edge+Chrome+Safari synthesis, 10-model routing, health-aware", duration: 80 },
   { text: "Layer 5: Unified Medical Shell — One Medical + MyChart + Teams synthesis, Pandora Flow", duration: 80 },
   { text: "Interop Bridge: Chromium↔Apple↔Android↔Amazon synthesis, 7 devices, E2E encrypted", duration: 80 },
+  { text: "Amazon ASIP: Alexa+ bridge, Bedrock 12 models, 10 Fire devices, One Medical, Ring/Blink", duration: 80 },
   { text: "Cross-platform UX: macOS, Windows, ChromeOS, iOS, Android, Pixel", duration: 80 },
   { text: "Starting Obsidian Glass UI...", duration: 200 },
   { text: "Welcome, Daavud.", duration: 300 },
@@ -214,7 +217,7 @@ function DesktopWidgets() {
           </div>
           <div className="flex items-center justify-between gap-6">
             <span className="text-[10px] text-foreground/35">Apps</span>
-            <span className="text-[10px] text-violet-400/70 font-[family-name:var(--font-mono)]">25 loaded</span>
+            <span className="text-[10px] text-violet-400/70 font-[family-name:var(--font-mono)]">26 loaded</span>
           </div>
           <div className="flex items-center justify-between gap-6">
             <span className="text-[10px] text-foreground/35">Artifacts</span>
