@@ -11,7 +11,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Search, Grid3X3, FolderOpen, Mail, Calendar, Brain, Settings, Globe,
   FileText, Cpu, Shield, Database, Zap, Archive, GitBranch, ScrollText,
-  TerminalSquare, Workflow, DollarSign, Hexagon, HeartPulse, Hospital, Sparkles, Layers,
+  TerminalSquare, Workflow, DollarSign, Hexagon, HeartPulse, Hospital, Sparkles, Layers, ArrowLeftRight,
 } from "lucide-react";
 import { useWindows } from "@/contexts/WindowContext";
 
@@ -48,6 +48,7 @@ const allApps: LauncherApp[] = [
   { id: "appkiller", name: "App Killer Registry", description: "22,740 methods — 6 providers — 247 apps killed — native constitutional tools", icon: <Zap className="w-5 h-5" />, category: "Core" },
   { id: "wishlist", name: "Manus Wish List", description: "60 wishes — 50 strategic + 10 chaos — 0 conflicts — Claude approved", icon: <Sparkles className="w-5 h-5" />, category: "Intelligence" },
   { id: "unifiedmedical", name: "Unified Medical Shell", description: "Layer 5 — One Medical + MyChart + Teams synthesis, Pandora Flow, Constitutional Abstraction", icon: <Layers className="w-5 h-5" />, category: "Healthcare" },
+  { id: "interopbridge", name: "Interop Bridge", description: "Chromium↔Apple↔Android↔Amazon synthesis — 7 devices, E2E encrypted, constitutional sync", icon: <ArrowLeftRight className="w-5 h-5" />, category: "Core" },
   { id: "fusion", name: "Fusion Engine", description: "Cross-provider workflow engine", icon: <Zap className="w-5 h-5" />, category: "Core" },
   { id: "identity", name: "Identity Graph", description: "Unified sovereign identity — Janus bridge", icon: <Cpu className="w-5 h-5" />, category: "Core" },
 ];
@@ -56,7 +57,7 @@ const openableApps = new Set([
   "spheres", "files", "mail", "calendar", "council", "settings", "browser", "notes",
   "sysmonitor", "governance", "memory", "vault", "router", "taip", "forgecore",
   "agentshell", "deerflow", "costoptimizer", "taskgraph", "wellness", "healthcare",
-  "appkiller", "wishlist",
+  "appkiller", "wishlist", "unifiedmedical", "interopbridge",
 ]);
 
 export default function AppLauncher() {

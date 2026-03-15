@@ -12,7 +12,7 @@ import {
   Minus, X, Maximize2, Grid3X3, FolderOpen, Mail, CalendarDays,
   Brain, Settings, Globe, StickyNote, Activity, Shield, Database,
   Archive, GitBranch, ScrollText, Cpu, TerminalSquare, Workflow,
-  DollarSign, Hexagon, HeartPulse, Hospital, Zap, Sparkles, Layers,
+  DollarSign, Hexagon, HeartPulse, Hospital, Zap, Sparkles, Layers, ArrowLeftRight,
 } from "lucide-react";
 import { useRef, useCallback, useEffect, useState, type ReactNode } from "react";
 
@@ -41,6 +41,7 @@ const appIcons: Record<string, React.ReactNode> = {
   appkiller: <Zap className="w-3.5 h-3.5 text-pink-400" />,
   wishlist: <Sparkles className="w-3.5 h-3.5 text-cyan-400" />,
   unifiedmedical: <Layers className="w-3.5 h-3.5 text-cyan-400" />,
+  interopbridge: <ArrowLeftRight className="w-3.5 h-3.5 text-cyan-400" />,
 };
 
 interface WindowProps {
