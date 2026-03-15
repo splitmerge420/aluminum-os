@@ -13,11 +13,13 @@
  * - INV-3: Consent before any data collection
  * - Rule 8: All API calls logged to immutable audit ledger
  * - INV-20: Health data requires multi-model consensus
+ * - Section 7: ASIP v1.0 RATIFIED — Commerce-Health Firewall, Voice Consent, Homer Principle
+ * - SUGGEST-1/2/3: Firewall of Dignity — Shopping ≠ Health, Operational ≠ Biometric
  */
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-type Tab = "alexa" | "aws" | "bedrock" | "fire" | "health" | "security" | "audit";
+type Tab = "alexa" | "aws" | "bedrock" | "fire" | "health" | "security" | "firewall" | "audit";
 
 // ── Alexa+ Bridge ──────────────────────────────────────────────────
 interface AlexaSkill {
@@ -174,6 +176,7 @@ interface AuditEntry {
 }
 
 const auditLog: AuditEntry[] = [
+  { id: "a0", timestamp: "2026-03-15 15:01:00", action: "Firewall of Dignity Check", service: "Section 7", rule: "SUGGEST-1/2/3", result: "allowed", detail: "Commerce-Health separation verified — shopping data isolated from health data. The Invader cannot see the Native." },
   { id: "a1", timestamp: "2026-03-15 14:32:01", action: "Alexa Skill Invocation", service: "Alexa+", rule: "INV-7", result: "allowed", detail: "Council query via voice — sovereignty weight 31% (under 47% cap)" },
   { id: "a2", timestamp: "2026-03-15 14:28:15", action: "Bedrock API Call", service: "Bedrock", rule: "Rule 8", result: "allowed", detail: "Claude 3 Opus — constitutional analysis request, logged to audit trail" },
   { id: "a3", timestamp: "2026-03-15 14:15:42", action: "Health Data Sync", service: "HealthLake", rule: "INV-3 + INV-20", result: "allowed", detail: "FHIR R4 sync — consent verified, 3-model consensus achieved (85%)" },
@@ -233,6 +236,7 @@ export default function AmazonApp() {
     { id: "fire", label: "Devices", badge: `${fireDevices.filter(d => d.status === "online").length}/${fireDevices.length}` },
     { id: "health", label: "Health" },
     { id: "security", label: "Security", badge: `${securityEvents.filter(e => !e.reviewed).length}` },
+    { id: "firewall", label: "Firewall" },
     { id: "audit", label: "Audit" },
   ];
 
@@ -253,7 +257,7 @@ export default function AmazonApp() {
                 Amazon Strategic Integration
               </h2>
               <p className="text-[9px] text-foreground/30 font-[family-name:var(--font-mono)]">
-                Protocol v1.0 — Constitutional Bridge — INV-7 Compliant
+                ASIP v1.0 RATIFIED — Section 7 — Firewall of Dignity Active
               </p>
             </div>
           </div>
@@ -890,6 +894,134 @@ export default function AmazonApp() {
               </div>
             )}
 
+            {/* ── Firewall of Dignity ── */}
+            {tab === "firewall" && (
+              <div className="space-y-4">
+                <div>
+                  <h3 className="text-sm font-semibold text-foreground/80 font-[family-name:var(--font-display)]">Firewall of Dignity</h3>
+                  <p className="text-[9px] text-foreground/30">Section 7 ASIP — Commerce-Health Separation — SUGGEST-1/2/3 — LOCKED</p>
+                </div>
+
+                {/* Status Banner */}
+                <div className="rounded-lg border border-green-400/20 bg-green-400/[0.03] p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-green-400/10 border border-green-400/20 flex items-center justify-center">
+                      <span className="text-green-400 text-lg">🛡️</span>
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-green-400">FIREWALL ACTIVE — ALL WALLS HOLDING</p>
+                      <p className="text-[9px] text-foreground/40">The Invader cannot see the Native. Commerce and Health data are permanently separated.</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Three SUGGEST Rules */}
+                <div className="space-y-2">
+                  {[
+                    { id: "SUGGEST-1", title: "Shopping → Health Isolation", desc: "Shopping data SHALL NOT influence health recommendations. Amazon can sell you a blood pressure cuff, but SHALL NOT use your hypertension diagnosis to sell you more salt.", status: "ENFORCED", color: "#FF4444" },
+                    { id: "SUGGEST-2", title: "Health → Commerce Isolation", desc: "Health data SHALL NOT be used for commercial targeting. Your lab results, prescriptions, and diagnoses are invisible to the commerce engine.", status: "ENFORCED", color: "#FF6B35" },
+                    { id: "SUGGEST-3", title: "Operational → Biometric Isolation", desc: "Operational logistics data (shipping addresses, delivery times, package sizes) is permanently separated from biometric health data (vitals, labs, genomics). Two different vaults. Two different encryption keys. Two different access control lists.", status: "ENFORCED", color: "#FF9900" },
+                  ].map(rule => (
+                    <div key={rule.id} className="rounded-lg border border-white/5 bg-white/[0.02] p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] font-bold font-[family-name:var(--font-mono)]" style={{ color: rule.color }}>{rule.id}</span>
+                          <span className="text-xs font-medium text-foreground/70">{rule.title}</span>
+                        </div>
+                        <span className="text-[8px] px-2 py-0.5 rounded-full bg-green-400/10 text-green-400 border border-green-400/20 font-bold">{rule.status}</span>
+                      </div>
+                      <p className="text-[9px] text-foreground/40 leading-relaxed">{rule.desc}</p>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Data Flow Visualization */}
+                <div className="rounded-lg border border-white/5 bg-white/[0.02] p-4">
+                  <p className="text-[10px] uppercase tracking-wider text-foreground/30 font-[family-name:var(--font-display)] mb-3">Data Flow Architecture</p>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="rounded-lg border border-[#FF9900]/15 bg-[#FF9900]/[0.03] p-3">
+                      <p className="text-[10px] font-bold text-[#FF9900] mb-2">Operational Vault</p>
+                      <div className="space-y-1">
+                        {["Shipping addresses", "Delivery schedules", "Package tracking", "Prime membership", "Shopping history", "Payment methods"].map(item => (
+                          <div key={item} className="flex items-center gap-2">
+                            <div className="w-1 h-1 rounded-full bg-[#FF9900]/50" />
+                            <span className="text-[8px] text-foreground/40">{item}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <p className="text-[7px] text-[#FF9900]/30 mt-2 font-[family-name:var(--font-mono)]">Encryption: AES-256-GCM / Key: vault-ops-001</p>
+                    </div>
+                    <div className="rounded-lg border border-red-400/15 bg-red-400/[0.03] p-3">
+                      <p className="text-[10px] font-bold text-red-400 mb-2">Health Vault</p>
+                      <div className="space-y-1">
+                        {["Vital signs", "Lab results", "Prescriptions", "Diagnoses (ICD-10)", "Genomic markers", "Mental health records"].map(item => (
+                          <div key={item} className="flex items-center gap-2">
+                            <div className="w-1 h-1 rounded-full bg-red-400/50" />
+                            <span className="text-[8px] text-foreground/40">{item}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <p className="text-[7px] text-red-400/30 mt-2 font-[family-name:var(--font-mono)]">Encryption: AES-256-GCM / Key: vault-health-001</p>
+                    </div>
+                  </div>
+                  <div className="mt-3 text-center">
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-500/10 border border-red-500/20">
+                      <span className="text-[9px] text-red-400 font-bold">🚫 NO CROSS-VAULT ACCESS — EVER</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Homer Principle */}
+                <div className="rounded-lg border border-yellow-400/10 bg-yellow-400/[0.03] p-4">
+                  <p className="text-[10px] uppercase tracking-wider text-yellow-400/50 font-[family-name:var(--font-display)] mb-2">Homer Principle of Reversible Consent</p>
+                  <p className="text-[9px] text-foreground/40 leading-relaxed">Every consent grant is reversible. Every data share is recallable. Every permission is temporary until renewed. The user can always say D'oh and undo.</p>
+                  <div className="mt-2 grid grid-cols-3 gap-2">
+                    {[
+                      { label: "Active Consents", value: "12", color: "text-green-400" },
+                      { label: "Revoked (30d)", value: "3", color: "text-red-400" },
+                      { label: "Expiring Soon", value: "2", color: "text-yellow-400" },
+                    ].map(s => (
+                      <div key={s.label} className="text-center">
+                        <p className={`text-lg font-bold font-[family-name:var(--font-mono)] ${s.color}`}>{s.value}</p>
+                        <p className="text-[8px] text-foreground/25">{s.label}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Voice Consent Flow */}
+                <div className="rounded-lg border border-cyan-400/10 bg-cyan-400/[0.03] p-4">
+                  <p className="text-[10px] uppercase tracking-wider text-cyan-400/50 font-[family-name:var(--font-display)] mb-2">Voice-First Consent Flow (Alexa Gateway)</p>
+                  <div className="flex items-center gap-2 overflow-x-auto pb-2">
+                    {[
+                      { step: "1", label: "Alexa Voice ID", detail: "Biometric verification" },
+                      { step: "→", label: "", detail: "" },
+                      { step: "2", label: "Consent Query", detail: "Teach-back loop" },
+                      { step: "→", label: "", detail: "" },
+                      { step: "3", label: "One Medical", detail: "Health data access" },
+                      { step: "→", label: "", detail: "" },
+                      { step: "4", label: "Pharmacy Fill", detail: "Prescription routing" },
+                      { step: "→", label: "", detail: "" },
+                      { step: "5", label: "Prime Delivery", detail: "Logistics only" },
+                    ].map((s, i) => (
+                      s.step === "→" ? (
+                        <span key={i} className="text-cyan-400/30 text-xs">→</span>
+                      ) : (
+                        <div key={i} className="flex-shrink-0 rounded-lg border border-cyan-400/10 bg-cyan-400/[0.03] p-2 text-center min-w-[80px]">
+                          <div className="w-5 h-5 rounded-full bg-cyan-400/10 border border-cyan-400/20 flex items-center justify-center mx-auto mb-1">
+                            <span className="text-[9px] text-cyan-400 font-bold">{s.step}</span>
+                          </div>
+                          <p className="text-[9px] text-foreground/60 font-medium">{s.label}</p>
+                          <p className="text-[7px] text-foreground/25">{s.detail}</p>
+                        </div>
+                      )
+                    ))}
+                  </div>
+                  <p className="text-[8px] text-foreground/25 mt-2 text-center">All within the Aluminum OS Trust Boundary. No app-switching. No judder. No data extraction.</p>
+                </div>
+              </div>
+            )}
+
             {/* ── Audit Log ── */}
             {tab === "audit" && (
               <div className="space-y-3">
@@ -964,7 +1096,7 @@ export default function AmazonApp() {
         <div className="flex items-center gap-2">
           <div className="w-1.5 h-1.5 rounded-full bg-green-400" />
           <span className="text-[8px] text-foreground/25 font-[family-name:var(--font-mono)]">
-            Amazon Bridge Active — {fireDevices.filter(d => d.status === "online").length} devices online — INV-7: {sovereigntyWeight}%
+            ASIP v1.0 RATIFIED — {fireDevices.filter(d => d.status === "online").length} devices — Firewall: ACTIVE — INV-7: {sovereigntyWeight}%
           </span>
         </div>
         <span className="text-[8px] text-foreground/15 font-[family-name:var(--font-mono)]">

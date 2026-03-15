@@ -1,22 +1,24 @@
-# Layer 5: Unified UI Synthesis
+# Master Architecture v1.0.2 — Root Integration
 
-## Phase 1: Read current state
-- [ ] Read HealthcareApp to understand existing medical UI
-- [ ] Read Desktop.tsx for registration pattern
+## Phase 1: GovernanceApp
+- [ ] Add Section 7: Amazon Strategic Integration Protocol (ASIP) as ratified law
+- [ ] Add Commerce-Health Firewall (SUGGEST-1/2/3) as constitutional invariant
+- [ ] Add Homer Principle of Reversible Consent
+- [ ] Add Identity & Consent Kernel (Factor 1/2/3)
+- [ ] Update status to LOCKED / Ratified
 
-## Phase 2: Build UnifiedMedicalShell
-- [ ] Create UnifiedMedicalApp.tsx — single interface wrapping One Medical, MyChart, Teams
-- [ ] Pandora-style flow: unified patient timeline, provider-agnostic
-- [ ] Constitutional Abstraction Layer: every data access logged to Audit Ledger
-- [ ] Provider cards: Amazon Health (One Medical), Epic (MyChart), Microsoft (Teams)
-- [ ] Unified patient view: vitals, appointments, messages, records across all providers
-- [ ] Constitutional consent gate on every cross-provider data access
+## Phase 2: AmazonApp
+- [ ] Add Voice Consent flow (Alexa → One Medical → Pharmacy → Prime Logistics)
+- [ ] Add Firewall of Dignity separation (Operational vs Health data)
+- [ ] Add Constitutional Tenant status badge
+- [ ] Add Voice-First Accessibility gateway
 
-## Phase 3: Register everywhere
-- [ ] Desktop.tsx: import + appComponents
-- [ ] Boot sequence: add Layer 5 line
-- [ ] Window.tsx: icon mapping
-- [ ] AppLauncher: add entry
-- [ ] ContextMenu: add entry
+## Phase 3: Healthcare/UnifiedMedical
+- [ ] Add Universal Metabolic Stream (UMS) Layer 4
+- [ ] Add Commerce-Health separation enforcement
+- [ ] Add Alexa Voice Consent integration
 
-## Phase 4: Test + checkpoint
+## Phase 4: Boot/Vault/Desktop
+- [ ] Add ratification boot steps
+- [ ] Add Master Architecture v1.0.2 vault artifact
+- [ ] Update widget counts

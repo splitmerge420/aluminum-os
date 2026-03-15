@@ -61,7 +61,7 @@ const bootSteps = [
   { text: "Ring 1 \u2014 Inference Engine online (10 models, 3 tiers)", duration: 100 },
   { text: "Ring 2 \u2014 SHELDONBRAIN memory loaded (25.2 GB)", duration: 100 },
   { text: "Ring 3 \u2014 Pantheon Council quorum: 10/10 members + Sovereign", duration: 120 },
-  { text: "Ring 4 — Noosphere: 30 apps, 97 artifacts, 24 rules", duration: 120 },
+  { text: "Ring 4 — Noosphere: 30 apps, 104 artifacts, 27 rules", duration: 120 },
   { text: "Council Wishes: 107 loaded (Manus 60 + Claude 47, 0 conflicts)", duration: 80 },
   { text: "Constitutional substrate: 24 domains verified (INV-22 Honesty, INV-23 AI Welfare, INV-24 Harm Calculus)", duration: 100 },
   { text: "Anthropic Constitution: CC0 cross-referenced, 8 alignments, 0 conflicts", duration: 80 },
@@ -75,7 +75,9 @@ const bootSteps = [
   { text: "Aluminum Browser: Edge+Chrome+Safari synthesis, 10-model routing, health-aware", duration: 80 },
   { text: "Layer 5: Unified Medical Shell — One Medical + MyChart + Teams synthesis, Pandora Flow", duration: 80 },
   { text: "Interop Bridge: Chromium↔Apple↔Android↔Amazon synthesis, 7 devices, E2E encrypted", duration: 80 },
-  { text: "Amazon ASIP: Alexa+ bridge, Bedrock 12 models, 10 Fire devices, One Medical, Ring/Blink", duration: 80 },
+  { text: "Amazon ASIP v1.0 RATIFIED — Section 7: Firewall of Dignity ACTIVE, SUGGEST-1/2/3 ENFORCED", duration: 80 },
+  { text: "Commerce-Health Firewall: Shopping ≠ Health, Operational ≠ Biometric, Homer Principle locked", duration: 80 },
+  { text: "Voice Consent Flow: Alexa Voice ID → Teach-back → One Medical → Pharmacy → Prime Delivery", duration: 80 },
   { text: "Regenerative Compute: Mycelium+Coral+Whale biomimetic self-healing, 12 nodes, 99.97% uptime", duration: 80 },
   { text: "Neuromorphic Architecture: 25,500 spiking neurons, 12 clusters, event-driven compute", duration: 80 },
   { text: "Unified Field v3.0: 8 field layers coherent, 144 spheres × 17K READMEs × 430 tools", duration: 80 },
@@ -233,11 +235,11 @@ function DesktopWidgets() {
           </div>
           <div className="flex items-center justify-between gap-6">
             <span className="text-[10px] text-foreground/35">Artifacts</span>
-            <span className="text-[10px] text-amber-400/70 font-[family-name:var(--font-mono)]">97 indexed</span>
+            <span className="text-[10px] text-amber-400/70 font-[family-name:var(--font-mono)]">104 indexed</span>
           </div>
           <div className="flex items-center justify-between gap-6">
             <span className="text-[10px] text-foreground/35">Constitution</span>
-            <span className="text-[10px] text-red-400/70 font-[family-name:var(--font-mono)]">24 rules</span>
+            <span className="text-[10px] text-red-400/70 font-[family-name:var(--font-mono)]">27 rules</span>
           </div>
         </div>
       </motion.div>

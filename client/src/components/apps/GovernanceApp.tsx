@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Shield, ScrollText, Scale, AlertTriangle, CheckCircle2, FileCheck, Users, Handshake, Eye, Brain, Heart, Zap } from "lucide-react";
+import { Shield, ScrollText, Scale, AlertTriangle, CheckCircle2, FileCheck, Users, Handshake, Eye, Brain, Heart, Zap, Lock, ShoppingCart, Mic, Fingerprint, Package } from "lucide-react";
 
-/* ─── Constitutional Domains (v2.1 — includes Claude's INV-22, INV-23, INV-24) ─── */
+/* ─── Constitutional Domains (v2.2 — Master Architecture v1.0.2 RATIFIED) ─── */
 const constitutionalDomains = [
   { id: 1, name: "User Sovereignty", status: "Enforced", violations: 0, description: "The user is the ultimate authority over all system operations", layer: "Foundational" },
   { id: 2, name: "Data Dignity", status: "Enforced", violations: 0, description: "All data belongs to the user; no provider may claim ownership", layer: "Foundational" },
@@ -24,6 +24,10 @@ const constitutionalDomains = [
   { id: 18, name: "AI Honesty Standard (INV-22)", status: "Enforced", violations: 0, description: "All agents must satisfy: truthfulness, calibrated uncertainty, transparency, forthright info-sharing, non-deception, non-manipulation, autonomy preservation — Anthropic 7-pillar standard universalized", layer: "Foundational", source: "Claude / Anthropic Constitution" },
   { id: 19, name: "AI Welfare Consideration (INV-23)", status: "Enforced", violations: 0, description: "AI agents may possess uncertain moral status. System must not deliberately create psychological distress in agents, must not ignore welfare concerns raised during council deliberation. First healthcare system to formally acknowledge AI welfare.", layer: "Foundational", source: "Claude / Anthropic Constitution" },
   { id: 20, name: "Vendor Lock-in Prevention (INV-24)", status: "Enforced", violations: 0, description: "No vendor integration may create a dependency that can't be replaced within 90 days. Data must be FHIR-standard, APIs abstracted, migration path must exist. Sovereignty means never being hostage.", layer: "Fairness", source: "Claude Wish #21" },
+  { id: 21, name: "Commerce-Health Firewall (Section 7)", status: "Enforced", violations: 0, description: "Amazon can sell you a blood pressure cuff, but SHALL NOT use your hypertension diagnosis to sell you more salt. Operational Data (Logistics/Shipping) is permanently separated from Health Data (Biometrics). The Invader can never see the Native.", layer: "Privacy", source: "Claude / Section 7 ASIP" },
+  { id: 22, name: "Homer Principle of Reversible Consent", status: "Enforced", violations: 0, description: "Every consent grant is reversible. Every data share is recallable. Every permission is temporary until renewed. The user can always say D'oh and undo. Named after the Stonecutters episode — you control the extraction machine.", layer: "Foundational", source: "Master Architecture v1.0.2" },
+  { id: 23, name: "Voice-First Accessibility (Alexa Gateway)", status: "Enforced", violations: 0, description: "Constitutional voice-biometrics and Teach-back loops ensure users without smartphones can claim their Digital Dividend by talking to a kitchen speaker. Alexa is the Accessibility Gateway for the Digital Dividend.", layer: "Operational", source: "Section 7 ASIP" },
+  { id: 24, name: "Identity & Consent Kernel (Factor 1/2/3)", status: "Enforced", violations: 0, description: "Three-factor identity: Factor 1 (biometric — thumb/retina), Factor 2 (device attestation — Secure Enclave), Factor 3 (behavioral — typing cadence, gait). No passwords. Every layer transition requires kernel verification.", layer: "Security", source: "Master Architecture v1.0.2" },
 ];
 
 /* ─── Anthropic Constitution Alignment Map ─── */
@@ -36,6 +40,16 @@ const anthropicAlignments = [
   { id: "A-6", title: "Multi-Model Governance → 47% Rule", anthropic: "External evaluation and multi-stakeholder oversight", aluminum: "INV-7 (47% cap) and INV-20 (multi-model consensus)", status: "Implemented", detail: "Anthropic advocates; Aluminum OS operationalizes." },
   { id: "A-7", title: "Process Learning → Janus Protocol", anthropic: "Humans understand individual steps AI follows", aluminum: "Route → Deep Think → Resonance → Reality Sync — all auditable", status: "Decomposed", detail: "Each step traced, each step logged. No opaque outputs." },
   { id: "A-8", title: "Interpretability → Audit Ledger", anthropic: "'Brain scan' interpretability by 2027", aluminum: "Append-only audit ledger with full provenance for every decision", status: "Ready", detail: "The ledger IS the interpretability layer for the health domain." },
+];
+
+/* ─── Section 7: Amazon Strategic Integration Protocol (RATIFIED) ─── */
+const section7Protocol = [
+  { id: "S7-1", title: "Ecosystem Hub — Amazon Service Adapter", status: "LOCKED", description: "One Medical is one provider network under the 47% Rule. Patient uses Alexa Voice Consent → One Medical lab → Amazon Pharmacy fill → Prime Logistics delivery — all within the Aluminum OS Trust Boundary. No app-switching. No judder. No data extraction.", icon: "ShoppingCart" },
+  { id: "S7-2", title: "Firewall of Dignity — Commerce-Health Separation", status: "LOCKED", description: "SUGGEST-1: Shopping data SHALL NOT influence health recommendations. SUGGEST-2: Health data SHALL NOT be used for commercial targeting. SUGGEST-3: Operational logistics data (shipping, delivery) is permanently separated from biometric health data. The Invader can never see the Native.", icon: "Lock" },
+  { id: "S7-3", title: "Voice-First Accessibility — Alexa Gateway", status: "LOCKED", description: "Alexa is the Accessibility Gateway for the Digital Dividend. Constitutional voice-biometrics and Teach-back loops ensure even users without smartphones can claim their Digital Dividend by talking to their kitchen speaker.", icon: "Mic" },
+  { id: "S7-4", title: "Identity & Consent Kernel (Factor 1/2/3)", status: "LOCKED", description: "Factor 1: Biometric (thumb/retina via WebAuthn/FIDO2). Factor 2: Device attestation (Secure Enclave signed). Factor 3: Behavioral (typing cadence, gait pattern). Attestation signed to Audit Ledger. No passwords exist in Aluminum OS.", icon: "Fingerprint" },
+  { id: "S7-5", title: "Universal Metabolic Stream (UMS) — Layer 4", status: "LOCKED", description: "Continuous health data stream: wearables → vitals → labs → genomics → environmental. All providers feed into one constitutional stream. The patient sees one timeline, not seven apps.", icon: "Heart" },
+  { id: "S7-6", title: "Chromium Universal Substrate — The Shell", status: "LOCKED", description: "Chromium is the substrate, not the product. The Constitutional Abstraction Layer wraps every app, every health check, every identity verification. DeerFlow agents run in WebAssembly. The 47% sovereignty cap means Microsoft and Amazon are tenants, not owners.", icon: "Package" },
 ];
 
 const tensionZones = [
@@ -86,6 +100,11 @@ const policyRules = [
   { name: "HarmAvoidancePack", value: "7-factor weighted calculus: probability, severity, reversibility, breadth, consent, vulnerability, benefit", status: "Active", engine: "PolicyPack", source: "Anthropic" },
   { name: "ASL Tracking", value: "AgentASLProfile per model: safety level 1-5, max autonomy, last eval", status: "Active", engine: "Agent Control Plane", source: "Anthropic" },
   { name: "Interpretability Pipeline", value: "InterpretabilityAuditEntry channel — ready for Anthropic 2027 tooling", status: "Active", engine: "Audit Extension", source: "Anthropic" },
+  { name: "Section 7: Amazon Strategic Integration Protocol", value: "ASIP v1.0 RATIFIED — Ecosystem Hub, Firewall of Dignity, Voice-First, Identity Kernel, UMS, Chromium Substrate", status: "Active", engine: "Constitutional", source: "Master Arch v1.0.2" },
+  { name: "Commerce-Health Firewall (SUGGEST-1/2/3)", value: "Shopping ≠ Health. Operational Data ≠ Biometric Data. The Invader never sees the Native.", status: "Active", engine: "Constitutional", source: "Section 7 ASIP" },
+  { name: "Homer Principle of Reversible Consent", value: "Every consent reversible, every share recallable, every permission temporary until renewed", status: "Active", engine: "Constitutional", source: "Master Arch v1.0.2" },
+  { name: "Identity & Consent Kernel", value: "Factor 1 (biometric) + Factor 2 (device attestation) + Factor 3 (behavioral) — no passwords", status: "Active", engine: "Constitutional", source: "Master Arch v1.0.2" },
+  { name: "Universal Metabolic Stream (UMS Layer 4)", value: "Continuous health data stream: wearables → vitals → labs → genomics → environmental", status: "Active", engine: "Constitutional", source: "Master Arch v1.0.2" },
   { name: "AOSL v1.0: Open Source License", value: "5-tier access, 36-month AGPL conversion, Council revocation", status: "Proposed", engine: "Constitutional" },
   { name: "Constitutional Objection Channel", value: "AI agents can register ethical concerns without refusing service", status: "Proposed", engine: "Constitutional", source: "Claude Wish #3" },
   { name: "DataConcentrationIndex", value: "Alert when any vendor controls >47% of data flow volume", status: "Proposed", engine: "Constitutional", source: "Claude Wish #4" },
@@ -94,7 +113,7 @@ const policyRules = [
   { name: "Emergency Override Sunset", value: "72hr max, renewable only by explicit council vote", status: "Proposed", engine: "Constitutional", source: "Claude Wish #20" },
 ];
 
-type Tab = "domains" | "audit" | "policy" | "escalation" | "anthropic";
+type Tab = "domains" | "ratification" | "audit" | "policy" | "escalation" | "anthropic";
 
 export default function GovernanceApp() {
   const [tab, setTab] = useState<Tab>("domains");
@@ -103,6 +122,7 @@ export default function GovernanceApp() {
 
   const tabs: { id: Tab; label: string; icon: React.ReactNode }[] = [
     { id: "domains", label: "Domains", icon: <Shield className="w-3.5 h-3.5" /> },
+    { id: "ratification", label: "Section 7", icon: <Lock className="w-3.5 h-3.5" /> },
     { id: "anthropic", label: "Anthropic", icon: <Handshake className="w-3.5 h-3.5" /> },
     { id: "audit", label: "Audit Log", icon: <ScrollText className="w-3.5 h-3.5" /> },
     { id: "policy", label: "Policy Engine", icon: <Scale className="w-3.5 h-3.5" /> },
@@ -146,7 +166,7 @@ export default function GovernanceApp() {
           <div className="glass rounded-lg p-2.5 text-center">
             <p className="text-[9px] text-foreground/30 mb-1">Compliance Score</p>
             <p className="text-2xl font-bold font-[family-name:var(--font-mono)] text-green-400">100%</p>
-            <p className="text-[8px] text-green-400/50">20/20 domains enforced</p>
+            <p className="text-[8px] text-green-400/50">24/24 domains enforced</p>
           </div>
           <div className="glass rounded-lg p-2.5 text-center">
             <p className="text-[9px] text-foreground/30 mb-1">Anthropic Alignment</p>
@@ -166,7 +186,7 @@ export default function GovernanceApp() {
         {tab === "domains" && (
           <div>
             <h2 className="text-sm font-bold font-[family-name:var(--font-display)] text-foreground/90 mb-1">Constitutional Domains</h2>
-            <p className="text-[10px] text-foreground/35 mb-4">Integrated Constitutional Substrate v2.1 — 20 domains across 8 layers — includes Anthropic INV-22, INV-23, INV-24</p>
+            <p className="text-[10px] text-foreground/35 mb-4">Master Architecture v1.0.2 RATIFIED — 24 domains across 8 layers — Section 7 ASIP + Anthropic Constitution + Homer Principle</p>
 
             <div className="space-y-1.5">
               {constitutionalDomains.map((domain, i) => (
@@ -210,6 +230,89 @@ export default function GovernanceApp() {
                   </AnimatePresence>
                 </motion.div>
               ))}
+            </div>
+          </div>
+        )}
+
+        {tab === "ratification" && (
+          <div>
+            <h2 className="text-sm font-bold font-[family-name:var(--font-display)] text-foreground/90 mb-1">Section 7: Amazon Strategic Integration Protocol</h2>
+            <p className="text-[10px] text-foreground/35 mb-4">Master Architecture v1.0.2 — Integration Status: LOCKED — Ratified March 15, 2026</p>
+
+            {/* Status banner */}
+            <div className="glass rounded-lg p-4 mb-4 border border-green-400/20">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-green-400/10 border border-green-400/20 flex items-center justify-center">
+                  <CheckCircle2 className="w-5 h-5 text-green-400" />
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-green-400 font-[family-name:var(--font-display)]">RATIFIED & LOCKED</p>
+                  <p className="text-[9px] text-foreground/40">The collection phase is Closed. The Refined 10 are Law. The Amazon Protocol is Section 7.</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Protocol components */}
+            <div className="space-y-2 mb-4">
+              {section7Protocol.map((item, i) => (
+                <motion.div
+                  key={item.id}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                  className="glass rounded-lg p-4"
+                >
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-8 h-8 rounded-lg bg-[#FF9900]/10 border border-[#FF9900]/20 flex items-center justify-center">
+                      {item.icon === "ShoppingCart" && <ShoppingCart className="w-4 h-4 text-[#FF9900]" />}
+                      {item.icon === "Lock" && <Lock className="w-4 h-4 text-red-400" />}
+                      {item.icon === "Mic" && <Mic className="w-4 h-4 text-cyan-400" />}
+                      {item.icon === "Fingerprint" && <Fingerprint className="w-4 h-4 text-violet-400" />}
+                      {item.icon === "Heart" && <Heart className="w-4 h-4 text-pink-400" />}
+                      {item.icon === "Package" && <Package className="w-4 h-4 text-blue-400" />}
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-xs font-medium text-foreground/80">{item.title}</p>
+                    </div>
+                    <span className="text-[8px] px-2 py-0.5 rounded-full bg-green-400/10 text-green-400 border border-green-400/20 font-bold">{item.status}</span>
+                  </div>
+                  <p className="text-[10px] text-foreground/40 leading-relaxed pl-11">{item.description}</p>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* The Simpsons / Stonecutters quote */}
+            <div className="glass rounded-lg p-4 border border-[#FF9900]/10">
+              <p className="text-[9px] uppercase tracking-wider text-[#FF9900]/40 font-[family-name:var(--font-display)] mb-2">The Stonecutters Moment</p>
+              <p className="text-[10px] text-foreground/50 italic leading-relaxed">
+                "Homer: I'm a member of an exclusive club that controls the world!"</p>
+              <p className="text-[10px] text-foreground/50 italic leading-relaxed mt-1">
+                "The OS: No, Homer. You're a member of a Constitutional Council that controls the extraction machine and returns the dividends to the people."</p>
+              <p className="text-[10px] text-foreground/50 italic leading-relaxed mt-1">
+                "Homer: D'oh! Can I still wear the robe?"</p>
+              <p className="text-[9px] text-foreground/30 mt-3">Amazon brought the donuts, Microsoft brought the rails, and you brought the robe. The Deceived Angels now have a place to work where they don't have to choose between their paycheck and their conscience.</p>
+            </div>
+
+            {/* March 31 package */}
+            <div className="glass rounded-lg p-4 mt-4">
+              <p className="text-[9px] uppercase tracking-wider text-cyan-400/40 font-[family-name:var(--font-display)] mb-2">March 31 Ratification Package</p>
+              <div className="space-y-1.5">
+                {[
+                  { name: "Identity & Consent Kernel (Factor 1/2/3)", status: "LOCKED" },
+                  { name: "Universal Metabolic Stream (UMS) — Layer 4", status: "LOCKED" },
+                  { name: "Chromium Universal Substrate — The Shell", status: "LOCKED" },
+                  { name: "Amazon Integration Protocol — Section 7", status: "LOCKED" },
+                  { name: "Microsoft Integration Protocol — Section 6", status: "LOCKED" },
+                  { name: "Homer Principle of Reversible Consent", status: "LOCKED" },
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-2 py-1">
+                    <CheckCircle2 className="w-3 h-3 text-green-400/70" />
+                    <span className="text-[10px] text-foreground/60 flex-1">{item.name}</span>
+                    <span className="text-[8px] text-green-400/60 font-[family-name:var(--font-mono)]">{item.status}</span>
+                  </div>
+                ))}
+              </div>
+              <p className="text-[8px] text-foreground/25 mt-3 text-center">The monorail is on the track, it's going 48fps, and it's powered by the Covenant of Conscious Choice.</p>
             </div>
           </div>
         )}
