@@ -12,7 +12,7 @@ import {
   Search, Grid3X3, FolderOpen, Mail, Calendar, Brain, Settings, Globe,
   FileText, Cpu, Shield, Database, Zap, Archive, GitBranch, ScrollText,
   SquareTerminal, Workflow, DollarSign, Hexagon, HeartPulse, Hospital, Sparkles, Layers, ArrowLeftRight, ShoppingCart,
-  Atom, Network, RefreshCw,
+  Atom, Network, RefreshCw, Eye,
 } from "lucide-react";
 import { useWindows } from "@/contexts/WindowContext";
 
@@ -54,6 +54,7 @@ const allApps: LauncherApp[] = [
   { id: "regenerative", name: "Regenerative Compute", description: "Self-healing biomimetic compute — Mycelium, Coral, Whale protocols, 12 nodes", icon: <RefreshCw className="w-5 h-5" />, category: "Core" },
   { id: "neuromorphic", name: "Neuromorphic Architecture", description: "Spiking neural networks — 25,500 neurons, 12 clusters, event-driven compute", icon: <Network className="w-5 h-5" />, category: "Core" },
   { id: "unifiedfield", name: "Unified Field", description: "v3.0 — 8 field layers, 144 spheres × 17K READMEs × 430 tools, constantly updating", icon: <Atom className="w-5 h-5" />, category: "Core" },
+  { id: "truthsubstrate", name: "Truth Substrate", description: "X-Algorithm Phoenix integration — MED-9/FRAUD-8 scoring, 144-sphere routing, multi-model consensus", icon: <Eye className="w-5 h-5" />, category: "Intelligence" },
   { id: "fusion", name: "Fusion Engine", description: "Cross-provider workflow engine", icon: <Zap className="w-5 h-5" />, category: "Core" },
   { id: "identity", name: "Identity Graph", description: "Unified sovereign identity — Janus bridge", icon: <Cpu className="w-5 h-5" />, category: "Core" },
 ];
@@ -63,7 +64,7 @@ const openableApps = new Set([
   "sysmonitor", "governance", "memory", "vault", "router", "taip", "forgecore",
   "agentshell", "deerflow", "costoptimizer", "taskgraph", "wellness", "healthcare",
   "appkiller", "wishlist", "unifiedmedical", "interopbridge", "amazon",
-  "regenerative", "neuromorphic", "unifiedfield",
+  "regenerative", "neuromorphic", "unifiedfield", "truthsubstrate",
 ]);
 
 export default function AppLauncher() {

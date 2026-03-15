@@ -31,6 +31,7 @@ import AmazonApp from "@/components/apps/AmazonApp";
 import RegenerativeApp from "@/components/apps/RegenerativeApp";
 import NeuromorphicApp from "@/components/apps/NeuromorphicApp";
 import UnifiedFieldApp from "@/components/apps/UnifiedFieldApp";
+import TruthSubstrateApp from "@/components/apps/TruthSubstrateApp";
 import ContextMenu from "@/components/ContextMenu";
 import AppLauncher from "@/components/AppLauncher";
 import { AnimatePresence, motion } from "framer-motion";
@@ -51,6 +52,7 @@ const appComponents: Record<string, React.FC> = {
   regenerative: RegenerativeApp,
   neuromorphic: NeuromorphicApp,
   unifiedfield: UnifiedFieldApp,
+  truthsubstrate: TruthSubstrateApp,
 };
 
 const bootSteps = [
@@ -61,7 +63,7 @@ const bootSteps = [
   { text: "Ring 1 \u2014 Inference Engine online (10 models, 3 tiers)", duration: 100 },
   { text: "Ring 2 \u2014 SHELDONBRAIN memory loaded (25.2 GB)", duration: 100 },
   { text: "Ring 3 \u2014 Pantheon Council quorum: 10/10 members + Sovereign", duration: 120 },
-  { text: "Ring 4 — Noosphere: 30 apps, 104 artifacts, 27 rules", duration: 120 },
+  { text: "Ring 4 — Noosphere: 31 apps, 104 artifacts, 27 rules", duration: 120 },
   { text: "Council Wishes: 107 loaded (Manus 60 + Claude 47, 0 conflicts)", duration: 80 },
   { text: "Constitutional substrate: 24 domains verified (INV-22 Honesty, INV-23 AI Welfare, INV-24 Harm Calculus)", duration: 100 },
   { text: "Anthropic Constitution: CC0 cross-referenced, 8 alignments, 0 conflicts", duration: 80 },
@@ -81,6 +83,7 @@ const bootSteps = [
   { text: "Regenerative Compute: Mycelium+Coral+Whale biomimetic self-healing, 12 nodes, 99.97% uptime", duration: 80 },
   { text: "Neuromorphic Architecture: 25,500 spiking neurons, 12 clusters, event-driven compute", duration: 80 },
   { text: "Unified Field v3.0: 8 field layers coherent, 144 spheres × 17K READMEs × 430 tools", duration: 80 },
+  { text: "Truth Substrate: X-Algorithm Phoenix integration, MED-9/FRAUD-8 scoring, 144-sphere routing", duration: 80 },
   { text: "Cross-platform UX: macOS, Windows, ChromeOS, iOS, Android, Pixel", duration: 80 },
   { text: "Starting Obsidian Glass UI...", duration: 200 },
   { text: "Welcome, Daavud.", duration: 300 },

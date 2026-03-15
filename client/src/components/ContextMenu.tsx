@@ -10,7 +10,7 @@ import {
   RefreshCw, Layout, Palette, Monitor, Info, Grid3X3, FolderOpen,
   Cpu, Activity, Shield, Archive, ScrollText, TerminalSquare, Workflow,
   DollarSign, Hexagon, HeartPulse, Hospital, Zap, Sparkles, Layers, ArrowLeftRight, ShoppingCart,
-  Atom, Network,
+  Atom, Network, Eye,
 } from "lucide-react";
 import { useWindows } from "@/contexts/WindowContext";
 
@@ -116,6 +116,7 @@ export default function ContextMenu() {
     { label: "Regenerative Compute", icon: <RefreshCw className="w-3.5 h-3.5" />, action: () => openWindow("regenerative", "Regenerative Compute Engine", "regenerative", 1050, 700) },
     { label: "Neuromorphic Arch", icon: <Network className="w-3.5 h-3.5" />, action: () => openWindow("neuromorphic", "Neuromorphic Architecture", "neuromorphic", 1050, 700) },
     { label: "Unified Field", icon: <Atom className="w-3.5 h-3.5" />, action: () => openWindow("unifiedfield", "Unified Field Dashboard v3.0", "unifiedfield", 1050, 700) },
+    { label: "Truth Substrate", icon: <Eye className="w-3.5 h-3.5" />, action: () => openWindow("truthsubstrate", "Truth Substrate — X-Algorithm Phoenix", "truthsubstrate", 1100, 750) },
     { label: "Manus Wish List", icon: <Sparkles className="w-3.5 h-3.5" />, action: () => openWindow("wishlist", "Manus Wish List — 60 Wishes", "wishlist", 1050, 700) },
     "divider",
     { label: "Change Wallpaper", icon: <Palette className="w-3.5 h-3.5" />, action: () => openWindow("settings", "Settings", "settings") },
