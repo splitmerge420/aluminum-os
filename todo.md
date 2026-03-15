@@ -1,20 +1,23 @@
-# Dock & TopBar Redesign + 144 Spheres
+# Aluminum Browser Build
 
-## Phase 1: Identify Top 10
-- [ ] Curate bottom permabar to 10 icons max
-- [ ] Remaining apps accessible via AppLauncher (Ctrl+K) and ContextMenu
+## Phase 1: Read current state
+- [ ] Read BrowserApp.tsx
+- [ ] Read Desktop.tsx for registry
 
-## Phase 2: Redesign Dock & TopBar
-- [ ] Bottom Dock: exactly 10 icons, clean, no scroll needed
-- [ ] TopBar: minimal — logo, search, time, council dots, notifications, battery
+## Phase 2: Build the browser
+- [ ] Synthesized tab system (vertical tabs from Edge, tab groups from Chrome, compact from Safari)
+- [ ] Council AI sidebar — delegates to right model per context
+- [ ] Health-aware browsing (screen time, break reminders, blue light, posture)
+- [ ] Reader mode (Safari-inspired)
+- [ ] Collections/bookmarks (Edge-inspired)
+- [ ] Privacy dashboard (Safari-inspired)
+- [ ] Split view (Edge-inspired)
+- [ ] Address bar with AI-powered suggestions
+- [ ] Constitutional governance over browsing behavior
 
-## Phase 3: Build 144 Spheres Matrix App
-- [ ] 12 Sphere Houses x 12 subsets = 144 spheres
-- [ ] Each sphere maps to agent tools with README references
-- [ ] 17,000 READMEs parsed to native tool features
-- [ ] Lattice visual design
-- [ ] Sphere detail view with knowledge domains and ontology
+## Phase 3: Register
+- [ ] Update Desktop.tsx
+- [ ] Dock already has browser slot
+- [ ] AppLauncher, ContextMenu, Window icons
 
-## Phase 4: Register & Test
-- [ ] Register SpheresApp in Desktop, AppLauncher, ContextMenu
-- [ ] Test and checkpoint
+## Phase 4: Test and deliver

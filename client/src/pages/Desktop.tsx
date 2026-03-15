@@ -58,6 +58,7 @@ const bootSteps = [
   { text: "Healthcare Layer: 7 modules, HIPAA 100%, FHIR R4 online", duration: 80 },
   { text: "App Killer Registry: 22,740 methods, 6 providers, 247 apps killed", duration: 80 },
   { text: "Claude Analysis: 0 conflicts, 6 new primitives, 8 critical items", duration: 80 },
+  { text: "Aluminum Browser: Edge+Chrome+Safari synthesis, 10-model routing, health-aware", duration: 80 },
   { text: "Cross-platform UX: macOS, Windows, ChromeOS, iOS, Android, Pixel", duration: 80 },
   { text: "Starting Obsidian Glass UI...", duration: 200 },
   { text: "Welcome, Daavud.", duration: 300 },
