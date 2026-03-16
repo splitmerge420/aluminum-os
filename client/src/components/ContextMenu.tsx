@@ -10,7 +10,7 @@ import {
   RefreshCw, Layout, Palette, Monitor, Info, Grid3X3, FolderOpen,
   Cpu, Activity, Shield, Archive, ScrollText, TerminalSquare, Workflow,
   DollarSign, Hexagon, HeartPulse, Hospital, Zap, Sparkles, Layers, ArrowLeftRight, ShoppingCart,
-  Atom, Network, Eye, Lock, Brain,
+  Atom, Network, Eye, Lock, Brain, Globe,
 } from "lucide-react";
 import { useWindows } from "@/contexts/WindowContext";
 
@@ -119,6 +119,7 @@ export default function ContextMenu() {
     { label: "Truth Substrate", icon: <Eye className="w-3.5 h-3.5" />, action: () => openWindow("truthsubstrate", "Truth Substrate — X-Algorithm Phoenix", "truthsubstrate", 1100, 750) },
     { label: "Lattice Genesis", icon: <Lock className="w-3.5 h-3.5" />, action: () => openWindow("latticegenesis", "Lattice Genesis v1.0.2 — PQC Shield", "latticegenesis", 1100, 750) },
     { label: "SHELDONBRAIN Engine", icon: <Brain className="w-3.5 h-3.5" />, action: () => openWindow("sheldonbrainengine", "SHELDONBRAIN Engine — ALUM-INT-007", "sheldonbrainengine", 1100, 750) },
+    { label: "Interop 2026", icon: <Globe className="w-3.5 h-3.5" />, action: () => openWindow("interop2026", "Interop 2026 — Cross-Browser Compliance", "interop2026", 950, 700) },
     { label: "Manus Wish List", icon: <Sparkles className="w-3.5 h-3.5" />, action: () => openWindow("wishlist", "Manus Wish List — 60 Wishes", "wishlist", 1050, 700) },
     "divider",
     { label: "Change Wallpaper", icon: <Palette className="w-3.5 h-3.5" />, action: () => openWindow("settings", "Settings", "settings") },

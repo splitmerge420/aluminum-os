@@ -57,6 +57,7 @@ const allApps: LauncherApp[] = [
   { id: "truthsubstrate", name: "Truth Substrate", description: "X-Algorithm Phoenix integration — MED-9/FRAUD-8 scoring, 144-sphere routing, multi-model consensus", icon: <Eye className="w-5 h-5" />, category: "Intelligence" },
   { id: "latticegenesis", name: "Lattice Genesis", description: "v1.0.2 — PQC Shield (ML-DSA-87), 10YST Engine, 144 PHD nodes, Rust-WASM transpilation", icon: <Lock className="w-5 h-5" />, category: "Core" },
   { id: "sheldonbrainengine", name: "SHELDONBRAIN Engine", description: "ALUM-INT-007 — 7 constitutional modules, 8 invariants, Janus↔Council mapping, health connectors", icon: <Brain className="w-5 h-5" />, category: "Core" },
+  { id: "interop2026", name: "Interop 2026", description: "Cross-browser compliance — 20 focus areas, constitutional alignment, implementation roadmap", icon: <Globe className="w-5 h-5" />, category: "Platform" },
   { id: "fusion", name: "Fusion Engine", description: "Cross-provider workflow engine", icon: <Zap className="w-5 h-5" />, category: "Core" },
   { id: "identity", name: "Identity Graph", description: "Unified sovereign identity — Janus bridge", icon: <Cpu className="w-5 h-5" />, category: "Core" },
 ];
@@ -68,6 +69,7 @@ const openableApps = new Set([
   "appkiller", "wishlist", "unifiedmedical", "interopbridge", "amazon",
   "regenerative", "neuromorphic", "unifiedfield", "truthsubstrate", "latticegenesis",
   "sheldonbrainengine",
+  "interop2026",
 ]);
 
 export default function AppLauncher() {
