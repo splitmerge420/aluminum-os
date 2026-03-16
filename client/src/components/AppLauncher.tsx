@@ -56,6 +56,7 @@ const allApps: LauncherApp[] = [
   { id: "unifiedfield", name: "Unified Field", description: "v3.0 — 8 field layers, 144 spheres × 17K READMEs × 430 tools, constantly updating", icon: <Atom className="w-5 h-5" />, category: "Core" },
   { id: "truthsubstrate", name: "Truth Substrate", description: "X-Algorithm Phoenix integration — MED-9/FRAUD-8 scoring, 144-sphere routing, multi-model consensus", icon: <Eye className="w-5 h-5" />, category: "Intelligence" },
   { id: "latticegenesis", name: "Lattice Genesis", description: "v1.0.2 — PQC Shield (ML-DSA-87), 10YST Engine, 144 PHD nodes, Rust-WASM transpilation", icon: <Lock className="w-5 h-5" />, category: "Core" },
+  { id: "sheldonbrainengine", name: "SHELDONBRAIN Engine", description: "ALUM-INT-007 — 7 constitutional modules, 8 invariants, Janus↔Council mapping, health connectors", icon: <Brain className="w-5 h-5" />, category: "Core" },
   { id: "fusion", name: "Fusion Engine", description: "Cross-provider workflow engine", icon: <Zap className="w-5 h-5" />, category: "Core" },
   { id: "identity", name: "Identity Graph", description: "Unified sovereign identity — Janus bridge", icon: <Cpu className="w-5 h-5" />, category: "Core" },
 ];
@@ -66,6 +67,7 @@ const openableApps = new Set([
   "agentshell", "deerflow", "costoptimizer", "taskgraph", "wellness", "healthcare",
   "appkiller", "wishlist", "unifiedmedical", "interopbridge", "amazon",
   "regenerative", "neuromorphic", "unifiedfield", "truthsubstrate", "latticegenesis",
+  "sheldonbrainengine",
 ]);
 
 export default function AppLauncher() {

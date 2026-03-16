@@ -49,6 +49,7 @@ const appIcons: Record<string, React.ReactNode> = {
   unifiedfield: <Atom className="w-3.5 h-3.5 text-indigo-400" />,
   truthsubstrate: <Eye className="w-3.5 h-3.5 text-orange-400" />,
   latticegenesis: <Lock className="w-3.5 h-3.5 text-cyan-400" />,
+  sheldonbrainengine: <Brain className="w-3.5 h-3.5 text-cyan-400" />,
 };
 
 interface WindowProps {
