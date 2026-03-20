@@ -24,7 +24,8 @@ pub const MAX_AUDIT_ENTRIES: usize = 256;
 pub const MAX_AMENDMENTS: usize = 32;
 /// Maximum AI disclosure records
 pub const MAX_DISCLOSURES: usize = 64;
-/// Fixed PQC public-key stub length (first 64 bytes of real ML-DSA-87 key)
+/// Fixed PQC public-key stub length stored in memory (first 64 bytes of a real
+/// ML-KEM-1024 or ML-DSA-87 key; full keys are 1568 / 2592 bytes respectively).
 pub const PQC_KEY_STUB_BYTES: usize = 64;
 
 // ============================================================================

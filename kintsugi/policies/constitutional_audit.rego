@@ -163,6 +163,9 @@ deny[msg] {
 }
 
 # RULE: Constitutional amendments require supermajority trace
+# Supermajority definition: ≥5 of 7 Pantheon Council members must approve.
+# This mirrors the Rust AmendmentProtocol.supermajority_met() check (votes_for >= 5)
+# and the Python AmendmentProposal.supermajority_met() check.
 deny[msg] {
     trace := input.trace
     trace.event_type == "amendment_enacted"

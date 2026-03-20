@@ -186,14 +186,14 @@ fn main() {
     println!();
     println!("╔══════════════════════════════════════════════╗");
     println!("║  BOOT COMPLETE — ALUMINUM OS v2.0.0          ║");
-    println!("║  Constitution: {} rules (14 core + 4 health) ║", constitution.rule_count());
-    println!("║  Agents: {}  PQC slots: {}                   ║", registry.count(), pqc_registry.count());
-    println!("║  Memory: {} bytes allocated                  ║", allocator.allocated_bytes());
+    println!("║  Constitution: {:>2} rules (14 core + 4 health) ║", constitution.rule_count());
+    println!("║  Agents: {:>2}  PQC slots: {:>2}                 ║", registry.count(), pqc_registry.count());
+    println!("║  Memory: {:>4} bytes allocated               ║", allocator.allocated_bytes());
     println!("║  Dave Protocol: ACTIVE                       ║");
     println!("║  Health Audit Ledger: ACTIVE (no-delete)     ║");
     println!("║  PQC Identity: ML-DSA-87 (NIST FIPS 204)    ║");
     println!("║  AI Disclosure: INV-30 ENFORCED              ║");
-    println!("║  Amendments enacted: {}                       ║", amendments.enacted_count());
+    println!("║  Amendments enacted: {:>1}                       ║", amendments.enacted_count());
     println!("║  FHIR: R4/R5 (15 resource types)            ║");
     println!("║  Status: OPERATIONAL                         ║");
     println!("╚══════════════════════════════════════════════╝");

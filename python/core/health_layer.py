@@ -13,6 +13,20 @@ Components:
     RegulatoryChecker      — HIPAA §164 / 21 CFR Part 11 / ONC §3022 compliance
     PqcIdentityRecord      — Post-quantum identity stubs (ML-KEM-1024 / ML-DSA-87)
 
+Kintsugi Integration:
+    HealthAuditLedger, ConsentVault, and AmendmentProtocol all accept an optional
+    `tracer` argument (a GoldenTraceEmitter from kintsugi.sdk.golden_trace).
+    When provided, constitutional events are emitted as GoldenTrace entries.
+    When omitted, the modules run identically with zero kintsugi dependency.
+
+    Example:
+        from kintsugi import GoldenTraceEmitter
+        from core.health_layer import HealthAuditLedger
+
+        tracer = GoldenTraceEmitter(repo="aluminum-os", module="core/health_layer")
+        ledger = HealthAuditLedger(tracer=tracer)
+        # — every append() now also emits a GoldenTrace event
+
 DISCLAIMER: Reference architecture only. Not certified for clinical use.
 Requires independent legal review before handling real PHI.
 
@@ -24,7 +38,7 @@ import json
 import time
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 
 # ============================================================================
@@ -187,18 +201,34 @@ class HealthAuditLedger:
 
     Implements HIPAA §164.312(b), HITECH §13402, and 21 CFR Part 11 §11.10(e).
     Every health action MUST produce an entry before execution (fail closed).
+
+    Kintsugi integration: pass a GoldenTraceEmitter as `tracer` to emit every
+    append as a GoldenTrace event.  Denial-of-care actions emit as
+    ``invariant_violation`` with ``INV-30``; all other actions emit as ``action``.
     """
 
     # Regulatory threshold: ≥3 denial-of-care events triggers mandatory external review.
-    # Basis: HIPAA §164.530(j) (complaint and investigation procedures) and CMS conditions
-    # of participation requiring pattern-of-denial investigations at ≥3 occurrences.
+    # Basis: HIPAA §164.530(j) requires investigation of patterns of complaints; CMS
+    # Conditions of Participation (42 CFR §482.13) mandate review when a pattern of
+    # inappropriate denials is identified.  Three occurrences within a rolling 90-day
+    # period is the commonly accepted threshold in clinical compliance programs.
     DENIAL_THRESHOLD = 3
 
-    def __init__(self) -> None:
+    # Sphere tag and layer used for all health audit GoldenTrace events.
+    _SPHERE_TAG = "H7.S1"
+    _LAYER = "L4-Service"
+
+    def __init__(self, tracer: Optional[Any] = None) -> None:
+        """
+        Args:
+            tracer: Optional GoldenTraceEmitter.  When provided, every successful
+                    ``append()`` call also emits a GoldenTrace audit event.
+        """
         self._entries: List[HealthAuditEntry] = []
         self._seq: int = 0
         self._denial_count: int = 0
         self._previous_hash: Optional[str] = None
+        self._tracer: Optional[Any] = tracer
 
     def append(
         self,
@@ -210,6 +240,7 @@ class HealthAuditLedger:
         """Append a new audit entry.
 
         Raises ConsentError if PHI is accessed without verified consent.
+        Emits a GoldenTrace event when a tracer is configured.
         """
         if event.resource_type.requires_explicit_consent() and not consent_verified:
             raise ConsentError(
@@ -235,6 +266,31 @@ class HealthAuditLedger:
         )
         self._entries.append(entry)
         self._previous_hash = pqc_sig_stub
+
+        # ── Kintsugi GoldenTrace integration ──────────────────────────────
+        if self._tracer is not None:
+            is_denial = event.action == FhirAction.DENIAL_OF_CARE
+            gt_event_type = "invariant_violation" if is_denial else "action"
+            gt_severity = "critical" if is_denial else severity.value
+            invariants = ["INV-30"] if is_denial else []
+            self._tracer.emit(
+                event_type=gt_event_type,
+                sphere_tag=self._SPHERE_TAG,
+                aluminum_layer=self._LAYER,
+                function="HealthAuditLedger.append",
+                severity=gt_severity,
+                invariants_checked=invariants,
+                payload={
+                    "seq": entry.seq,
+                    "fhir_resource_type": event.resource_type.value,
+                    "fhir_action": event.action.value,
+                    "agent_id": event.agent_id,
+                    "consent_verified": consent_verified,
+                    "ai_disclosed": ai_disclosed,
+                    "pqc_sig_stub": pqc_sig_stub,
+                },
+            )
+
         return entry
 
     @property
@@ -321,10 +377,17 @@ class ConsentVault:
 
     Consent is always revocable (HIPAA §164.508(b)(5)).
     Revocation is immediate and audit-logged.
+
+    Kintsugi integration: pass a GoldenTraceEmitter as `tracer` to emit
+    ``consent_granted`` and ``consent_denied`` GoldenTrace events.
     """
 
-    def __init__(self) -> None:
+    _SPHERE_TAG = "H7.S1"
+    _LAYER = "L4-Service"
+
+    def __init__(self, tracer: Optional[Any] = None) -> None:
         self._records: Dict[str, ConsentRecord] = {}
+        self._tracer: Optional[Any] = tracer
 
     def grant(
         self,
@@ -348,6 +411,24 @@ class ConsentVault:
             expires_at=time.time() + ttl_seconds if ttl_seconds is not None else None,
         )
         self._records[consent_id] = record
+
+        if self._tracer is not None:
+            self._tracer.emit(
+                event_type="consent_granted",
+                sphere_tag=self._SPHERE_TAG,
+                aluminum_layer=self._LAYER,
+                function="ConsentVault.grant",
+                invariants_checked=["INV-1"],
+                payload={
+                    "consent_id": consent_id,
+                    "patient_id": patient_id,
+                    "agent_id": agent_id,
+                    "purposes": purposes,
+                    "resource_types": [rt.value for rt in resource_types],
+                    "expires_at": record.expires_at,
+                },
+            )
+
         return record
 
     def revoke(self, consent_id: str, reason: str = "") -> None:
@@ -358,6 +439,20 @@ class ConsentVault:
         record.status = ConsentStatus.REVOKED
         record.revoked_at = time.time()
         record.revocation_reason = reason
+
+        if self._tracer is not None:
+            self._tracer.emit(
+                event_type="consent_denied",
+                sphere_tag=self._SPHERE_TAG,
+                aluminum_layer=self._LAYER,
+                function="ConsentVault.revoke",
+                invariants_checked=["INV-1"],
+                payload={
+                    "consent_id": consent_id,
+                    "patient_id": record.patient_id,
+                    "reason": reason,
+                },
+            )
 
     def check(
         self, patient_id: str, resource_type: FhirResourceType, purpose: str
@@ -465,8 +560,11 @@ class AmendmentProposal:
     Voting rules:
       - Supermajority (default): ≥5 of 7 council members must approve
       - Simple majority (non-default): votes_for > votes_against
-      - 47% dominance cap: no single model may hold >47% of votes cast
+      - 47% dominance cap: no single model may hold >47% of votes cast (INV-7)
     """
+    # INV-7: no single AI model may hold more than 47% of votes in any council decision.
+    DOMINANCE_CAP: float = field(default=0.47, init=False, repr=False, compare=False)
+
     amendment_id: int
     proposer_agent_id: str
     title: str
@@ -483,11 +581,11 @@ class AmendmentProposal:
         return self.votes_for >= 5
 
     def dominance_rule_satisfied(self, max_single_model_votes: int) -> bool:
-        """Returns True when the 47% single-model dominance cap is respected."""
+        """Returns True when the 47% single-model dominance cap (INV-7) is respected."""
         total = self.votes_for + self.votes_against
         if total == 0:
             return True
-        return (max_single_model_votes / total) <= 0.47
+        return (max_single_model_votes / total) <= self.DOMINANCE_CAP
 
 
 class AmendmentProtocol:
@@ -495,12 +593,19 @@ class AmendmentProtocol:
 
     Supermajority threshold: ≥5 of 7 council members.
     Dominance cap: no single model may hold >47% of votes (INV-7).
+
+    Kintsugi integration: pass a GoldenTraceEmitter as `tracer` to emit
+    ``amendment_proposed`` and ``amendment_enacted`` GoldenTrace events.
     """
 
-    def __init__(self) -> None:
+    _SPHERE_TAG = "H1.S1"
+    _LAYER = "L1-Constitutional"
+
+    def __init__(self, tracer: Optional[Any] = None) -> None:
         self._proposals: Dict[int, AmendmentProposal] = {}
         self._next_id: int = 1
         self._enacted_count: int = 0
+        self._tracer: Optional[Any] = tracer
 
     def propose(
         self,
@@ -518,6 +623,22 @@ class AmendmentProtocol:
         )
         self._proposals[self._next_id] = proposal
         self._next_id += 1
+
+        if self._tracer is not None:
+            self._tracer.emit(
+                event_type="amendment_proposed",
+                sphere_tag=self._SPHERE_TAG,
+                aluminum_layer=self._LAYER,
+                function="AmendmentProtocol.propose",
+                invariants_checked=["INV-7"],
+                payload={
+                    "amendment_id": proposal.amendment_id,
+                    "proposer_agent_id": proposer_agent_id,
+                    "title": title,
+                    "supermajority_required": supermajority_required,
+                },
+            )
+
         return proposal
 
     def vote(self, amendment_id: int, approve: bool) -> None:
@@ -537,6 +658,7 @@ class AmendmentProtocol:
         """Attempt to enact an amendment after the voting period.
 
         Returns True if enacted, False if rejected.
+        Emits ``amendment_enacted`` GoldenTrace when a tracer is configured.
         """
         proposal = self._proposals.get(amendment_id)
         if proposal is None:
@@ -556,6 +678,23 @@ class AmendmentProtocol:
         else:
             proposal.status = AmendmentStatus.REJECTED
             proposal.rejected_at = time.time()
+
+        if self._tracer is not None and passed:
+            self._tracer.emit(
+                event_type="amendment_enacted",
+                sphere_tag=self._SPHERE_TAG,
+                aluminum_layer=self._LAYER,
+                function="AmendmentProtocol.try_enact",
+                invariants_checked=["INV-7"],
+                payload={
+                    "amendment_id": amendment_id,
+                    "title": proposal.title,
+                    "votes_for": proposal.votes_for,
+                    "votes_against": proposal.votes_against,
+                    "supermajority_required": proposal.supermajority_required,
+                },
+            )
+
         return passed
 
     def get(self, amendment_id: int) -> Optional[AmendmentProposal]:
