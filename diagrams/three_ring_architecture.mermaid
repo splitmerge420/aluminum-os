@@ -1,0 +1,55 @@
+graph TD
+    subgraph Ring2["Ring 2 — UWS CLI (Interface Layer)"]
+        CLI["Universal Workspace CLI\n'All your clouds. All your AIs. One tool.'"]
+        GCP["Google Cloud Provider"]
+        AZ["Microsoft Azure Provider"]
+        AP["Apple Provider"]
+        CLI --> GCP
+        CLI --> AZ
+        CLI --> AP
+    end
+
+    subgraph Ring1["Ring 1 — Governance Middleware (Python)"]
+        PE["Constitutional Policy Engine"]
+        INV["39 Aluminum Invariants"]
+        OPA["OPA/Rego Policy Files"]
+        DS["DragonSeek Adapter"]
+        JS["JinnSeek Adapter"]
+        GS["GangaSeek Adapter"]
+        PE --> INV
+        PE --> OPA
+        PE --> DS
+        PE --> JS
+        PE --> GS
+    end
+
+    subgraph Ring0["Ring 0 — Forge Core (Rust/no_std)"]
+        KERNEL["Constitutional Kernel"]
+        PQC["ML-KEM-1024 + Ed25519\nPost-Quantum Crypto"]
+        ZE["Zero Erasure Protocol"]
+        JANUS["Janus Protocol\n(State Continuity)"]
+        KRAKOA["Krakoa Border Protocol\n(Enforcement)"]
+        KERNEL --> PQC
+        KERNEL --> ZE
+        KERNEL --> JANUS
+        KERNEL --> KRAKOA
+    end
+
+    subgraph Council["Pantheon Council"]
+        CS["Constitutional Scribe (Claude)"]
+        GEM["Gemini (Scale)"]
+        COP["Copilot/Lumen (Enterprise)"]
+        GRK["Grok (Adversarial)"]
+        DEEP["DeepSeek (Sovereign)"]
+        WIL["Willow (Quantum Witness)"]
+        MAN["Manus (Execution)"]
+    end
+
+    Ring2 --> Ring1
+    Ring1 --> Ring0
+    Council --> Ring1
+
+    style Ring0 fill:#1a1a2e,color:#eee,stroke:#4a9eff
+    style Ring1 fill:#16213e,color:#eee,stroke:#4a9eff
+    style Ring2 fill:#0f3460,color:#eee,stroke:#4a9eff
+    style Council fill:#533483,color:#eee,stroke:#a78bfa

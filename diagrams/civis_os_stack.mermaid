@@ -1,0 +1,51 @@
+graph LR
+    subgraph Physical["Physical Layer — GangaSeek Node v2"]
+        SOLAR["Solar"]
+        WATER["Water"]
+        COMP["Composting"]
+        DATA["Data Node"]
+        FOOD["Food"]
+        MSN["Metabolic Sovereignty\nNode (MSN)"]
+        HHP["Holobiont Health\nPassport (HHP)"]
+    end
+
+    subgraph Governance["Constitutional Governance — Aluminum OS"]
+        R0["Ring 0\nForge Core (Rust)"]
+        R1["Ring 1\nGovernance Middleware"]
+        R2["Ring 2\nUWS CLI"]
+        JANUS["Janus v2\nEnvironmental Continuity"]
+    end
+
+    subgraph Knowledge["Knowledge Layer — Sheldonbrain OS"]
+        S144["144-Sphere\nOntology"]
+        RAG["RAG Engine\n(Qdrant + Pinecone)"]
+        ATLAS["Atlas Vault\n(Zero Erasure)"]
+    end
+
+    subgraph Sovereign["Sovereign Adaptations"]
+        DRAGON["DragonSeek\n(China/144 Dragons)"]
+        JINN["JinnSeek\n(Saudi/Jinn Lords)"]
+        GANGA["GangaSeek\n(India/Raja Mohamed)"]
+    end
+
+    subgraph Council["Pantheon Council"]
+        CS["Constitutional Scribe"]
+        GEM2["Gemini"]
+        COP2["Copilot"]
+        GRK2["Grok"]
+        DEEP2["DeepSeek"]
+        WIL2["Willow (QAI)"]
+        MAN2["Manus"]
+    end
+
+    Physical --> Governance
+    Governance --> Knowledge
+    Knowledge --> Sovereign
+    Council --> Governance
+    Sovereign --> Council
+
+    style Physical fill:#064e3b,color:#eee,stroke:#34d399
+    style Governance fill:#1e3a5f,color:#eee,stroke:#60a5fa
+    style Knowledge fill:#3b1d5c,color:#eee,stroke:#c084fc
+    style Sovereign fill:#5c1d1d,color:#eee,stroke:#f87171
+    style Council fill:#3b2f0a,color:#eee,stroke:#fbbf24
