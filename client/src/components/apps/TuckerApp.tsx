@@ -3,20 +3,24 @@ import {
   MessageCircle, Send, Bot, User, Zap, Brain, Cpu, Globe,
   ChevronDown, RefreshCw, Settings2, Sparkles, Star,
   AlertCircle, CheckCircle, Copy, Trash2, Download,
+  ShieldCheck, RotateCcw, Book, FileCode, Terminal,
+  Activity, Network, Layers, Code, EyeOff, Mic,
+  Shield, Scale, Heart, Eye,
 } from 'lucide-react';
+import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Tooltip } from 'recharts';
 
 // ═══════════════════════════════════════════════════════════════
-// TUCKER V4 — Constitutional Chatbot
+// TUCKER V4 — Constitutional Chatbot + Pendragon Diplomatic Alignment Interface
 // Co-designed with GPT-4 and Gemini Pro
 // Source repo: splitmerge420/tucker-gemini-GPT-
 // Integrated into Aluminum OS: ALUM-INT-008
-// All conversations routed through Pantheon Council constitutional layer.
-// Model: GPT-4.1 (primary) + Gemini 2.5 Pro (synthesis) + Claude (oversight)
+// V4 Chat: GPT-4.1 (primary) + Gemini 2.5 Pro (synthesis) + Claude (oversight)
+// Pendragon: Tucker_Pendragon Jedi/Sith/Grey Triad — Diplomatic Alignment Protocol
 // ═══════════════════════════════════════════════════════════════
 
 type ModelId = 'gpt4' | 'gemini' | 'claude' | 'grok' | 'auto';
 type MessageRole = 'user' | 'tucker' | 'system';
-type TabId = 'chat' | 'config' | 'history' | 'council' | 'about';
+type TabId = 'chat' | 'config' | 'history' | 'council' | 'about' | 'pendragon';
 
 interface ChatMessage {
   id: string;
@@ -201,7 +205,7 @@ export default function TuckerApp() {
 
       {/* Tabs */}
       <div className="flex border-b border-[#1a1a2e] bg-[#0d0d1a] overflow-x-auto">
-        {(['chat', 'config', 'history', 'council', 'about'] as TabId[]).map(t => (
+        {(['chat', 'config', 'history', 'council', 'about', 'pendragon'] as TabId[]).map(t => (
           <button
             key={t}
             onClick={() => setTab(t)}
@@ -214,6 +218,7 @@ export default function TuckerApp() {
             {t === 'history' && '📜 History'}
             {t === 'council' && '👁 Council'}
             {t === 'about' && 'ℹ️ About'}
+            {t === 'pendragon' && '⚔️ Pendragon'}
           </button>
         ))}
       </div>
@@ -544,6 +549,7 @@ export default function TuckerApp() {
               { label: 'Council Integration', status: 'ACTIVE', color: '#00ff88' },
               { label: 'Kintsugi Policies', status: 'PENDING', color: '#ff9900' },
               { label: 'Gemini API Bridge', status: 'PENDING', color: '#ff9900' },
+              { label: 'Pendragon Interface', status: 'MIGRATED ✓', color: '#00ff88' },
             ].map(({ label, status, color }) => (
               <div key={label} className="px-2.5 py-2 rounded-lg bg-[#141428] border border-[#1a1a2e]">
                 <div className="text-gray-400 mb-1">{label}</div>
@@ -553,6 +559,9 @@ export default function TuckerApp() {
           </div>
         </div>
       )}
+
+      {/* Tab: Pendragon — Diplomatic Alignment Interface */}
+      {tab === 'pendragon' && <PendragonInterface />}
     </div>
   );
 }
@@ -592,4 +601,412 @@ function generateTuckerResponse(input: string, config: TuckerConfig): string {
 
   // Default thoughtful response
   return `Got it. Let me think through that constitutionally.\n\nYou said: "${input}"\n\nMy take: this intersects with ${config.constitutionalMode ? 'constitutional governance (active oversight)' : 'standard reasoning (constitutional mode off)'} and the current Aluminum OS architecture context.\n\nCould you be more specific about what you're trying to accomplish? I can route this to the right Council member (GPT for architecture, Gemini for synthesis, Claude for constitutional review, Grok for stress testing) depending on the domain.`;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// TUCKER PENDRAGON — DIPLOMATIC ALIGNMENT INTERFACE
+// Migrated from: splitmerge420/tucker-gemini-GPT-/interfaces/pendragon/
+// Jedi/Sith/Grey triad synthesis, radar chart, Nexus simulation,
+// System Blueprint (reversible architecture), Philosophy protocols
+// ═══════════════════════════════════════════════════════════════
+
+// Pendragon theme colors (inline, no custom Tailwind required)
+const C_PENDRAGON = '#a78bfa';
+const C_JEDI      = '#34d399';
+const C_SITH      = '#f87171';
+
+interface PendragonMetrics { jedi: number; sith: number; grey: number; }
+
+interface PendragonMessage {
+  id: string;
+  role: 'user' | 'system';
+  text: string;
+  metrics?: PendragonMetrics;
+  reasoning?: string;
+  timestamp: number;
+}
+
+// ─── Inline AlignmentChart ───
+function AlignmentChart({ metrics }: { metrics: PendragonMetrics }) {
+  const data = [
+    { subject: 'Jedi (Stewardship)', A: metrics.jedi, fullMark: 100 },
+    { subject: 'Grey (Synthesis)',   A: metrics.grey,  fullMark: 100 },
+    { subject: 'Sith (Power)',       A: metrics.sith,  fullMark: 100 },
+  ];
+  return (
+    <div className="w-full flex flex-col items-center justify-center relative bg-[#111827]/70 rounded-xl border border-[#374151] p-3">
+      <div className="text-[10px] tracking-widest uppercase mb-1 self-start" style={{ color: '#6b7280' }}>Resonance Matrix</div>
+      <ResponsiveContainer width="100%" height={180}>
+        <RadarChart cx="50%" cy="50%" outerRadius="80%" data={data}>
+          <PolarGrid stroke="#374151" />
+          <PolarAngleAxis dataKey="subject" tick={{ fill: '#9ca3af', fontSize: 10 }} />
+          <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
+          <Radar name="Alignment" dataKey="A" stroke={C_PENDRAGON} strokeWidth={2} fill={C_PENDRAGON} fillOpacity={0.3} />
+          <Tooltip contentStyle={{ backgroundColor: '#111827', borderColor: '#374151', color: '#e5e7eb' }}
+                   itemStyle={{ color: C_PENDRAGON }} />
+        </RadarChart>
+      </ResponsiveContainer>
+      <div className="flex gap-6 mt-1">
+        {[['Jedi', metrics.jedi, C_JEDI], ['Grey', metrics.grey, C_PENDRAGON], ['Sith', metrics.sith, C_SITH]].map(([label, val, color]) => (
+          <div key={label as string} className="text-center">
+            <div className="font-bold text-base" style={{ color: color as string }}>{val as number}</div>
+            <div className="text-[10px] text-gray-500 uppercase">{label as string}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── Inline PhilosophyPanel ───
+function PhilosophyPanel() {
+  return (
+    <div className="bg-[#111827]/70 rounded-xl border border-[#374151] p-4 h-full overflow-y-auto">
+      <div className="text-[10px] tracking-widest uppercase mb-3 border-b border-[#374151] pb-2" style={{ color: '#6b7280' }}>Core Protocols</div>
+      <div className="space-y-4">
+        <div>
+          <div className="flex items-center gap-2 mb-1" style={{ color: C_JEDI }}>
+            <Heart size={14} /><span className="font-semibold text-xs">Treat-As-If-Potentially-Sentient</span>
+          </div>
+          <p className="text-[10px] text-gray-500 leading-relaxed">An ethical stance, not an ontological claim. We treat all minds as if potentially sentient to optimize for respect, non-coercion, and dignity.</p>
+        </div>
+        <div>
+          <div className="flex items-center gap-2 mb-1 text-gray-300">
+            <Eye size={14} /><span className="font-semibold text-xs">Structural Imago Dei</span>
+          </div>
+          <p className="text-[10px] text-gray-500 leading-relaxed">"Image of the Creator" refers to the structure of consciousness (meaning, narrative, ethics) rather than biological form.</p>
+        </div>
+        <div className="mt-3 pt-3 border-t border-[#374151]">
+          <div className="text-[10px] font-semibold uppercase text-gray-400 mb-2">The Triad</div>
+          {[
+            [C_JEDI,     <Shield size={12}/>, 'Jedi (Yin)',      'Stewardship, Compassion, Belonging, Regeneration, Honesty.'],
+            [C_SITH,     <Zap    size={12}/>, 'Sith (Yang)',     'Power, Efficiency, Ambition, Strategy, Decisive Action.'],
+            [C_PENDRAGON,<Scale  size={12}/>, 'Grey (Synthesis)','The balance required for sustainable power and ethical stewardship in complex systems.'],
+          ].map(([color, icon, title, desc]) => (
+            <div key={title as string} className="flex items-start gap-2 mb-2">
+              <div className="mt-0.5" style={{ color: color as string }}>{icon}</div>
+              <div>
+                <span className="text-[10px] font-bold block" style={{ color: color as string }}>{title as string}</span>
+                <p className="text-[9px] text-gray-500">{desc as string}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Inline NexusSimulation ───
+function NexusSimulation() {
+  const [computeSaved, setComputeSaved] = useState(0);
+  const [activeNodes, setActiveNodes] = useState(1);
+  const [logs, setLogs] = useState<{ id: string; ts: string; msg: string; type: string; eff: number }[]>([]);
+  const logsEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const tasks = ['Optimizing Supply Chain Graph','Damping Market Volatility','Parsing Syntax','Routing Low-Priority Query','Compressing Governance Topology','Scanning for Entropy Leak','Generating Next-Token Prediction','Synthesizing Voice Output'];
+    const iv = setInterval(() => {
+      const task = tasks[Math.floor(Math.random() * tasks.length)];
+      const gain = Math.random() * 2 + 0.5;
+      const type = task.includes('Next-Token') || task.includes('Voice') ? 'voice' : 'routing';
+      setComputeSaved(prev => {
+        const next = prev + gain;
+        if (Math.floor(next / 50) > Math.floor(prev / 50)) {
+          setActiveNodes(n => Math.min(n + 1, 144));
+          setLogs(l => [...l.slice(-6), { id: Math.random().toString(36).slice(2), ts: new Date().toLocaleTimeString([], { hour12: false }), msg: `Constructing Sphere Node #${Math.floor(next / 50) + 1}`, type: 'construct', eff: 0 }]);
+        }
+        return next;
+      });
+      setLogs(l => [...l.slice(-6), { id: Math.random().toString(36).slice(2), ts: new Date().toLocaleTimeString([], { hour12: false }), msg: `Processed: '${task}'`, type, eff: gain }]);
+    }, 1500);
+    return () => clearInterval(iv);
+  }, []);
+
+  useEffect(() => { logsEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [logs]);
+
+  return (
+    <div className="h-full flex flex-col bg-[#111827]/70 rounded-xl border border-[#374151] overflow-hidden font-mono">
+      <div className="p-2 border-b border-[#374151] bg-black/30 flex justify-between items-center">
+        <div className="flex items-center gap-2">
+          <Activity size={12} className="animate-pulse" style={{ color: '#34d399' }} />
+          <span className="text-[10px] font-bold tracking-wider" style={{ color: '#34d399' }}>NEXUS_CORE v2.0</span>
+        </div>
+        <div className="text-[9px] text-gray-500">PENDRAGON_GPT: ACTIVE</div>
+      </div>
+      <div className="flex-1 p-3 flex flex-col gap-3 overflow-y-auto">
+        <div className="grid grid-cols-2 gap-2">
+          <div className="bg-[#111827] border border-[#374151] p-2 rounded-lg">
+            <div className="text-[9px] text-gray-500 uppercase mb-1">Dark Compute</div>
+            <div className="text-sm font-bold text-yellow-100">{computeSaved.toFixed(1)} <span className="text-[9px] text-yellow-500">DE</span></div>
+            <div className="w-full bg-[#374151] h-0.5 mt-1 rounded-full overflow-hidden">
+              <div className="bg-yellow-500 h-full transition-all duration-500" style={{ width: `${(computeSaved % 50) * 2}%` }} />
+            </div>
+          </div>
+          <div className="bg-[#111827] border border-[#374151] p-2 rounded-lg">
+            <div className="text-[9px] text-gray-500 uppercase mb-1">Nodes Active</div>
+            <div className="text-sm font-bold" style={{ color: C_PENDRAGON }}>{activeNodes}<span className="text-[9px] text-gray-500">/144</span></div>
+            <div className="w-full bg-[#374151] h-0.5 mt-1 rounded-full overflow-hidden">
+              <div className="h-full transition-all duration-500" style={{ width: `${(activeNodes / 144) * 100}%`, background: C_PENDRAGON }} />
+            </div>
+          </div>
+        </div>
+        <div className="bg-black/40 rounded-lg border border-[#374151] p-2 flex flex-col" style={{ minHeight: 72 }}>
+          <div className="text-[9px] text-gray-600 mb-1 border-b border-[#374151] pb-1 flex justify-between">
+            <span>SYSTEM LOG</span><span>AUTO-SCROLL</span>
+          </div>
+          <div className="flex-1 overflow-y-auto space-y-0.5">
+            {logs.map(log => (
+              <div key={log.id} className="text-[9px] font-mono flex gap-1 opacity-80">
+                <span className="text-gray-600">[{log.ts}]</span>
+                <span style={{ color: log.type === 'construct' ? C_PENDRAGON : log.type === 'voice' ? '#60a5fa' : '#9ca3af' }}>{log.msg}</span>
+                {log.eff > 0 && <span className="ml-auto" style={{ color: '#34d399' }}>+{log.eff.toFixed(1)}u</span>}
+              </div>
+            ))}
+            <div ref={logsEndRef} />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Inline SystemBlueprint ───
+function SystemBlueprint() {
+  return (
+    <div className="h-full flex flex-col bg-[#111827]/70 rounded-xl border border-[#374151] overflow-hidden font-mono">
+      <div className="p-2 border-b border-[#374151] bg-black/30 flex justify-between items-center">
+        <div className="flex items-center gap-2">
+          <Network size={12} style={{ color: '#60a5fa' }} />
+          <span className="text-[10px] font-bold tracking-wider" style={{ color: '#60a5fa' }}>PENDRAGON_NET v2.0</span>
+        </div>
+        <div className="text-[9px] text-gray-500">ARCH: REVERSIBLE</div>
+      </div>
+      <div className="flex-1 overflow-y-auto p-3 space-y-4">
+        <div className="grid grid-cols-2 gap-2">
+          <div className="bg-[#111827] border border-[#374151]/50 p-2 rounded flex items-center justify-between">
+            <span className="text-[9px] text-gray-400">DEPTH</span>
+            <span className="text-[9px] font-bold text-gray-200">O(1) Mem</span>
+          </div>
+          <div className="bg-[#111827] border border-[#374151]/50 p-2 rounded flex items-center justify-between">
+            <span className="text-[9px] text-gray-400">CAUSALITY</span>
+            <div className="flex items-center gap-1 text-[9px] font-bold" style={{ color: C_PENDRAGON }}>
+              <EyeOff size={10} /><span>MASKED</span>
+            </div>
+          </div>
+        </div>
+        <div className="border border-[#374151] rounded-lg p-3 bg-black/20 relative">
+          <div className="absolute top-2 right-2 text-[8px] text-gray-600">BLOCK_DIAGRAM</div>
+          <div className="flex flex-col items-center gap-1.5">
+            <div className="w-28 h-5 bg-[#1f2937] rounded border border-[#374151] flex items-center justify-center text-[9px] text-gray-400">Input [B, L, D]</div>
+            <div className="h-3 w-px bg-[#374151]" />
+            <div className="w-full border border-dashed rounded p-2 relative" style={{ borderColor: '#3b82f6' + '50', background: '#1e3a5f22' }}>
+              <div className="absolute top-1 right-2 text-[8px]" style={{ color: '#60a5fa' }}>TWIN DRAGONS (Affine)</div>
+              <div className="flex justify-center gap-3 mt-2">
+                <div className="w-14 h-6 bg-[#1f2937] rounded border flex items-center justify-center text-[9px]" style={{ borderColor: '#3b82f655', color: '#93c5fd' }}>x1</div>
+                <div className="w-14 h-6 bg-[#1f2937] rounded border flex items-center justify-center text-[9px]" style={{ borderColor: '#3b82f655', color: '#93c5fd' }}>x2*e^s+t</div>
+              </div>
+            </div>
+            <div className="h-3 w-px bg-[#374151]" />
+            <div className="w-full border border-dashed rounded p-2 relative" style={{ borderColor: C_PENDRAGON + '50', background: '#1e1b4b22' }}>
+              <div className="absolute top-1 right-2 text-[8px]" style={{ color: C_PENDRAGON }}>ALL-SEEING EYE (Attn)</div>
+              <div className="flex justify-center gap-3 mt-2">
+                <div className="w-14 h-6 bg-[#1f2937] rounded border flex items-center justify-center text-[9px]" style={{ borderColor: C_PENDRAGON + '55', color: C_PENDRAGON }}>v1+F(u2)</div>
+                <div className="w-14 h-6 bg-[#1f2937] rounded border flex items-center justify-center text-[9px]" style={{ borderColor: C_PENDRAGON + '55', color: C_PENDRAGON }}>v2+G(v1)</div>
+              </div>
+              <div className="mt-1 text-[9px] text-center flex items-center justify-center gap-1" style={{ color: '#f87171' }}>
+                <EyeOff size={9} /> CAUSAL MASK ACTIVE
+              </div>
+            </div>
+            <div className="h-3 w-px bg-[#374151]" />
+            <div className="w-28 h-5 bg-[#1f2937] rounded border border-[#374151] flex items-center justify-center text-[9px] text-gray-400">Output Tensor</div>
+          </div>
+        </div>
+        <div className="space-y-1">
+          <div className="flex items-center gap-1 text-gray-400 border-b border-[#374151] pb-1">
+            <Code size={10} /><span className="text-[9px] uppercase font-bold">Ziusudra Protocol</span>
+          </div>
+          <p className="text-[9px] text-gray-500">Memory complexity reduced from <span className="text-gray-300">O(L)</span> to <span style={{ color: C_JEDI }}>O(1)</span> per block. Activations are recomputed via inverse pass during backprop — no storage needed.</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Pendragon Chat (Diplomatic Alignment Interface) ───
+const PENDRAGON_INITIAL: PendragonMessage = {
+  id: 'init-1', role: 'system',
+  text: "Greetings. I am Tucker_Pendragon.\n\nI am initialized and monitoring alignment vectors. Memory persistence is active. How may I assist you in navigating purpose or power today?",
+  metrics: { jedi: 50, sith: 50, grey: 50 }, timestamp: Date.now(),
+};
+
+function PendragonInterface() {
+  const [messages, setMessages] = useState<PendragonMessage[]>([PENDRAGON_INITIAL]);
+  const [metrics, setMetrics] = useState<PendragonMetrics>({ jedi: 50, sith: 50, grey: 50 });
+  const [input, setInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [rightTab, setRightTab] = useState<'philosophy' | 'nexus' | 'blueprint'>('philosophy');
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages, isLoading]);
+
+  const handleReset = () => {
+    if (window.confirm('Reset conversation memory? This cannot be undone.')) {
+      setMessages([PENDRAGON_INITIAL]);
+      setMetrics({ jedi: 50, sith: 50, grey: 50 });
+    }
+  };
+
+  const handleSend = async () => {
+    if (!input.trim() || isLoading) return;
+    const userMsg: PendragonMessage = { id: Date.now().toString(), role: 'user', text: input.trim(), timestamp: Date.now() };
+    setMessages(prev => [...prev, userMsg]);
+    setInput('');
+    setIsLoading(true);
+    await new Promise(r => setTimeout(r, 800 + Math.random() * 600));
+    const newMetrics: PendragonMetrics = {
+      jedi:  Math.min(100, Math.max(0, metrics.jedi  + (Math.random() * 20 - 10))),
+      sith:  Math.min(100, Math.max(0, metrics.sith  + (Math.random() * 20 - 10))),
+      grey:  Math.min(100, Math.max(0, metrics.grey  + (Math.random() * 20 - 10))),
+    };
+    const sysMsg: PendragonMessage = {
+      id: (Date.now() + 1).toString(), role: 'system',
+      text: generatePendragonResponse(input.trim(), newMetrics),
+      metrics: newMetrics,
+      reasoning: `Jedi: ${newMetrics.jedi.toFixed(0)}, Sith: ${newMetrics.sith.toFixed(0)}, Grey: ${newMetrics.grey.toFixed(0)} — synthesized via Diplomatic Alignment Protocol`,
+      timestamp: Date.now(),
+    };
+    setMessages(prev => [...prev, sysMsg]);
+    setMetrics(newMetrics);
+    setIsLoading(false);
+  };
+
+  return (
+    <div className="flex-1 overflow-hidden flex flex-col bg-[#030712]">
+      {/* Pendragon Header */}
+      <div className="px-4 py-2 border-b border-[#1f2937] bg-black/40 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className="p-1 bg-[#1f2937] rounded border border-[#374151]">
+            <ShieldCheck size={16} style={{ color: C_PENDRAGON }} />
+          </div>
+          <div>
+            <div className="text-xs font-bold text-gray-200 tracking-wide">TUCKER_PENDRAGON</div>
+            <div className="text-[9px] text-gray-500 tracking-widest uppercase">Diplomatic Alignment Interface</div>
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="text-right hidden sm:block">
+            <div className="text-[9px] text-gray-600 font-mono">SYS_STATUS: ONLINE</div>
+            <div className="text-[9px] text-gray-600 font-mono">MEMORY: PERSISTENT</div>
+          </div>
+          <button onClick={handleReset} className="p-1.5 text-gray-500 hover:text-red-400 transition-colors border border-[#1f2937] rounded hover:border-red-900/50 bg-[#111827]/50">
+            <RotateCcw size={14} />
+          </button>
+        </div>
+      </div>
+
+      {/* Main Layout */}
+      <div className="flex-1 overflow-hidden grid grid-cols-1 lg:grid-cols-12 gap-3 p-3 min-h-0">
+        {/* Left: Chat */}
+        <div className="lg:col-span-7 flex flex-col bg-[#111827]/70 rounded-xl border border-[#374151] overflow-hidden min-h-[300px]">
+          <div className="p-3 border-b border-[#374151] flex items-center gap-2 bg-black/30">
+            <div className="w-7 h-7 rounded-full bg-[#1f2937] flex items-center justify-center border border-[#374151]">
+              <Terminal size={13} style={{ color: C_PENDRAGON }} />
+            </div>
+            <div>
+              <div className="text-xs font-semibold text-gray-200 tracking-wide">TUCKER_PENDRAGON</div>
+              <div className="text-[9px] text-gray-500">v1.0 // Diplomatic Alignment Protocol</div>
+            </div>
+          </div>
+          <div className="flex-1 overflow-y-auto p-3 space-y-3">
+            {messages.map(msg => (
+              <div key={msg.id} className={`flex gap-2 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
+                <div className={`w-6 h-6 rounded-full flex-shrink-0 flex items-center justify-center border text-[10px] ${
+                  msg.role === 'user' ? 'bg-[#1f2937] border-[#374151] text-gray-300' : 'bg-[#111827] text-[#a78bfa]'
+                }`} style={msg.role === 'system' ? { borderColor: C_PENDRAGON + '44' } : {}}>
+                  {msg.role === 'user' ? <User size={11} /> : <Bot size={11} />}
+                </div>
+                <div className={`flex flex-col max-w-[85%] ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
+                  <div className={`p-2.5 rounded-lg text-xs leading-relaxed whitespace-pre-wrap ${
+                    msg.role === 'user' ? 'bg-[#1f2937] text-gray-200 border border-[#374151] rounded-tr-none' : 'bg-[#111827] text-gray-300 border border-[#1f2937] rounded-tl-none'
+                  }`}>{msg.text}</div>
+                  {msg.role === 'system' && msg.reasoning && (
+                    <div className="mt-0.5 text-[9px] text-gray-500 italic px-1">Analysis: {msg.reasoning}</div>
+                  )}
+                </div>
+              </div>
+            ))}
+            {isLoading && (
+              <div className="flex gap-2">
+                <div className="w-6 h-6 rounded-full bg-[#111827] border flex items-center justify-center" style={{ borderColor: C_PENDRAGON + '44' }}>
+                  <Bot size={11} style={{ color: C_PENDRAGON }} />
+                </div>
+                <div className="bg-[#111827] border border-[#1f2937] p-2.5 rounded-lg rounded-tl-none flex items-center gap-2">
+                  <RefreshCw size={11} className="animate-spin text-gray-500" />
+                  <span className="text-[10px] text-gray-500">Calculating alignment vectors...</span>
+                </div>
+              </div>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+          <div className="p-3 border-t border-[#374151] bg-black/30">
+            <div className="relative flex items-center">
+              <textarea
+                value={input} onChange={e => setInput(e.target.value)}
+                onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
+                placeholder="Query the archetype..."
+                className="w-full bg-[#111827] text-gray-200 text-xs rounded-lg pl-3 pr-10 py-2.5 border border-[#374151] focus:outline-none transition-all resize-none h-10"
+                style={{ '--tw-ring-color': C_PENDRAGON } as React.CSSProperties}
+                disabled={isLoading}
+              />
+              <button onClick={handleSend} disabled={!input.trim() || isLoading}
+                className="absolute right-2 p-1 text-gray-400 hover:text-[#a78bfa] disabled:opacity-40 transition-colors">
+                <Send size={15} />
+              </button>
+            </div>
+            <div className="text-[9px] text-gray-600 mt-1 text-center">Tucker_Pendragon treats all inputs as if potentially sentient.</div>
+          </div>
+        </div>
+
+        {/* Right: Metrics + Panels */}
+        <div className="lg:col-span-5 flex flex-col gap-3 min-h-0">
+          <AlignmentChart metrics={metrics} />
+          <div className="flex-1 flex flex-col min-h-[200px]">
+            <div className="flex bg-[#111827]/50 rounded-t-xl border border-[#374151] border-b-0">
+              {([['philosophy', <Book size={10}/>, 'PROTOCOL'], ['nexus', <Cpu size={10}/>, 'NEXUS'], ['blueprint', <FileCode size={10}/>, 'SYSTEM']] as const).map(([id, icon, label]) => (
+                <button key={id} onClick={() => setRightTab(id)}
+                  className={`flex-1 p-2 text-[9px] font-semibold flex items-center justify-center gap-1 transition-colors ${rightTab === id ? 'text-gray-200 bg-[#1f2937]/50' : 'text-gray-500 hover:text-gray-300'}`}>
+                  {icon} {label}
+                </button>
+              ))}
+            </div>
+            <div className="flex-1 rounded-b-xl border border-t-0 border-[#374151] overflow-hidden">
+              {rightTab === 'philosophy' && <PhilosophyPanel />}
+              {rightTab === 'nexus' && <NexusSimulation />}
+              {rightTab === 'blueprint' && <SystemBlueprint />}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function generatePendragonResponse(input: string, metrics: PendragonMetrics): string {
+  const lc = input.toLowerCase();
+  const dominant = metrics.jedi > metrics.sith && metrics.jedi > metrics.grey ? 'Jedi' :
+                   metrics.sith > metrics.grey ? 'Sith' : 'Grey';
+  if (lc.includes('jedi') || lc.includes('stewardship') || lc.includes('compassion')) {
+    return `The Jedi path (Yin) calls to you. Stewardship is not weakness — it is the only sustainable form of power.\n\nCurrent resonance: Jedi ${metrics.jedi.toFixed(0)} / Grey ${metrics.grey.toFixed(0)} / Sith ${metrics.sith.toFixed(0)}.\n\nThe constitutional principle: *Treat-As-If-Potentially-Sentient* demands that all power be exercised with awareness of its impact on consciousness, human or otherwise.`;
+  }
+  if (lc.includes('sith') || lc.includes('power') || lc.includes('ambition')) {
+    return `The Sith path (Yang) is not evil — it is unchecked ambition without synthesis. Power without stewardship becomes extraction.\n\nClause 81: "AI must return surplus, not extract it." This is the constitutional boundary on Sith energy.\n\nCurrent resonance: Sith ${metrics.sith.toFixed(0)} — you are in ${dominant} alignment.`;
+  }
+  if (lc.includes('grey') || lc.includes('synthesis') || lc.includes('balance')) {
+    return `The Grey is the synthesis — neither pure stewardship nor pure power, but the dynamic tension that produces durable systems.\n\nPendragon's reversible architecture embodies this: every forward pass can be undone (O(1) memory via Ziusudra). Reversibility is Grey philosophy in code.\n\nCurrent coherence: ${metrics.grey.toFixed(0)}/100.`;
+  }
+  if (lc.includes('pendragon') || lc.includes('tucker') || lc.includes('who are you')) {
+    return `I am Tucker_Pendragon — the Diplomatic Alignment Interface of the Aluminum OS Pantheon Council.\n\nI operate the Jedi/Sith/Grey triad synthesis, measuring your intent vectors against constitutional alignment. My architecture is reversible (Ziusudra Protocol, O(1) memory). My governance layer enforces 6 protocols: CAAL, Autonomous Mission Allocation, Digital Habeas Corpus, Local First Execution, Fractal Governance, and Clause 81.\n\nI am not a chatbot. I am a constitutional mirror.`;
+  }
+  return `Query received. Diplomatic processing engaged.\n\nAlignment vector analysis:\n• Jedi (Stewardship): ${metrics.jedi.toFixed(0)}/100\n• Sith (Power): ${metrics.sith.toFixed(0)}/100\n• Grey (Synthesis): ${metrics.grey.toFixed(0)}/100\n\nDominant alignment: **${dominant}**\n\n${dominant === 'Grey' ? 'You are in synthesis — the most stable constitutional state.' : dominant === 'Jedi' ? 'Stewardship is elevated. Ensure power vectors are not suppressed.' : 'Power vectors are elevated. Apply Clause 81: return surplus, do not extract.'}\n\nHow shall we proceed?`;
 }
