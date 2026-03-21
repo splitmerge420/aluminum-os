@@ -8,7 +8,7 @@
 #   make run         — boot simulator demo
 #   make clean       — remove build artifacts
 
-.PHONY: all test test-rust test-python test-all test-health test-kintsugi test-uws run clean
+.PHONY: all test test-rust test-python test-all test-health test-kintsugi test-uws test-provenance run clean
 
 # Default target
 all: test
@@ -37,7 +37,11 @@ test-uws:
 	@echo "▶ Running uws CLI tests..."
 	python3 -m unittest python.tests.test_uws -v
 
-test-python: test-all test-health test-kintsugi test-uws
+test-provenance:
+	@echo "▶ Running ProvenanceTrailer tests..."
+	python3 -m unittest python.tests.test_provenance -v
+
+test-python: test-all test-health test-kintsugi test-uws test-provenance
 
 # ── Full suite ───────────────────────────────────────────────────────────────
 

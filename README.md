@@ -34,7 +34,9 @@ Aluminum OS is a constitutional governance substrate for multi-agent AI systems.
 | Kintsugi SDK (GoldenTraceEmitter/Validator) | Kintsugi | 21 | ✅ Passing |
 | Kintsugi × Health Integration | Kintsugi | 17 | ✅ Passing |
 | `uws` CLI (swarm review, lint, audit, status) | Python Ring 1 | 38 | ✅ Passing |
-| **Total** | | **194** | **All passing** |
+| ProvenanceTrailer (Golden-Trace validator) | Python Ring 1 | 33 | ✅ Passing |
+| Kintsugi Weave CI/CD workflow | GitHub Actions | — | ✅ Active |
+| **Total** | | **227** | **All passing** |
 
 ## What Doesn't Work Yet
 
@@ -47,7 +49,7 @@ Aluminum OS is a constitutional governance substrate for multi-agent AI systems.
 ## Quick Start
 
 ```bash
-make test        # Run all 194 tests (Rust + Python + Kintsugi + uws CLI)
+make test        # Run all 227 tests (Rust + Python + Kintsugi + uws CLI + Provenance)
 make run         # Boot simulator demo (11 phases)
 make test-rust   # Rust tests only
 make test-python # Python tests only (includes uws CLI)
@@ -65,6 +67,7 @@ python3 -m unittest python.tests.test_all -v       # Manus Core (22 tests)
 python3 -m unittest python.tests.test_health -v    # Health Layer (55 tests)
 python3 -m unittest python.tests.test_kintsugi -v  # Kintsugi SDK (38 tests)
 python3 -m unittest python.tests.test_uws -v       # uws CLI (38 tests)
+python3 -m unittest python.tests.test_provenance -v # ProvenanceTrailer (33 tests)
 
 # uws CLI (entry-point script)
 python3 uws status
@@ -73,7 +76,44 @@ python3 uws lint python/
 python3 uws audit
 ```
 
-## Architecture
+## Kintsugi Weave CI/CD Workflow
+
+The repository enforces constitutional governance at the CI level via
+`.github/workflows/kintsugi-weave.yml`.  Three jobs run automatically:
+
+| Job | Trigger | What it enforces |
+|-----|---------|-----------------|
+| `constitutional-lint` | Every PR / push to `main` | `uws lint` — zero CONST-001/002 credential violations |
+| `provenance-check` | Every PR / push to `main` | Every commit must carry a valid `Golden-Trace` trailer |
+| `swarm-review` | PR comment `/uws swarm review` | NPFM Gate — scores the file batch; posts result table as comment |
+
+### Adding provenance trailers to commits
+
+```python
+from python.core.provenance import make_golden_trace_value, format_trailers
+
+# Compute the trailer block (typically hash the diff or a summary):
+trailers = format_trailers(
+    golden_trace=make_golden_trace_value("your diff or commit body"),
+    hitl_weight=0.85,
+)
+print(trailers)
+# Golden-Trace: sha3-256:a3f9...
+# HITL-Weight: 0.85
+```
+
+Append the output after a blank line at the end of your commit message:
+
+```
+feat: implement amazing feature
+
+Detailed explanation of the change.
+
+Golden-Trace: sha3-256:<64 hex chars>
+HITL-Weight: 0.85
+```
+
+
 
 ```
 ┌────────────────────────────────────────────────┐
