@@ -280,6 +280,41 @@ _EXTRACTIVE_RULES: List[Tuple[re.Pattern, str, str]] = [
 ]
 
 
+_LINT_IGNORE_RE = re.compile(
+    r"#\s*lint:\s*ignore(?:\s+([A-Z0-9,\s-]+))?",
+    re.IGNORECASE,
+)
+"""Inline suppression comment recognised by the constitutional linter.
+
+Usage examples::
+
+    some_code()  # lint: ignore              — suppress ALL rules on this line
+    some_code()  # lint: ignore CONST-001    — suppress a single rule
+    some_code()  # lint: ignore CONST-001,CONST-002  — suppress several rules
+"""
+
+
+def _suppressed_rules(line: str) -> Optional[set]:
+    """Return the set of rule IDs suppressed on *line*, or None if no comment.
+
+    Collects ALL ``# lint: ignore`` annotations on the line (there may be more
+    than one when a string literal contains an annotation followed by a real
+    trailing annotation).  Returns an empty set when any annotation suppresses
+    all rules; otherwise returns the union of all named rule IDs.
+    Returns None when no annotation is present.
+    """
+    matches = list(_LINT_IGNORE_RE.finditer(line))
+    if not matches:
+        return None
+    result: set = set()
+    for m in matches:
+        raw = m.group(1)
+        if not raw or not raw.strip():
+            return set()  # empty set → suppress everything
+        result.update(r.strip().upper() for r in raw.split(",") if r.strip())
+    return result
+
+
 def _lint_file(path: Path) -> List[LintFinding]:
     """Return LintFindings for a single Python file."""
     findings: List[LintFinding] = []
@@ -293,26 +328,34 @@ def _lint_file(path: Path) -> List[LintFinding]:
     # CONST-001 / CONST-002 — credential patterns
     for pattern, rule_id in _SECRET_RULES:
         for i, line in enumerate(lines, 1):
-            if pattern.search(line):
-                findings.append(LintFinding(
-                    rule_id=rule_id,
-                    severity=LintSeverity.VIOLATION,
-                    message="Potential credential or secret detected",
-                    file=str(path),
-                    line=i,
-                ))
+            if not pattern.search(line):
+                continue
+            suppressed = _suppressed_rules(line)
+            if suppressed is not None and (not suppressed or rule_id in suppressed):
+                continue  # inline suppression
+            findings.append(LintFinding(
+                rule_id=rule_id,
+                severity=LintSeverity.VIOLATION,
+                message="Potential credential or secret detected",
+                file=str(path),
+                line=i,
+            ))
 
     # CONST-003 / CONST-004 — extractive patterns
     for pattern, rule_id, message in _EXTRACTIVE_RULES:
         for i, line in enumerate(lines, 1):
-            if pattern.search(line):
-                findings.append(LintFinding(
-                    rule_id=rule_id,
-                    severity=LintSeverity.WARNING,
-                    message=message,
-                    file=str(path),
-                    line=i,
-                ))
+            if not pattern.search(line):
+                continue
+            suppressed = _suppressed_rules(line)
+            if suppressed is not None and (not suppressed or rule_id in suppressed):
+                continue  # inline suppression
+            findings.append(LintFinding(
+                rule_id=rule_id,
+                severity=LintSeverity.WARNING,
+                message=message,
+                file=str(path),
+                line=i,
+            ))
 
     # CONST-005 — missing module docstring
     stripped = src.lstrip()

@@ -159,7 +159,7 @@ class TestLint(unittest.TestCase):
         self.assertGreaterEqual(result.constitutional_score, 0.8)
 
     def test_detects_api_key_assignment(self):
-        p = self._write("s.py", '"""Test."""\napi_key = "sk-abcdefghijklmnop12345"\n')
+        p = self._write("s.py", '"""Test."""\napi_key = "sk-abcdefghijklmnop12345"\n')  # lint: ignore CONST-001,CONST-002
         result = lint([p])
         self.assertGreater(result.violations, 0)
         rule_ids = [f.rule_id for f in result.findings]
@@ -195,7 +195,7 @@ class TestLint(unittest.TestCase):
 
     def test_violations_lower_score_below_clean(self):
         clean = self._write("c.py", '"""Module."""\n')
-        dirty = self._write("d.py", '"""Module."""\napi_key = "sk-abcdefghijklmnop12345"\n')
+        dirty = self._write("d.py", '"""Module."""\napi_key = "sk-abcdefghijklmnop12345"\n')  # lint: ignore CONST-001,CONST-002
         clean_result = lint([clean])
         dirty_result = lint([dirty])
         self.assertGreater(clean_result.constitutional_score, dirty_result.constitutional_score)
@@ -224,8 +224,67 @@ class TestLint(unittest.TestCase):
         result = lint(["/tmp/this-file-does-not-exist-uws-test.py"])
         self.assertEqual(result.files_scanned, 0)
 
+    def test_lint_ignore_suppresses_all_rules_on_line(self):
+        # A line with '# lint: ignore' and no rule IDs suppresses everything.
+        p = self._write(
+            "supp_all.py",
+            '"""Module."""\napi_key = "sk-abc123456789abcde"  # lint: ignore\n',
+        )
+        result = lint([p])
+        self.assertEqual(result.violations, 0)
 
-# ─────────────────────────────────────────────────────────────────────────────
+    def test_lint_ignore_suppresses_specific_rules(self):
+        # '# lint: ignore CONST-001,CONST-002' suppresses both rules.
+        p = self._write(
+            "supp_spec.py",
+            '"""Module."""\napi_key = "sk-abc123456789abcde"  # lint: ignore CONST-001,CONST-002\n',  # lint: ignore CONST-001,CONST-002
+        )
+        result = lint([p])
+        self.assertEqual(result.violations, 0)
+
+    def test_lint_ignore_wrong_rule_does_not_suppress(self):
+        # '# lint: ignore CONST-003' should NOT suppress CONST-001/002.
+        p = self._write(
+            "supp_wrong.py",
+            '"""Module."""\napi_key = "sk-abc123456789abcde"  # lint: ignore CONST-003\n',  # lint: ignore CONST-001,CONST-002
+        )
+        result = lint([p])
+        self.assertGreater(result.violations, 0)
+
+    def test_lint_ignore_suppresses_extractive_pattern(self):
+        # '# lint: ignore CONST-003' should suppress the bare except warning.
+        p = self._write(
+            "supp_extract.py",
+            '"""Module."""\ntry:\n    x = 1\nexcept: pass  # lint: ignore CONST-003\n',
+        )
+        result = lint([p])
+        self.assertEqual(result.warnings, 0)
+
+    def test_lint_ignore_union_of_multiple_annotations(self):
+        # When a source line has two separate '# lint: ignore' annotations
+        # (e.g. one embedded inside a string literal and one as a real trailing
+        # comment), _suppressed_rules() unions both and the real annotation wins.
+        # This is the scenario that exposed the bug fixed in _suppressed_rules:
+        #   line contains  ...# lint: ignore CONST-003\n',  # lint: ignore CONST-001
+        # The first match gives CONST-003, the second gives CONST-001.
+        # The union is {CONST-001, CONST-003}, so CONST-001 IS suppressed.
+        p = self._write(
+            "multi_annot.py",
+            '"""Mod."""\napi_key = "sk-abc123456789abcde"\n',
+        )
+        # Build the line manually so we can reproduce the exact pattern:
+        # "...fake_key  # lint: ignore CONST-003",  # lint: ignore CONST-001,CONST-002
+        source = (
+            '"""Mod."""\n'
+            'x = \'api_key = "sk-abc123456789abcde"  # lint: ignore CONST-003\'  '
+            '# lint: ignore CONST-001,CONST-002\n'  # lint: ignore CONST-001,CONST-002
+        )
+        p2 = self._write("multi_annot2.py", source)
+        result = lint([p2])
+        self.assertEqual(result.violations, 0)
+
+
+
 # Audit Summary
 # ─────────────────────────────────────────────────────────────────────────────
 

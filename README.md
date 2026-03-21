@@ -33,10 +33,10 @@ Aluminum OS is a constitutional governance substrate for multi-agent AI systems.
 | Health Layer (FHIR, consent, amendments, PQC, regulatory) | Python Ring 1 | 55 | ✅ Passing |
 | Kintsugi SDK (GoldenTraceEmitter/Validator) | Kintsugi | 21 | ✅ Passing |
 | Kintsugi × Health Integration | Kintsugi | 17 | ✅ Passing |
-| `uws` CLI (swarm review, lint, audit, status) | Python Ring 1 | 38 | ✅ Passing |
+| `uws` CLI (swarm review, lint, audit, status) | Python Ring 1 | 42 | ✅ Passing |
 | ProvenanceTrailer (Golden-Trace validator) | Python Ring 1 | 33 | ✅ Passing |
 | Kintsugi Weave CI/CD workflow | GitHub Actions | — | ✅ Active |
-| **Total** | | **227** | **All passing** |
+| **Total** | | **231** | **All passing** |
 
 ## What Doesn't Work Yet
 
@@ -49,7 +49,7 @@ Aluminum OS is a constitutional governance substrate for multi-agent AI systems.
 ## Quick Start
 
 ```bash
-make test        # Run all 227 tests (Rust + Python + Kintsugi + uws CLI + Provenance)
+make test        # Run all 231 tests (Rust + Python + Kintsugi + uws CLI + Provenance)
 make run         # Boot simulator demo (11 phases)
 make test-rust   # Rust tests only
 make test-python # Python tests only (includes uws CLI)
@@ -66,7 +66,7 @@ cargo run
 python3 -m unittest python.tests.test_all -v       # Manus Core (22 tests)
 python3 -m unittest python.tests.test_health -v    # Health Layer (55 tests)
 python3 -m unittest python.tests.test_kintsugi -v  # Kintsugi SDK (38 tests)
-python3 -m unittest python.tests.test_uws -v       # uws CLI (38 tests)
+python3 -m unittest python.tests.test_uws -v       # uws CLI (42 tests)
 python3 -m unittest python.tests.test_provenance -v # ProvenanceTrailer (33 tests)
 
 # uws CLI (entry-point script)
