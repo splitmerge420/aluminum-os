@@ -3,7 +3,7 @@ import {
   Layers, Send, Bot, User, Shield, Zap, Scale, Heart, Star,
   Activity, RefreshCw, ShieldCheck, Network, Code, EyeOff,
   CheckCircle, AlertTriangle, Cpu, Globe, Lock, Flame,
-  Moon, Sparkles, Briefcase,
+  Moon, Sparkles, Briefcase, TrendingUp, FileCheck, GitBranch, Key,
 } from 'lucide-react';
 import {
   Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
@@ -94,7 +94,54 @@ interface ForgeMessage {
   score?:    number;
   tier?:     QueryTier;
   phase?:    AgentPhase;       // which phase the agent was in when this response was forged
+  verdict?:  ForgeVerdict;     // governance verdict attached to Nexus responses
+  npfm?:     number;           // Net Positive Flourishing Metric: -1.0 to 1.0
   timestamp: number;
+}
+
+// ─── Governance types (ported from pendragon-claude/types.ts) ──
+
+// The 6 Pendragon constitutional protocols — canonical identifiers
+// matching cli/src/uws/mod.rs and pendragon-claude/types.ts
+export enum Protocol {
+  CAAL               = 'CAAL',
+  MissionAllocation  = 'MissionAllocation',
+  DigitalHabeasCorpus= 'DigitalHabeasCorpus',
+  LocalFirst         = 'LocalFirst',
+  FractalGovernance  = 'FractalGovernance',
+  Clause81           = 'Clause81',
+}
+export const ALL_PROTOCOLS: Protocol[] = [
+  Protocol.CAAL, Protocol.MissionAllocation, Protocol.DigitalHabeasCorpus,
+  Protocol.LocalFirst, Protocol.FractalGovernance, Protocol.Clause81,
+];
+
+// Tri-level verdict mirroring pendragon-claude and the Rust CLI
+export enum Verdict { Approved = 'Approved', Conditional = 'Conditional', Rejected = 'Rejected' }
+
+export interface ProtocolResult {
+  protocol:   Protocol;
+  compliant:  boolean;
+  confidence: number;  // 0.0–1.0
+  reasoning:  string;
+}
+
+// ForgeVerdict = pendragon-claude GovernanceVerdict adapted for ForgeMetrics
+export interface ForgeVerdict {
+  id:               string;
+  timestamp:        number;
+  protocol_results: ProtocolResult[];
+  overall_verdict:  Verdict;
+  npfm_score:       number; // (AutomationGain × AgencyUplift) - BusyworkPenalty - (0.5 × DisplacementRisk)
+  recommendation:   string;
+}
+
+// Jedi/Sith/Grey triad (AlignmentMetrics from pendragon-claude/types.ts)
+// Derived from ForgeMetrics for cross-compatibility
+export interface AlignmentTriad {
+  jedi: number;  // 0-100 — maps to sovereignty + dignity
+  sith: number;  // 0-100 — maps to power
+  grey: number;  // 0-100 — maps to synthesis
 }
 
 // ─── Constants ────────────────────────────────────────────────
