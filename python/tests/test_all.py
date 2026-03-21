@@ -1,7 +1,7 @@
 """
 Aluminum OS — Ring 1 Behavioral Tests
 
-19 tests verifying actual behavior, not just instantiation.
+25 tests verifying actual behavior, not just instantiation.
 Zero external dependencies.
 
 Atlas Lattice Foundation — March 2026
@@ -21,6 +21,7 @@ from core.manus_core import (
     MemoryStore, MemoryTier,
     TaskDecomposer,
     SessionVault,
+    PerformanceTracker,
 )
 
 
@@ -216,6 +217,60 @@ class TestSessionVault(unittest.TestCase):
         exported = vault.export_session(token)
         self.assertIn("key", exported)
         self.assertIn("value", exported)
+
+
+class TestPerformanceTracker(unittest.TestCase):
+    """PerformanceTracker tests — verify snapshot, baseline, and delta logic."""
+
+    def setUp(self):
+        self.tracker = PerformanceTracker()
+        self.tracker.record_snapshot("baseline", {
+            "latency_ms": 120.0,
+            "hit_rate": 0.72,
+            "error_rate": 0.05,
+        })
+        self.tracker.set_baseline("baseline")
+
+    def test_record_and_count(self):
+        """Snapshots are stored and counted correctly."""
+        self.assertEqual(self.tracker.snapshot_count, 1)
+        self.tracker.record_snapshot("t2", {"latency_ms": 100.0})
+        self.assertEqual(self.tracker.snapshot_count, 2)
+
+    def test_set_baseline_returns_true(self):
+        """set_baseline returns True for an existing label."""
+        result = self.tracker.set_baseline("baseline")
+        self.assertTrue(result)
+
+    def test_set_baseline_returns_false_for_missing(self):
+        """set_baseline returns False when no snapshot has that label."""
+        result = self.tracker.set_baseline("nonexistent")
+        self.assertFalse(result)
+
+    def test_compare_improvement(self):
+        """Reduced latency and higher hit_rate should show expected deltas."""
+        self.tracker.record_snapshot("current", {
+            "latency_ms": 90.0,   # 25% reduction
+            "hit_rate": 0.90,     # 25% increase
+            "error_rate": 0.02,   # 60% reduction
+        })
+        deltas = self.tracker.compare_to_baseline("current")
+        self.assertIsNotNone(deltas)
+        self.assertAlmostEqual(deltas["latency_ms"], -25.0, places=5)
+        self.assertAlmostEqual(deltas["hit_rate"], 25.0, places=5)
+        self.assertAlmostEqual(deltas["error_rate"], -60.0, places=5)
+
+    def test_compare_returns_none_without_baseline(self):
+        """compare_to_baseline returns None when baseline has not been set."""
+        tracker = PerformanceTracker()
+        tracker.record_snapshot("snap", {"x": 1.0})
+        self.assertIsNone(tracker.compare_to_baseline("snap"))
+
+    def test_all_labels(self):
+        """all_labels returns labels in insertion order."""
+        self.tracker.record_snapshot("day2", {"latency_ms": 110.0})
+        self.tracker.record_snapshot("day3", {"latency_ms": 95.0})
+        self.assertEqual(self.tracker.all_labels(), ["baseline", "day2", "day3"])
 
 
 if __name__ == "__main__":

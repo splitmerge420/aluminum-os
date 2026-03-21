@@ -24,6 +24,7 @@
 | Memory store | ✅ Working | 5 | Three-tier with TTL |
 | Task decomposition | ✅ Working | 4 | DAG ordering, cycle detection |
 | Session vault | ✅ Working | 4 | SHA-256 tokens, TTL, JSON export |
+| Performance tracking | ✅ Working | 6 | Timestamped snapshots, baseline, % delta |
 
 ### Ring 2 (UWS CLI)
 
@@ -50,5 +51,5 @@
 | Layer | Language | Tests | Status |
 |-------|----------|-------|--------|
 | Ring 0 | Rust | 16 | ✅ All passing |
-| Ring 1 | Python | 22 | ✅ All passing |
-| **Total** | | **38** | **All green** |
+| Ring 1 | Python | 28 | ✅ All passing |
+| **Total** | | **44** | **All green** |

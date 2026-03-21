@@ -4,11 +4,12 @@ Aluminum OS — Ring 1 Middleware (Manus Core)
 Zero external dependencies. Vanilla Python 3.
 
 Components:
-    ModelRouter    — Routes requests to cheapest capable model
-    CostTracker    — Tracks per-model spending with budget enforcement
-    MemoryStore    — Three-tier memory (working / session / long-term)
-    TaskDecomposer — Breaks complex tasks into dependency-ordered subtasks
-    SessionVault   — Encrypted session persistence with TTL
+    ModelRouter        — Routes requests to cheapest capable model
+    CostTracker        — Tracks per-model spending with budget enforcement
+    MemoryStore        — Three-tier memory (working / session / long-term)
+    TaskDecomposer     — Breaks complex tasks into dependency-ordered subtasks
+    SessionVault       — Encrypted session persistence with TTL
+    PerformanceTracker — Records metric snapshots, baselines, and delta reports
 
 Atlas Lattice Foundation — March 2026
 """
@@ -403,3 +404,104 @@ class SessionVault:
         if data is None:
             return None
         return json.dumps(data)
+
+
+# ============================================================================
+# PerformanceTracker
+# ============================================================================
+
+@dataclass
+class MetricSnapshot:
+    """Point-in-time capture of named performance metrics."""
+    label: str
+    timestamp: float
+    metrics: Dict[str, float]
+
+
+class PerformanceTracker:
+    """Records timestamped metric snapshots, establishes a baseline, and
+    computes percentage deltas to answer: has performance improved?
+
+    Usage pattern:
+        tracker = PerformanceTracker()
+        tracker.record_snapshot("baseline", {"latency_ms": 120.0, "hit_rate": 0.72})
+        tracker.set_baseline("baseline")
+        # ... time passes / work happens ...
+        tracker.record_snapshot("current", {"latency_ms": 95.0, "hit_rate": 0.88})
+        deltas = tracker.compare_to_baseline("current")
+        # {"latency_ms": -20.83, "hit_rate": 22.22}  (negative latency = faster)
+    """
+
+    def __init__(self):
+        self._snapshots: List[MetricSnapshot] = []
+        self._baseline_label: Optional[str] = None
+
+    def record_snapshot(self, label: str, metrics: Dict[str, float]) -> MetricSnapshot:
+        """Record a named snapshot of metrics at the current time."""
+        snap = MetricSnapshot(
+            label=label,
+            timestamp=time.time(),
+            metrics=dict(metrics),
+        )
+        self._snapshots.append(snap)
+        return snap
+
+    def set_baseline(self, label: str) -> bool:
+        """Designate a previously recorded snapshot as the baseline.
+
+        Returns True if a snapshot with that label exists and was set,
+        False if no matching snapshot was found.
+        """
+        for snap in self._snapshots:
+            if snap.label == label:
+                self._baseline_label = label
+                return True
+        return False
+
+    def get_baseline(self) -> Optional[MetricSnapshot]:
+        """Return the current baseline snapshot, or None if not set."""
+        if self._baseline_label is None:
+            return None
+        return self._snapshot_by_label(self._baseline_label)
+
+    def _snapshot_by_label(self, label: str) -> Optional[MetricSnapshot]:
+        """Return the most recent snapshot with the given label."""
+        for snap in reversed(self._snapshots):
+            if snap.label == label:
+                return snap
+        return None
+
+    def compare_to_baseline(self, current_label: str) -> Optional[Dict[str, float]]:
+        """Return percentage change for each metric vs. the baseline snapshot.
+
+        Positive value means the metric value increased; whether that is an
+        improvement depends on the metric direction (e.g. lower latency = better,
+        higher hit_rate = better).
+
+        Returns None if the baseline is not set or the current snapshot is not found.
+        """
+        baseline = self.get_baseline()
+        current = self._snapshot_by_label(current_label)
+        if baseline is None or current is None:
+            return None
+
+        deltas: Dict[str, float] = {}
+        all_keys = set(baseline.metrics.keys()) | set(current.metrics.keys())
+        for key in sorted(all_keys):
+            base_val = baseline.metrics.get(key, 0.0)
+            curr_val = current.metrics.get(key, 0.0)
+            if base_val == 0.0:
+                # Avoid division by zero; report raw absolute delta
+                deltas[key] = curr_val - base_val
+            else:
+                deltas[key] = ((curr_val - base_val) / abs(base_val)) * 100.0
+        return deltas
+
+    @property
+    def snapshot_count(self) -> int:
+        """Total number of recorded snapshots."""
+        return len(self._snapshots)
+
+    def all_labels(self) -> List[str]:
+        """Return labels of all recorded snapshots in order."""
+        return [s.label for s in self._snapshots]
