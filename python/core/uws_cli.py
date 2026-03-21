@@ -509,12 +509,15 @@ def audit_summary(
 # ─── System Status ────────────────────────────────────────────────────────────
 
 @dataclass
+@dataclass
 class SystemStatus:
     """Per-ring operational status for Aluminum OS."""
-    ring0: str    # "no_bridge" until Rust↔Python IPC is wired
-    ring1: str    # "operational" | "degraded" | "offline"
-    kintsugi: str # "operational" | "degraded" | "offline"
+    ring0: str      # "no_bridge" until Rust↔Python IPC is wired
+    ring1: str      # "operational" | "degraded" | "offline"
+    kintsugi: str   # "operational" | "degraded" | "offline"
     version: str
+    workspace: str = "not_probed"  # "operational" | "degraded" | "unavailable"
+    workspace_tool: Optional[str] = None  # preferred GWS tool, if any
 
     def to_dict(self) -> Dict[str, Any]:
         overall = (
@@ -526,6 +529,8 @@ class SystemStatus:
             "ring0": self.ring0,
             "ring1": self.ring1,
             "kintsugi": self.kintsugi,
+            "workspace": self.workspace,
+            "workspace_tool": self.workspace_tool,
             "version": self.version,
             "overall": overall,
         }
@@ -566,9 +571,45 @@ def status() -> SystemStatus:
     except Exception:
         kintsugi = "degraded"
 
+    # Workspace probe — detect Google Workspace CLI tools without raising.
+    workspace = "unavailable"
+    workspace_tool = None
+    try:
+        from .workspace import detect_tools as _detect_ws
+        ws_status = _detect_ws()
+        workspace_tool = ws_status.preferred_tool
+        workspace = "operational" if ws_status.any_available else "unavailable"
+    except Exception:
+        workspace = "degraded"
+
     return SystemStatus(
         ring0="no_bridge",
         ring1=ring1,
         kintsugi=kintsugi,
         version="2.0.0",
+        workspace=workspace,
+        workspace_tool=workspace_tool,
     )
+
+
+def workspace_detect(
+    emitter: Optional[GoldenTraceEmitter] = None,
+) -> Dict[str, Any]:
+    """Detect installed Google Workspace CLI tools and return a status dict.
+
+    Equivalent to ``uws workspace detect``.
+
+    Probes for ``gws`` (≥ 0.18.1), ``gam`` (≥ 7.36.03), and ``gyb``
+    (≥ 1.95).  Returns a plain dict compatible with JSON serialisation.
+
+    Args:
+        emitter: Optional Kintsugi emitter for audit trace.
+
+    Returns:
+        Dict with keys: ``any_available``, ``preferred_tool``, ``tools``
+        (list of per-tool status dicts), and ``trace_id``.
+    """
+    from .workspace import detect_tools as _detect_ws
+    ws_status = _detect_ws(emitter=emitter)
+    return ws_status.to_dict()
+

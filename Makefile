@@ -8,7 +8,7 @@
 #   make run         — boot simulator demo
 #   make clean       — remove build artifacts
 
-.PHONY: all test test-rust test-python test-all test-health test-kintsugi test-uws test-provenance run clean
+.PHONY: all test test-rust test-python test-all test-health test-kintsugi test-uws test-provenance test-workspace run clean
 
 # Default target
 all: test
@@ -41,7 +41,11 @@ test-provenance:
 	@echo "▶ Running ProvenanceTrailer tests..."
 	python3 -m unittest python.tests.test_provenance -v
 
-test-python: test-all test-health test-kintsugi test-uws test-provenance
+test-workspace:
+	@echo "▶ Running WorkspaceAdapter (Google Workspace CLI) tests..."
+	python3 -m unittest python.tests.test_workspace -v
+
+test-python: test-all test-health test-kintsugi test-uws test-provenance test-workspace
 
 # ── Full suite ───────────────────────────────────────────────────────────────
 

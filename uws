@@ -7,6 +7,7 @@ Usage:
   uws lint [<path>...]
   uws swarm review [--batch=N] [<item>...]
   uws audit [--last=N]
+  uws workspace detect
 """
 
 import argparse
@@ -25,6 +26,7 @@ from python.core.uws_cli import (
     lint,
     status,
     swarm_review,
+    workspace_detect,
 )
 from kintsugi.sdk.golden_trace import GoldenTraceEmitter
 
@@ -72,6 +74,13 @@ def cmd_audit(args) -> int:
     return 0
 
 
+def cmd_workspace_detect(args) -> int:
+    em = _make_emitter()
+    result = workspace_detect(emitter=em)
+    print(json.dumps(result, indent=2))
+    return 0 if result.get("any_available") else 1
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(
         prog="uws",
@@ -99,6 +108,14 @@ def main() -> int:
     audit_p.add_argument("--last", type=int, default=20,
                          help="Number of recent traces to summarise (default: 20)")
 
+    # workspace
+    ws_p = sub.add_parser("workspace", help="Google Workspace CLI integration")
+    ws_sub = ws_p.add_subparsers(dest="ws_cmd")
+    ws_sub.add_parser(
+        "detect",
+        help="Detect installed GWS tools (gws ≥0.18.1, gam ≥7.36.03, gyb ≥1.95)",
+    )
+
     args = parser.parse_args()
 
     if args.command == "status":
@@ -112,6 +129,11 @@ def main() -> int:
         return 1
     if args.command == "audit":
         return cmd_audit(args)
+    if args.command == "workspace":
+        if getattr(args, "ws_cmd", None) == "detect":
+            return cmd_workspace_detect(args)
+        ws_p.print_help()
+        return 1
 
     parser.print_help()
     return 1

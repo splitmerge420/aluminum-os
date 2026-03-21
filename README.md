@@ -33,10 +33,11 @@ Aluminum OS is a constitutional governance substrate for multi-agent AI systems.
 | Health Layer (FHIR, consent, amendments, PQC, regulatory) | Python Ring 1 | 55 | ✅ Passing |
 | Kintsugi SDK (GoldenTraceEmitter/Validator) | Kintsugi | 21 | ✅ Passing |
 | Kintsugi × Health Integration | Kintsugi | 17 | ✅ Passing |
-| `uws` CLI (swarm review, lint, audit, status) | Python Ring 1 | 42 | ✅ Passing |
+| `uws` CLI (swarm review, lint, audit, status) | Python Ring 1 | 43 | ✅ Passing |
 | ProvenanceTrailer (Golden-Trace validator) | Python Ring 1 | 33 | ✅ Passing |
+| WorkspaceAdapter (Google Workspace CLI bridge) | Python Ring 1 | 49 | ✅ Passing |
 | Kintsugi Weave CI/CD workflow | GitHub Actions | — | ✅ Active |
-| **Total** | | **231** | **All passing** |
+| **Total** | | **281** | **All passing** |
 
 ## What Doesn't Work Yet
 
@@ -49,7 +50,7 @@ Aluminum OS is a constitutional governance substrate for multi-agent AI systems.
 ## Quick Start
 
 ```bash
-make test        # Run all 231 tests (Rust + Python + Kintsugi + uws CLI + Provenance)
+make test        # Run all 281 tests (Rust + Python + Kintsugi + uws CLI + Provenance + Workspace)
 make run         # Boot simulator demo (11 phases)
 make test-rust   # Rust tests only
 make test-python # Python tests only (includes uws CLI)
@@ -66,15 +67,71 @@ cargo run
 python3 -m unittest python.tests.test_all -v       # Manus Core (22 tests)
 python3 -m unittest python.tests.test_health -v    # Health Layer (55 tests)
 python3 -m unittest python.tests.test_kintsugi -v  # Kintsugi SDK (38 tests)
-python3 -m unittest python.tests.test_uws -v       # uws CLI (42 tests)
+python3 -m unittest python.tests.test_uws -v       # uws CLI (43 tests)
 python3 -m unittest python.tests.test_provenance -v # ProvenanceTrailer (33 tests)
+python3 -m unittest python.tests.test_workspace -v  # WorkspaceAdapter (49 tests)
 
 # uws CLI (entry-point script)
 python3 uws status
 python3 uws swarm review --batch=50 "dep-a" "dep-b" "dep-c"
 python3 uws lint python/
 python3 uws audit
+python3 uws workspace detect     # probe gws/gam/gyb versions
 ```
+
+## Google Workspace CLI Integration
+
+`python/core/workspace.py` is the cross-ecosystem bridge between Aluminum OS
+and Google Workspace APIs.  It requires **zero new Python dependencies** —
+all CLI tools are invoked via `subprocess`.
+
+### Supported tools (March 2026)
+
+| Tool | Version | Ecosystem | Install | Services |
+|------|---------|-----------|---------|----------|
+| [`gws`](https://github.com/googleworkspace/cli) | **0.18.1** | Node.js ≥ 18 (npm) | `npm install -g @googleworkspace/cli@0.18.1` | Drive, Gmail, Calendar, Sheets, Docs, Chat, Admin, MCP |
+| [`gam`](https://github.com/GAM-team/GAM) | **7.36.03** | Python ≥ 3.10 | `pip install gam7==7.36.03` | Admin SDK, Users, Groups, Chrome, Drive, Gmail |
+| [`gyb`](https://github.com/GAM-team/got-your-back) | **1.95** | Python ≥ 3.10 | [binary release](https://github.com/GAM-team/got-your-back/releases/tag/v1.95) | Gmail (backup/restore) |
+
+Tool preference order: **gws → gam → gyb** (gws selected first for any service it supports).
+
+### Authentication environment variables (gws)
+
+```bash
+export GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
+export GOOGLE_CLIENT_SECRET=your-client-secret
+# Optional — populated automatically after first OAuth2 login:
+export GOOGLE_REFRESH_TOKEN=your-refresh-token
+```
+
+`gam` and `gyb` manage their own credentials in `~/.gam/` and `~/.gyb/` respectively.
+
+### Usage
+
+```python
+from python.core.workspace import WorkspaceAdapter
+
+adapter = WorkspaceAdapter()
+ws_status = adapter.detect()
+print(ws_status.preferred_tool)   # "gws" | "gam" | "gyb" | None
+
+# Execute a Drive file listing via gws:
+result = adapter.call("drive", "files.list", params={"pageSize": 10})
+print(result.parsed)              # JSON response from gws
+
+# Or via CLI:
+# python3 uws workspace detect
+```
+
+### Cross-ecosystem compatibility guarantee
+
+- **Pure stdlib** — no `google-api-python-client` or `google-auth` required at import time
+- **Graceful degradation** — missing tools are reported as `unavailable`, not raised as exceptions
+- **Structured JSON** — every `call()` response is parsed from JSON where the tool supports it
+- **Kintsugi trace** — every `detect()` and `call()` emits a `GoldenTrace` audit record
+- **CI-aware** — the Kintsugi Weave workflow runs `uws workspace detect` on every PR and uploads the tool inventory as an artifact
+
+
 
 ## Kintsugi Weave CI/CD Workflow
 

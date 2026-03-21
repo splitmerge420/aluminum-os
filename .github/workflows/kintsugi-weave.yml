@@ -103,12 +103,29 @@ jobs:
           fi
           echo "✅  Constitutional linter: clean (score=$SCORE)"
 
+      - name: Workspace CLI detect
+        # Non-blocking step: logs GWS tool availability for observability.
+        # gws is available via npx (Node.js pre-installed on ubuntu-latest).
+        # Install hints are printed for gam/gyb if absent.
+        run: |
+          python3 uws workspace detect | tee workspace_detect.json
+          echo "ℹ️  Workspace detect complete (see workspace_detect.json artifact)."
+        continue-on-error: true
+
       - name: Upload lint report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: constitutional-lint-report
           path: lint_result.json
+          retention-days: 7
+
+      - name: Upload workspace detect report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: workspace-detect-report
+          path: workspace_detect.json
           retention-days: 7
 
   # ── Job 2: Provenance Check ───────────────────────────────────────────────
