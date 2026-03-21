@@ -37,6 +37,9 @@ import SheldonbrainEngineApp from "@/components/apps/SheldonbrainEngineApp";
 import Interop2026App from "@/components/apps/Interop2026App";
 import TuckerApp from "@/components/apps/TuckerApp";
 import ForgeApp from "@/components/apps/ForgeApp";
+import SnippetVaultApp from "@/components/apps/SnippetVaultApp";
+import CodeReviewApp from "@/components/apps/CodeReviewApp";
+import PromptLibraryApp from "@/components/apps/PromptLibraryApp";
 import ContextMenu from "@/components/ContextMenu";
 import AppLauncher from "@/components/AppLauncher";
 import { AnimatePresence, motion } from "framer-motion";
@@ -63,6 +66,9 @@ const appComponents: Record<string, React.FC> = {
   interop2026: Interop2026App,
   tucker: TuckerApp,
   forge: ForgeApp,
+  snippetvault: SnippetVaultApp,
+  codereview: CodeReviewApp,
+  promptlibrary: PromptLibraryApp,
 };
 
 const bootSteps = [
@@ -73,7 +79,7 @@ const bootSteps = [
   { text: "Ring 1 \u2014 Inference Engine online (10 models, 3 tiers)", duration: 100 },
   { text: "Ring 2 \u2014 SHELDONBRAIN memory loaded (25.2 GB)", duration: 100 },
   { text: "Ring 3 \u2014 Pantheon Council quorum: 10/10 members + Sovereign", duration: 120 },
-  { text: "Ring 4 — Noosphere: 35 apps, 120 artifacts, 27 rules", duration: 120 },
+  { text: "Ring 4 — Noosphere: 38 apps, 120 artifacts, 27 rules", duration: 120 },
   { text: "Council Wishes: 107 loaded (Manus 60 + Claude 47, 0 conflicts)", duration: 80 },
   { text: "Constitutional substrate: 24 domains verified (INV-22 Honesty, INV-23 AI Welfare, INV-24 Harm Calculus)", duration: 100 },
   { text: "Anthropic Constitution: CC0 cross-referenced, 8 alignments, 0 conflicts", duration: 80 },

@@ -12,7 +12,7 @@ import {
   Search, Grid3X3, FolderOpen, Mail, Calendar, Brain, Settings, Globe,
   FileText, Cpu, Shield, Database, Zap, Archive, GitBranch, ScrollText,
   SquareTerminal, Workflow, DollarSign, Hexagon, HeartPulse, Hospital, Sparkles, Layers, ArrowLeftRight, ShoppingCart,
-  Atom, Network, RefreshCw, Eye, Lock, MessageCircle,
+  Atom, Network, RefreshCw, Eye, Lock, MessageCircle, Code2, GitPullRequest, BookOpen,
 } from "lucide-react";
 import { useWindows } from "@/contexts/WindowContext";
 
@@ -62,6 +62,9 @@ const allApps: LauncherApp[] = [
   { id: "forge", name: "Pantheon Forge", description: "ALUM-INT-009 — Tiered query routing, 5-axis Pentagon alignment, personal agent + Nexus gate, no firehose", icon: <Zap className="w-5 h-5" />, category: "Intelligence" },
   { id: "fusion", name: "Fusion Engine", description: "Cross-provider workflow engine", icon: <Zap className="w-5 h-5" />, category: "Core" },
   { id: "identity", name: "Identity Graph", description: "Unified sovereign identity — Janus bridge", icon: <Cpu className="w-5 h-5" />, category: "Core" },
+  { id: "snippetvault",    name: "Snippet Vault",    description: "ALUM-DEV-001 — Code snippet manager — search, tag, copy, star — 12 languages, 100+ snippets", icon: <Code2 className="w-5 h-5" />, category: "Developer" },
+  { id: "codereview",     name: "Code Review",     description: "ALUM-DEV-002 — Constitutional AI code review — 6-model council, security, complexity, coverage scoring", icon: <GitPullRequest className="w-5 h-5" />, category: "Developer" },
+  { id: "promptlibrary",  name: "Prompt Library",  description: "ALUM-DEV-003 — Vibe coding prompt templates — 20 prompts, 8 categories, variables, one-click copy", icon: <BookOpen className="w-5 h-5" />, category: "Developer" },
 ];
 
 const openableApps = new Set([
@@ -74,6 +77,9 @@ const openableApps = new Set([
   "interop2026",
   "tucker",
   "forge",
+  "snippetvault",
+  "codereview",
+  "promptlibrary",
 ]);
 
 export default function AppLauncher() {
