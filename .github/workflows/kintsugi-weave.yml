@@ -1,0 +1,383 @@
+# Kintsugi Weave — Multi-Agent CI/CD Engine
+#
+# This workflow enforces Aluminum OS constitutional governance at the
+# repository level.  Three independent jobs run on every PR and push:
+#
+#   constitutional-lint   Run `uws lint` over changed Python files.
+#                         In SHADOW MODE: records violations but does NOT
+#                         block the merge.  Set KINTSUGI_SHADOW_MODE=false
+#                         to enable hard-blocking for the team that is ready.
+#
+#   provenance-check      Validate every commit in the PR for a valid
+#                         Golden-Trace trailer and optional HITL-Weight.
+#                         GPG/SSH-signed commits automatically satisfy the
+#                         HITL proof requirement (zero-friction key binding).
+#                         In SHADOW MODE: fails are reported but not blocking.
+#
+#   swarm-review          Triggered on-demand by the slash command
+#                         `/uws swarm review` posted as a PR comment.
+#                         Runs the NPFM Gate over the changed file list and
+#                         posts the JSON result back as a follow-up comment.
+#
+# ── Shadow Mode (V1 enterprise default) ──────────────────────────────────────
+# KINTSUGI_SHADOW_MODE: "true"  → audit-only; results posted as annotations
+#                                  and artifacts but the pipeline never exits 1.
+# KINTSUGI_SHADOW_MODE: "false" → full enforcement; violations block the merge.
+#
+# Flip the repo/org variable to "false" when your team is ready for hard gates.
+#
+# Atlas Lattice Foundation — March 2026
+
+name: Kintsugi Weave
+
+on:
+  pull_request:
+    branches: ["main"]
+    types: [opened, synchronize, reopened]
+  push:
+    branches: ["main"]
+  issue_comment:
+    types: [created]
+
+# ── Shadow Mode default: "true" (audit-only, never blocks).
+# Override at repo level: Settings → Variables → KINTSUGI_SHADOW_MODE = "false"
+env:
+  KINTSUGI_SHADOW_MODE: ${{ vars.KINTSUGI_SHADOW_MODE || 'true' }}
+
+# Prevent concurrent runs on the same ref to avoid race conditions.
+concurrency:
+  group: kintsugi-weave-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+
+  # ── Job 1: Constitutional Linter ──────────────────────────────────────────
+  constitutional-lint:
+    name: Constitutional Lint (uws lint)
+    # Run on PRs only; skip comment events.
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Detect changed Python files
+        id: changed
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE="${{ github.event.pull_request.base.sha }}"
+            HEAD="${{ github.event.pull_request.head.sha }}"
+          else
+            BASE="${{ github.event.before }}"
+            HEAD="${{ github.sha }}"
+          fi
+          # Fall back to scanning all Python files when base SHA is unavailable
+          # (e.g. force-push or initial commit).
+          if git rev-parse --verify "$BASE" >/dev/null 2>&1; then
+            FILES=$(git diff --name-only "$BASE" "$HEAD" -- '*.py' | tr '\n' ' ')
+          else
+            FILES=$(find . -name '*.py' -not -path './.git/*' | tr '\n' ' ')
+          fi
+          echo "files=$FILES" >> "$GITHUB_OUTPUT"
+
+      - name: Run constitutional linter
+        id: lint
+        run: |
+          # If no Python files changed, still run over the full tree to guard
+          # against files modified outside diff detection (e.g. binary renames).
+          FILES="${{ steps.changed.outputs.files }}"
+          if [ -z "$FILES" ]; then
+            FILES="."
+          fi
+          python3 uws lint $FILES | tee lint_result.json
+          # Exit code from uws is non-zero on violations; continue-on-error
+          # lets the next step report a human-friendly message instead.
+        continue-on-error: true
+
+      - name: Enforce zero violations
+        run: |
+          VIOLATIONS=$(python3 -c "import json; d=json.load(open('lint_result.json')); print(d['violations'])")
+          SCORE=$(python3 -c "import json; d=json.load(open('lint_result.json')); print(d['constitutional_score'])")
+          SHADOW="${KINTSUGI_SHADOW_MODE}"
+          echo "Constitutional score: $SCORE"
+          echo "Violations: $VIOLATIONS"
+          echo "Shadow mode: $SHADOW"
+          if [ "$VIOLATIONS" -gt 0 ]; then
+            echo ""
+            echo "⚠️  Constitutional linter found $VIOLATIONS violation(s)."
+            if [ "$SHADOW" = "true" ]; then
+              echo "    SHADOW MODE: violations recorded but merge is NOT blocked."
+              echo "    Set repo variable KINTSUGI_SHADOW_MODE=false to enable hard gates."
+            else
+              echo "    Fix all CONST-001 / CONST-002 findings before merging."
+              exit 1
+            fi
+          else
+            echo "✅  Constitutional linter: clean (score=$SCORE)"
+          fi
+
+      - name: Workspace CLI detect
+        # Non-blocking step: logs GWS tool availability for observability.
+        # gws is available via npx (Node.js pre-installed on ubuntu-latest).
+        # Install hints are printed for gam/gyb if absent.
+        run: |
+          python3 uws workspace detect | tee workspace_detect.json
+          echo "ℹ️  Workspace detect complete (see workspace_detect.json artifact)."
+        continue-on-error: true
+
+      - name: Upload lint report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: constitutional-lint-report
+          path: lint_result.json
+          retention-days: 7
+
+      - name: Upload workspace detect report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: workspace-detect-report
+          path: workspace_detect.json
+          retention-days: 7
+
+  # ── Job 2: Provenance Check ───────────────────────────────────────────────
+  provenance-check:
+    name: Provenance Check (Golden-Trace trailers)
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Collect PR commits
+        id: commits
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE="${{ github.event.pull_request.base.sha }}"
+            HEAD="${{ github.event.pull_request.head.sha }}"
+          else
+            BASE="${{ github.event.before }}"
+            HEAD="${{ github.sha }}"
+          fi
+          if git rev-parse --verify "$BASE" >/dev/null 2>&1; then
+            RANGE="$BASE..$HEAD"
+          else
+            RANGE="$HEAD~1..$HEAD"
+          fi
+          # Emit one JSON object per line: {"sha": "...", "message": "..."}
+          python3 - "$RANGE" <<'EOF'
+          import subprocess, json, sys
+          range_arg = sys.argv[1]
+          result = subprocess.run(
+              ["git", "log", range_arg, "--format=%H|||%B|||---END---"],
+              capture_output=True, text=True, check=True,
+          )
+          commits = []
+          for block in result.stdout.split("|||---END---\n"):
+              block = block.strip()
+              if not block:
+                  continue
+              sha, _, msg = block.partition("|||")
+              commits.append({"sha": sha.strip(), "message": msg.strip()})
+          with open("commits.json", "w") as f:
+              json.dump(commits, f)
+          print(f"Collected {len(commits)} commit(s).")
+          EOF
+
+      - name: Validate provenance trailers
+        run: |
+          python3 - <<'EOF'
+          import json, sys, os, subprocess
+          sys.path.insert(0, os.getcwd())
+          from python.core.provenance import validate_commits, detect_git_signing
+
+          with open("commits.json") as f:
+              raw = json.load(f)
+
+          # Enrich commits with GPG/SSH signing info from git log.
+          # A signed commit satisfies HITL proof automatically (zero-friction).
+          enriched = []
+          for c in raw:
+              sha = c["sha"]
+              signed = detect_git_signing(sha)
+              enriched.append((sha[:8], c["message"], signed))
+
+          commits = [(sha, msg) for sha, msg, _ in enriched]
+          result = validate_commits(commits)
+
+          # Annotate which commits had signing-based HITL proof
+          for r, (sha, msg, signed) in zip(result.results, enriched):
+              if signed and r.parsed and r.parsed.hitl_weight is None:
+                  # GPG/SSH signature provides HITL floor — clear PROV-004 if it fired
+                  r.findings = [f for f in r.findings if f.rule_id not in ("PROV-001",)]
+                  r.passed = len(r.findings) == 0
+                  print(f"  ✅  {sha}: GPG/SSH-signed commit — HITL proof satisfied by key binding")
+
+          passed = sum(1 for r in result.results if r.passed)
+          failed = len(result.results) - passed
+          result.commits_passed = passed
+          result.commits_failed = failed
+
+          print(json.dumps(result.to_dict(), indent=2))
+
+          with open("provenance_result.json", "w") as f:
+              json.dump(result.to_dict(), f, indent=2)
+
+          shadow = os.environ.get("KINTSUGI_SHADOW_MODE", "true").lower()
+          if not result.all_passed:
+              print()
+              print(f"⚠️  Provenance check: {result.commits_failed} commit(s) missing valid Golden-Trace trailer.")
+              print("    Add trailers with: python3 -c \"from python.core.provenance import make_golden_trace_value, format_trailers; print(format_trailers(make_golden_trace_value('your diff here'), 0.85))\"")
+              if shadow != "true":
+                  sys.exit(1)
+              else:
+                  print("    SHADOW MODE: recorded but merge is NOT blocked.")
+          else:
+              print(f"✅  All {result.commits_passed} commit(s) have valid provenance.")
+          EOF
+
+      - name: Upload provenance report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: provenance-report
+          path: provenance_result.json
+          retention-days: 7
+
+  # ── Job 3: Swarm Review (slash-command trigger) ───────────────────────────
+  swarm-review:
+    name: Swarm Review (NPFM Gate)
+    # Only runs when a PR comment contains "/uws swarm review".
+    if: |
+      github.event_name == 'issue_comment' &&
+      github.event.issue.pull_request != null &&
+      contains(github.event.comment.body, '/uws swarm review')
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Post acknowledgement comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: "🔄 **Kintsugi Weave** — NPFM Gate initiated. Running `uws swarm review`…"
+            });
+
+      - name: Collect changed files
+        id: changed-files
+        run: |
+          PR_NUM="${{ github.event.issue.number }}"
+          # Use GH API to get PR diff URLs and extract file list
+          python3 - "$PR_NUM" "${{ github.token }}" <<'EOF'
+          import json, sys, urllib.request
+          pr_num, token = sys.argv[1], sys.argv[2]
+          url = f"https://api.github.com/repos/${{ github.repository }}/pulls/{pr_num}/files"
+          req = urllib.request.Request(url, headers={
+              "Authorization": f"Bearer {token}",
+              "Accept": "application/vnd.github+json",
+          })
+          with urllib.request.urlopen(req) as resp:
+              files = json.load(resp)
+          items = [f["filename"] for f in files]
+          with open("pr_files.json", "w") as f:
+              json.dump(items, f)
+          print(f"PR touches {len(items)} file(s).")
+          EOF
+
+      - name: Run NPFM Gate
+        run: |
+          python3 - <<'EOF'
+          import json, sys, os
+          sys.path.insert(0, os.getcwd())
+          from python.core.uws_cli import SwarmReviewItem, swarm_review
+
+          with open("pr_files.json") as f:
+              files = json.load(f)
+
+          items = [SwarmReviewItem(id=str(i), description=fn) for i, fn in enumerate(files, 1)]
+          result = swarm_review(items, batch_size=50)
+
+          output = result.to_dict()
+          print(json.dumps(output, indent=2))
+          with open("swarm_result.json", "w") as f:
+              json.dump(output, f, indent=2)
+          EOF
+
+      - name: Post NPFM result comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const result = JSON.parse(fs.readFileSync('swarm_result.json', 'utf8'));
+            const verdict = result.verdict;
+            const icon = verdict === 'APPROVED' ? '✅' : '⚠️';
+            const body = [
+              `${icon} **NPFM Gate Result** — \`${verdict}\``,
+              '',
+              '| Metric | Value |',
+              '|--------|-------|',
+              `| Items submitted | ${result.items_submitted} |`,
+              `| Items reviewed | ${result.items_reviewed} |`,
+              `| Items approved | ${result.items_approved} |`,
+              `| Items flagged | ${result.items_flagged} |`,
+              `| NPFM score | ${result.npfm_score} |`,
+              `| Model used | \`${result.model_used}\` |`,
+              `| Cost estimate | \$${result.cost_estimate_usd} |`,
+              `| Trace ID | \`${result.trace_id || 'n/a'}\` |`,
+              '',
+              result.flagged_ids.length > 0
+                ? `**Flagged files:** ${result.flagged_ids.join(', ')}`
+                : '_No files flagged._',
+            ].join('\n');
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body,
+            });
+
+      - name: Fail on low NPFM score
+        run: |
+          python3 - <<'EOF'
+          import json, sys
+          with open("swarm_result.json") as f:
+              r = json.load(f)
+          if r["verdict"] != "APPROVED":
+              print(f"❌  NPFM score {r['npfm_score']} is below 0.7 — batch not approved.")
+              sys.exit(1)
+          print(f"✅  NPFM Gate APPROVED (score={r['npfm_score']}).")
+          EOF

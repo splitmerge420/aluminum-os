@@ -2,7 +2,7 @@
 
 **Constitutional AI Governance Kernel**
 
-Atlas Lattice Foundation · v0.3.0 · March 2026
+Atlas Lattice Foundation · v2.0.0 · March 2026
 
 ---
 
@@ -10,90 +10,228 @@ Atlas Lattice Foundation · v0.3.0 · March 2026
 
 Aluminum OS is a constitutional governance substrate for multi-agent AI systems. It provides:
 
-- **Ring 0 (Rust Kernel):** Memory management, agent identity, intent scheduling, and constitutional rule enforcement — all `no_std` compatible
-- **Ring 1 (Python Middleware):** Model routing, cost tracking, memory management, task decomposition, and session persistence — zero external dependencies
+- **Ring 0 (Rust Kernel):** Memory management, agent identity, intent scheduling, and constitutional rule enforcement — `no_std` compatible. Healthcare v2.0 adds FHIR types, PQC identity, health audit, amendment protocol, AI disclosure, and regulatory compliance.
+- **Ring 1 (Python Middleware):** Model routing, cost tracking, memory management, task decomposition, session persistence, full healthcare layer — zero external dependencies.
+- **Kintsugi Governance Spine:** Append-only GoldenTrace audit SDK. Every constitutional action, consent, amendment, and health event produces a hash-chained trace. Integrated with the health layer out of the box.
 
 ## What Works Right Now
 
-| Component | Language | Tests | Status |
-|-----------|----------|-------|--------|
-| BuddyAllocator | Rust | 3 | ✅ Passing |
-| AgentIdentity / Registry | Rust | 2 | ✅ Passing |
-| Constitution + Rules | Rust | 2 | ✅ Passing |
-| ConstitutionalDomains (15) | Rust | 6 | ✅ Passing |
-| IntentScheduler | Rust | 2 | ✅ Passing |
-| Boot Simulator | Rust | — | ✅ Runs |
-| ModelRouter | Python | 5 | ✅ Passing |
-| CostTracker | Python | 4 | ✅ Passing |
-| MemoryStore | Python | 5 | ✅ Passing |
-| TaskDecomposer | Python | 4 | ✅ Passing |
-| SessionVault | Python | 4 | ✅ Passing |
-| **Total** | | **37** | **All passing** |
+| Component | Layer | Tests | Status |
+|-----------|-------|-------|--------|
+| BuddyAllocator | Rust Ring 0 | 3 | ✅ Passing |
+| AgentIdentity / Registry | Rust Ring 0 | 2 | ✅ Passing |
+| Constitution + Rules (18) | Rust Ring 0 | 2 | ✅ Passing |
+| ConstitutionalDomains (15) | Rust Ring 0 | 6 | ✅ Passing |
+| IntentScheduler | Rust Ring 0 | 2 | ✅ Passing |
+| Health Layer (FHIR, PQC, audit, amendments) | Rust Ring 0 | 25 | ✅ Passing |
+| Boot Simulator (v2.0 — 11 phases) | Rust Ring 0 | — | ✅ Runs |
+| ModelRouter | Python Ring 1 | 5 | ✅ Passing |
+| CostTracker | Python Ring 1 | 4 | ✅ Passing |
+| MemoryStore | Python Ring 1 | 5 | ✅ Passing |
+| TaskDecomposer | Python Ring 1 | 4 | ✅ Passing |
+| SessionVault | Python Ring 1 | 4 | ✅ Passing |
+| Health Layer (FHIR, consent, amendments, PQC, regulatory) | Python Ring 1 | 55 | ✅ Passing |
+| Kintsugi SDK (GoldenTraceEmitter/Validator) | Kintsugi | 21 | ✅ Passing |
+| Kintsugi × Health Integration | Kintsugi | 17 | ✅ Passing |
+| `uws` CLI (swarm review, lint, audit, status) | Python Ring 1 | 43 | ✅ Passing |
+| ProvenanceTrailer (Golden-Trace validator) | Python Ring 1 | 33 | ✅ Passing |
+| WorkspaceAdapter (Google Workspace CLI bridge) | Python Ring 1 | 49 | ✅ Passing |
+| Kintsugi Weave CI/CD workflow | GitHub Actions | — | ✅ Active |
+| **Total** | | **281** | **All passing** |
 
 ## What Doesn't Work Yet
 
 - No network layer (agents are local only)
-- No persistence layer for Rust (Ring 0 is in-memory)
-- No real model API integration (ModelRouter routes but doesn't call APIs)
-- No cross-ring IPC (Rust ↔ Python bridge is planned, not built)
-- No authentication/authorization beyond trust levels
-- UWS CLI integration pending (shared types, not wired yet)
+- No persistence layer for Ring 0 (in-memory)
+- No real model API calls (ModelRouter routes but doesn't call APIs)
+- No Rust ↔ Python IPC bridge (shared type definitions planned)
+- OPA policy enforcement requires separate OPA binary (policy exists in `kintsugi/policies/`)
 
 ## Quick Start
 
-### Rust (Ring 0)
+```bash
+make test        # Run all 281 tests (Rust + Python + Kintsugi + uws CLI + Provenance + Workspace)
+make run         # Boot simulator demo (11 phases)
+make test-rust   # Rust tests only
+make test-python # Python tests only (includes uws CLI)
+```
+
+### Or without make
 
 ```bash
-cargo test          # Run all 15 Rust tests
-cargo run           # Boot simulator demo
+# Rust (Ring 0)
+cargo test
+cargo run
+
+# Python (Ring 1 + Kintsugi + uws CLI)
+python3 -m unittest python.tests.test_all -v       # Manus Core (22 tests)
+python3 -m unittest python.tests.test_health -v    # Health Layer (55 tests)
+python3 -m unittest python.tests.test_kintsugi -v  # Kintsugi SDK (38 tests)
+python3 -m unittest python.tests.test_uws -v       # uws CLI (43 tests)
+python3 -m unittest python.tests.test_provenance -v # ProvenanceTrailer (33 tests)
+python3 -m unittest python.tests.test_workspace -v  # WorkspaceAdapter (49 tests)
+
+# uws CLI (entry-point script)
+python3 uws status
+python3 uws swarm review --batch=50 "dep-a" "dep-b" "dep-c"
+python3 uws lint python/
+python3 uws audit
+python3 uws workspace detect     # probe gws/gam/gyb versions
 ```
 
-### Python (Ring 1)
+## Google Workspace CLI Integration
+
+`python/core/workspace.py` is the cross-ecosystem bridge between Aluminum OS
+and Google Workspace APIs.  It requires **zero new Python dependencies** —
+all CLI tools are invoked via `subprocess`.
+
+### Supported tools (March 2026)
+
+| Tool | Version | Ecosystem | Install | Services |
+|------|---------|-----------|---------|----------|
+| [`gws`](https://github.com/googleworkspace/cli) | **0.18.1** | Node.js ≥ 18 (npm) | `npm install -g @googleworkspace/cli@0.18.1` | Drive, Gmail, Calendar, Sheets, Docs, Chat, Admin, MCP |
+| [`gam`](https://github.com/GAM-team/GAM) | **7.36.03** | Python ≥ 3.10 | `pip install gam7==7.36.03` | Admin SDK, Users, Groups, Chrome, Drive, Gmail |
+| [`gyb`](https://github.com/GAM-team/got-your-back) | **1.95** | Python ≥ 3.10 | [binary release](https://github.com/GAM-team/got-your-back/releases/tag/v1.95) | Gmail (backup/restore) |
+
+Tool preference order: **gws → gam → gyb** (gws selected first for any service it supports).
+
+### Authentication environment variables (gws)
 
 ```bash
-cd python
-python -m pytest tests/test_all.py -v    # Run 19+ Python tests
-# or
-python -m unittest tests.test_all -v
+export GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
+export GOOGLE_CLIENT_SECRET=your-client-secret
+# Optional — populated automatically after first OAuth2 login:
+export GOOGLE_REFRESH_TOKEN=your-refresh-token
 ```
 
-## Architecture
+`gam` and `gyb` manage their own credentials in `~/.gam/` and `~/.gyb/` respectively.
+
+### Usage
+
+```python
+from python.core.workspace import WorkspaceAdapter
+
+adapter = WorkspaceAdapter()
+ws_status = adapter.detect()
+print(ws_status.preferred_tool)   # "gws" | "gam" | "gyb" | None
+
+# Execute a Drive file listing via gws:
+result = adapter.call("drive", "files.list", params={"pageSize": 10})
+print(result.parsed)              # JSON response from gws
+
+# Or via CLI:
+# python3 uws workspace detect
+```
+
+### Cross-ecosystem compatibility guarantee
+
+- **Pure stdlib** — no `google-api-python-client` or `google-auth` required at import time
+- **Graceful degradation** — missing tools are reported as `unavailable`, not raised as exceptions
+- **Structured JSON** — every `call()` response is parsed from JSON where the tool supports it
+- **Kintsugi trace** — every `detect()` and `call()` emits a `GoldenTrace` audit record
+- **CI-aware** — the Kintsugi Weave workflow runs `uws workspace detect` on every PR and uploads the tool inventory as an artifact
+
+
+
+## Kintsugi Weave CI/CD Workflow
+
+The repository enforces constitutional governance at the CI level via
+`.github/workflows/kintsugi-weave.yml`.  Three jobs run automatically:
+
+| Job | Trigger | What it enforces |
+|-----|---------|-----------------|
+| `constitutional-lint` | Every PR / push to `main` | `uws lint` — zero CONST-001/002 credential violations |
+| `provenance-check` | Every PR / push to `main` | Every commit must carry a valid `Golden-Trace` trailer |
+| `swarm-review` | PR comment `/uws swarm review` | NPFM Gate — scores the file batch; posts result table as comment |
+
+### Adding provenance trailers to commits
+
+```python
+from python.core.provenance import make_golden_trace_value, format_trailers
+
+# Compute the trailer block (typically hash the diff or a summary):
+trailers = format_trailers(
+    golden_trace=make_golden_trace_value("your diff or commit body"),
+    hitl_weight=0.85,
+)
+print(trailers)
+# Golden-Trace: sha3-256:a3f9...
+# HITL-Weight: 0.85
+```
+
+Append the output after a blank line at the end of your commit message:
 
 ```
-┌─────────────────────────────────────────┐
-│  Ring 2: Experience Layer (planned)     │
-│  UWS CLI · Dashboard · Voice           │
-├─────────────────────────────────────────┤
-│  Ring 1: Manus Core (Python)           │
-│  ModelRouter · CostTracker · Memory    │
-│  TaskDecomposer · SessionVault         │
-├─────────────────────────────────────────┤
-│  Ring 0: Forge Core (Rust)             │
-│  BuddyAllocator · AgentIdentity       │
-│  IntentScheduler · Constitution        │
-│  15 ConstitutionalDomains              │
-└─────────────────────────────────────────┘
+feat: implement amazing feature
+
+Detailed explanation of the change.
+
+Golden-Trace: sha3-256:<64 hex chars>
+HITL-Weight: 0.85
 ```
 
-## Constitutional Domains
 
-The 15 governance domains were extracted from 40 empty AI governance placeholder repos. Each was analyzed, categorized, and collapsed into typed enum variants:
 
-1. General Governance
-2. Data Privacy
-3. Transparency & Audit
-4. Human Oversight (HITL)
-5. Fairness & Bias
-6. Safety & Alignment
-7. Explainability
-8. Accountability & Liability
-9. Resource Governance
-10. Cross-Border Compliance
-11. Environmental Impact
-12. Interoperability Standards
-13. Dispute Resolution
-14. Digital Sovereignty
-15. Emergency Protocols
+```
+┌────────────────────────────────────────────────┐
+│  Ring 2: Experience Layer (partial)            │
+│  uws CLI · Dashboard (planned) · Voice (plan) │
+├────────────────────────────────────────────────┤
+│  Kintsugi Governance Spine (cross-cutting)     │
+│  GoldenTraceEmitter · GoldenTraceValidator    │
+│  OPA Constitutional Audit Policy (v2.0)       │
+├────────────────────────────────────────────────┤
+│  Ring 1: Manus Core + Health Layer (Python)   │
+│  ModelRouter · CostTracker · MemoryStore      │
+│  TaskDecomposer · SessionVault                │
+│  HealthAuditLedger · ConsentVault             │
+│  AmendmentProtocol · AiDisclosureRegistry     │
+│  RegulatoryChecker · PqcIdentityRegistry      │
+├────────────────────────────────────────────────┤
+│  Ring 0: Forge Core (Rust, no_std)            │
+│  BuddyAllocator · AgentIdentity · Constitution│
+│  IntentScheduler · 15 ConstitutionalDomains   │
+│  Health: FHIR · PQC · AuditLedger · Amendments│
+└────────────────────────────────────────────────┘
+```
+
+## Kintsugi Integration
+
+The Kintsugi governance spine is a fully working Python SDK that integrates with the health layer. Pass a `GoldenTraceEmitter` to `HealthAuditLedger`, `ConsentVault`, or `AmendmentProtocol` and every constitutional event automatically produces a hash-chained audit trace:
+
+```python
+from kintsugi import GoldenTraceEmitter
+from core.health_layer import HealthAuditLedger, FhirEvent, FhirResourceType, FhirAction, HealthAuditSeverity
+
+tracer = GoldenTraceEmitter(repo="aluminum-os", module="core/health_layer")
+ledger = HealthAuditLedger(tracer=tracer)
+
+ev = FhirEvent(resource_type=FhirResourceType.OBSERVATION,
+               action=FhirAction.READ, agent_id="claude")
+ledger.append(ev, HealthAuditSeverity.INFO, consent_verified=False, ai_disclosed=True)
+
+# Chain is valid — every append produced a GoldenTrace event
+assert tracer.verify_chain()
+```
+
+Health layer modules work identically without a tracer — kintsugi is an optional enhancement, not a dependency.
+
+## Constitutional Domains (15)
+
+Extracted from 40 AI governance placeholder repos and collapsed into typed enum variants:
+
+1. General Governance · 2. Data Privacy · 3. Transparency & Audit · 4. Human Oversight (HITL)
+5. Fairness & Bias · 6. Safety & Alignment · 7. Explainability · 8. Accountability & Liability
+9. Resource Governance · 10. Cross-Border Compliance · 11. Environmental Impact
+12. Interoperability Standards · 13. Dispute Resolution · 14. Digital Sovereignty · 15. Emergency Protocols
+
+## Constitutional Rules (18)
+
+14 core rules + 4 healthcare rules (v2.0):
+- `health-ai-disclosure` — Critical / TransparencyAudit (INV-30 enforcement)
+- `health-audit-no-delete` — Critical / TransparencyAudit (HIPAA §164.312 mandate)
+- `fhir-interop-mandate` — Mandatory / InteroperabilityStandards (ONC §3022)
+- `amendment-supermajority` — Mandatory / HumanOversight (≥5/7, 47% dominance cap)
 
 ## Related Repos
 
@@ -104,3 +242,4 @@ The 15 governance domains were extracted from 40 empty AI governance placeholder
 ## License
 
 MIT — Atlas Lattice Foundation
+

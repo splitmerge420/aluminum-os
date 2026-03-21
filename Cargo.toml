@@ -1,8 +1,8 @@
 [package]
 name = "aluminum-os"
-version = "0.3.0"
+version = "2.0.0"
 edition = "2021"
-description = "Aluminum OS — Constitutional AI Governance Kernel (Forge Core)"
+description = "Aluminum OS — Constitutional Healthcare AI Governance Kernel (Forge Core v2.0)"
 license = "MIT"
 repository = "https://github.com/splitmerge420/aluminum-os"
 authors = ["Atlas Lattice Foundation"]

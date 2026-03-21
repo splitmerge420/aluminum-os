@@ -8,12 +8,15 @@
 //! - AgentIdentity: Agent registration with trust + constitutional compliance
 //! - IntentScheduler: Priority queue for agent intents with constitutional veto
 //! - Constitution: Rule engine with severity levels and Dave Protocol veto
+//! - Health: FHIR R4/R5 types, health audit ledger, PQC identity, AI disclosure,
+//!            amendment protocol, regulatory compliance (v2.0)
 //!
 //! Atlas Lattice Foundation — March 2026
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
 pub mod constitution_domains;
+pub mod health;
 
 // ============================================================================
 // Constants
@@ -564,12 +567,13 @@ impl Constitution {
         true
     }
 
-    /// Load default constitutional rules (the 14 core rules from governance repos)
+    /// Load default constitutional rules (v2.0: 14 core rules + 4 healthcare rules)
     pub fn load_defaults(&mut self) -> Result<(), AluminumError> {
         use constitution_domains::ConstitutionalDomain::*;
         use Severity::*;
 
-        let defaults: [(& [u8], Severity, constitution_domains::ConstitutionalDomain, bool); 14] = [
+        let defaults: [(&[u8], Severity, constitution_domains::ConstitutionalDomain, bool); 18] = [
+            // --- Core governance rules (14) ---
             (b"consent-required", Critical, DataPrivacy, true),
             (b"audit-trail-mandatory", Mandatory, TransparencyAudit, false),
             (b"human-override-always", Critical, HumanOversight, true),
@@ -584,6 +588,15 @@ impl Constitution {
             (b"sovereignty-respect", Critical, DigitalSovereignty, true),
             (b"emergency-protocol", Critical, EmergencyProtocols, true),
             (b"governance-general", Advisory, GeneralGovernance, false),
+            // --- Healthcare extensions (v2.0, 4 rules) ---
+            // INV-30: All AI involvement in health decisions must be disclosed
+            (b"health-ai-disclosure", Critical, TransparencyAudit, false),
+            // HIPAA §164.312(b): Health audit trail must be append-only, no-delete
+            (b"health-audit-no-delete", Critical, TransparencyAudit, false),
+            // FHIR interoperability mandate (ONC §3022)
+            (b"fhir-interop-mandate", Mandatory, InteroperabilityStandards, false),
+            // Amendment supermajority (≥5/7 council, 47% dominance cap)
+            (b"amendment-supermajority", Mandatory, HumanOversight, false),
         ];
 
         for (name, severity, domain, dave_veto) in defaults {
@@ -656,7 +669,7 @@ mod tests {
     fn test_constitution_defaults() {
         let mut con = Constitution::new();
         con.load_defaults().unwrap();
-        assert_eq!(con.rule_count(), 14);
+        assert_eq!(con.rule_count(), 18);
         assert!(con.is_dave_protocol_active());
     }
 
