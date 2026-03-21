@@ -33,7 +33,8 @@ Aluminum OS is a constitutional governance substrate for multi-agent AI systems.
 | Health Layer (FHIR, consent, amendments, PQC, regulatory) | Python Ring 1 | 55 | ✅ Passing |
 | Kintsugi SDK (GoldenTraceEmitter/Validator) | Kintsugi | 21 | ✅ Passing |
 | Kintsugi × Health Integration | Kintsugi | 17 | ✅ Passing |
-| **Total** | | **156** | **All passing** |
+| `uws` CLI (swarm review, lint, audit, status) | Python Ring 1 | 38 | ✅ Passing |
+| **Total** | | **194** | **All passing** |
 
 ## What Doesn't Work Yet
 
@@ -41,16 +42,15 @@ Aluminum OS is a constitutional governance substrate for multi-agent AI systems.
 - No persistence layer for Ring 0 (in-memory)
 - No real model API calls (ModelRouter routes but doesn't call APIs)
 - No Rust ↔ Python IPC bridge (shared type definitions planned)
-- No UWS CLI integration (types defined, not wired)
 - OPA policy enforcement requires separate OPA binary (policy exists in `kintsugi/policies/`)
 
 ## Quick Start
 
 ```bash
-make test        # Run all 156 tests (Rust + Python + Kintsugi)
+make test        # Run all 194 tests (Rust + Python + Kintsugi + uws CLI)
 make run         # Boot simulator demo (11 phases)
 make test-rust   # Rust tests only
-make test-python # Python tests only
+make test-python # Python tests only (includes uws CLI)
 ```
 
 ### Or without make
@@ -60,18 +60,25 @@ make test-python # Python tests only
 cargo test
 cargo run
 
-# Python (Ring 1 + Kintsugi)
+# Python (Ring 1 + Kintsugi + uws CLI)
 python3 -m unittest python.tests.test_all -v       # Manus Core (22 tests)
 python3 -m unittest python.tests.test_health -v    # Health Layer (55 tests)
 python3 -m unittest python.tests.test_kintsugi -v  # Kintsugi SDK (38 tests)
+python3 -m unittest python.tests.test_uws -v       # uws CLI (38 tests)
+
+# uws CLI (entry-point script)
+python3 uws status
+python3 uws swarm review --batch=50 "dep-a" "dep-b" "dep-c"
+python3 uws lint python/
+python3 uws audit
 ```
 
 ## Architecture
 
 ```
 ┌────────────────────────────────────────────────┐
-│  Ring 2: Experience Layer (planned)            │
-│  UWS CLI · Dashboard · Voice                  │
+│  Ring 2: Experience Layer (partial)            │
+│  uws CLI · Dashboard (planned) · Voice (plan) │
 ├────────────────────────────────────────────────┤
 │  Kintsugi Governance Spine (cross-cutting)     │
 │  GoldenTraceEmitter · GoldenTraceValidator    │

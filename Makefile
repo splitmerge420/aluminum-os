@@ -8,7 +8,7 @@
 #   make run         — boot simulator demo
 #   make clean       — remove build artifacts
 
-.PHONY: all test test-rust test-python test-all test-health test-kintsugi run clean
+.PHONY: all test test-rust test-python test-all test-health test-kintsugi test-uws run clean
 
 # Default target
 all: test
@@ -33,7 +33,11 @@ test-kintsugi:
 	@echo "▶ Running Kintsugi SDK + integration tests..."
 	python3 -m unittest python.tests.test_kintsugi -v
 
-test-python: test-all test-health test-kintsugi
+test-uws:
+	@echo "▶ Running uws CLI tests..."
+	python3 -m unittest python.tests.test_uws -v
+
+test-python: test-all test-health test-kintsugi test-uws
 
 # ── Full suite ───────────────────────────────────────────────────────────────
 

@@ -150,6 +150,9 @@ class GoldenTraceValidator:
         "query", "ingestion", "classification",
         "amendment_proposed", "amendment_enacted",
         "ghost_seat_invoked", "human_override",
+        # uws CLI event types
+        "swarm_review",
+        "constitutional_lint",
     ]
     VALID_LAYERS = ["L1-Constitutional", "L2-Kernel", "L3-Engine", "L4-Service", "L5-Extension"]
     VALID_SEVERITIES = ["trace", "info", "warning", "error", "critical", "golden"]
