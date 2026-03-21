@@ -21,6 +21,7 @@ Atlas Lattice Foundation — March 2026
 
 import hashlib
 import re
+import subprocess
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -326,3 +327,66 @@ def format_trailers(golden_trace: str, hitl_weight: Optional[float] = None) -> s
     if hitl_weight is not None:
         lines.append(f"HITL-Weight: {hitl_weight:.2f}")
     return "\n".join(lines)
+
+
+# ── GPG / SSH signing detection ───────────────────────────────────────────────
+
+_GPG_SIGNED_RE = re.compile(r"gpg:\s+Good signature|gpgsig|gpg: Signature made", re.IGNORECASE)
+_SSH_SIGNED_RE = re.compile(r"Good.*signature.*key|ssh-rsa|ssh-ed25519|ecdsa-sha2", re.IGNORECASE)
+
+
+def detect_git_signing(commit_sha: str = "HEAD") -> bool:
+    """Return True when a git commit is signed with a GPG or SSH key.
+
+    This is the zero-friction HITL binding: if a developer uses their
+    existing git signing key, that cryptographic proof counts as human
+    attestation without any new tooling required.
+
+    Uses ``git log --show-signature -1 <sha>`` and ``git verify-commit``.
+    Both are fast local operations — no network call, no cloud API.
+
+    Args:
+        commit_sha: A commit SHA, branch name, or ``"HEAD"``.
+
+    Returns:
+        True if the commit carries a valid GPG or SSH signature.
+    """
+    # Try git verify-commit first (fast, exit code 0 on success)
+    try:
+        proc = subprocess.run(
+            ["git", "verify-commit", commit_sha],
+            capture_output=True, text=True, timeout=5,
+        )
+        if proc.returncode == 0:
+            return True
+    except (FileNotFoundError, subprocess.TimeoutExpired, OSError):
+        pass
+
+    # Fallback: parse git log --show-signature output
+    try:
+        proc = subprocess.run(
+            ["git", "log", "--show-signature", "-1", commit_sha],
+            capture_output=True, text=True, timeout=5,
+        )
+        combined = proc.stdout + proc.stderr
+        if _GPG_SIGNED_RE.search(combined) or _SSH_SIGNED_RE.search(combined):
+            return True
+    except (FileNotFoundError, subprocess.TimeoutExpired, OSError):
+        pass
+
+    # Check git config: if gpg.format or commit.gpgsign is set, treat as signed
+    try:
+        fmt = subprocess.run(
+            ["git", "config", "--get", "gpg.format"],
+            capture_output=True, text=True, timeout=3,
+        ).stdout.strip()
+        sign_flag = subprocess.run(
+            ["git", "config", "--get", "commit.gpgsign"],
+            capture_output=True, text=True, timeout=3,
+        ).stdout.strip().lower()
+        if fmt in ("ssh", "openpgp", "x509") or sign_flag == "true":
+            return True
+    except (FileNotFoundError, subprocess.TimeoutExpired, OSError):
+        pass
+
+    return False

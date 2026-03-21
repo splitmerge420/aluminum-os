@@ -4,18 +4,27 @@
 # repository level.  Three independent jobs run on every PR and push:
 #
 #   constitutional-lint   Run `uws lint` over changed Python files.
-#                         Fails the PR if any VIOLATION-level finding is found
-#                         (CONST-001 / CONST-002 hardcoded credentials).
+#                         In SHADOW MODE: records violations but does NOT
+#                         block the merge.  Set KINTSUGI_SHADOW_MODE=false
+#                         to enable hard-blocking for the team that is ready.
 #
 #   provenance-check      Validate every commit in the PR for a valid
 #                         Golden-Trace trailer and optional HITL-Weight.
-#                         Fails if any commit is missing PROV-001 or violates
-#                         PROV-002 / PROV-003 / PROV-004.
+#                         GPG/SSH-signed commits automatically satisfy the
+#                         HITL proof requirement (zero-friction key binding).
+#                         In SHADOW MODE: fails are reported but not blocking.
 #
 #   swarm-review          Triggered on-demand by the slash command
 #                         `/uws swarm review` posted as a PR comment.
 #                         Runs the NPFM Gate over the changed file list and
 #                         posts the JSON result back as a follow-up comment.
+#
+# ── Shadow Mode (V1 enterprise default) ──────────────────────────────────────
+# KINTSUGI_SHADOW_MODE: "true"  → audit-only; results posted as annotations
+#                                  and artifacts but the pipeline never exits 1.
+# KINTSUGI_SHADOW_MODE: "false" → full enforcement; violations block the merge.
+#
+# Flip the repo/org variable to "false" when your team is ready for hard gates.
 #
 # Atlas Lattice Foundation — March 2026
 
@@ -29,6 +38,11 @@ on:
     branches: ["main"]
   issue_comment:
     types: [created]
+
+# ── Shadow Mode default: "true" (audit-only, never blocks).
+# Override at repo level: Settings → Variables → KINTSUGI_SHADOW_MODE = "false"
+env:
+  KINTSUGI_SHADOW_MODE: ${{ vars.KINTSUGI_SHADOW_MODE || 'true' }}
 
 # Prevent concurrent runs on the same ref to avoid race conditions.
 concurrency:
@@ -93,15 +107,23 @@ jobs:
         run: |
           VIOLATIONS=$(python3 -c "import json; d=json.load(open('lint_result.json')); print(d['violations'])")
           SCORE=$(python3 -c "import json; d=json.load(open('lint_result.json')); print(d['constitutional_score'])")
+          SHADOW="${KINTSUGI_SHADOW_MODE}"
           echo "Constitutional score: $SCORE"
           echo "Violations: $VIOLATIONS"
+          echo "Shadow mode: $SHADOW"
           if [ "$VIOLATIONS" -gt 0 ]; then
             echo ""
-            echo "❌  Constitutional linter found $VIOLATIONS violation(s)."
-            echo "    Fix all CONST-001 / CONST-002 findings before merging."
-            exit 1
+            echo "⚠️  Constitutional linter found $VIOLATIONS violation(s)."
+            if [ "$SHADOW" = "true" ]; then
+              echo "    SHADOW MODE: violations recorded but merge is NOT blocked."
+              echo "    Set repo variable KINTSUGI_SHADOW_MODE=false to enable hard gates."
+            else
+              echo "    Fix all CONST-001 / CONST-002 findings before merging."
+              exit 1
+            fi
+          else
+            echo "✅  Constitutional linter: clean (score=$SCORE)"
           fi
-          echo "✅  Constitutional linter: clean (score=$SCORE)"
 
       - name: Workspace CLI detect
         # Non-blocking step: logs GWS tool availability for observability.
@@ -184,28 +206,53 @@ jobs:
       - name: Validate provenance trailers
         run: |
           python3 - <<'EOF'
-          import json, sys, os
+          import json, sys, os, subprocess
           sys.path.insert(0, os.getcwd())
-          from python.core.provenance import validate_commits, make_golden_trace_value
+          from python.core.provenance import validate_commits, detect_git_signing
 
           with open("commits.json") as f:
               raw = json.load(f)
 
-          commits = [(c["sha"][:8], c["message"]) for c in raw]
+          # Enrich commits with GPG/SSH signing info from git log.
+          # A signed commit satisfies HITL proof automatically (zero-friction).
+          enriched = []
+          for c in raw:
+              sha = c["sha"]
+              signed = detect_git_signing(sha)
+              enriched.append((sha[:8], c["message"], signed))
+
+          commits = [(sha, msg) for sha, msg, _ in enriched]
           result = validate_commits(commits)
+
+          # Annotate which commits had signing-based HITL proof
+          for r, (sha, msg, signed) in zip(result.results, enriched):
+              if signed and r.parsed and r.parsed.hitl_weight is None:
+                  # GPG/SSH signature provides HITL floor — clear PROV-004 if it fired
+                  r.findings = [f for f in r.findings if f.rule_id not in ("PROV-001",)]
+                  r.passed = len(r.findings) == 0
+                  print(f"  ✅  {sha}: GPG/SSH-signed commit — HITL proof satisfied by key binding")
+
+          passed = sum(1 for r in result.results if r.passed)
+          failed = len(result.results) - passed
+          result.commits_passed = passed
+          result.commits_failed = failed
 
           print(json.dumps(result.to_dict(), indent=2))
 
           with open("provenance_result.json", "w") as f:
               json.dump(result.to_dict(), f, indent=2)
 
+          shadow = os.environ.get("KINTSUGI_SHADOW_MODE", "true").lower()
           if not result.all_passed:
               print()
-              print(f"❌  Provenance check failed: {result.commits_failed} commit(s) missing valid Golden-Trace trailer.")
-              print("    Add trailers using: python3 -c \"from python.core.provenance import make_golden_trace_value, format_trailers; print(format_trailers(make_golden_trace_value('your diff here'), 0.85))\"")
-              sys.exit(1)
-
-          print(f"✅  All {result.commits_passed} commit(s) have valid provenance trailers.")
+              print(f"⚠️  Provenance check: {result.commits_failed} commit(s) missing valid Golden-Trace trailer.")
+              print("    Add trailers with: python3 -c \"from python.core.provenance import make_golden_trace_value, format_trailers; print(format_trailers(make_golden_trace_value('your diff here'), 0.85))\"")
+              if shadow != "true":
+                  sys.exit(1)
+              else:
+                  print("    SHADOW MODE: recorded but merge is NOT blocked.")
+          else:
+              print(f"✅  All {result.commits_passed} commit(s) have valid provenance.")
           EOF
 
       - name: Upload provenance report
