@@ -16,6 +16,7 @@ from element145.contracts import (
     SphereQuery,
 )
 from element145.governance.consent import ConsentKernel
+from element145.integrations.uws_adapter import to_uws_envelopes
 
 
 @dataclass
@@ -174,8 +175,15 @@ class DispatchStage:
 
     async def execute(self, ctx: PipelineContext) -> PipelineContext:
         assert ctx.execution_plan is not None
-        if ctx.execution_plan.dry_run:
-            ctx.result = {"status": "dry_run", "operations": ctx.execution_plan.operations}
-        else:
-            ctx.result = {"status": "ok", "operations": ctx.execution_plan.operations}
+        consent = ctx.consent_decision.model_dump(mode="json") if ctx.consent_decision else {}
+        envelopes = to_uws_envelopes(
+            trace_id=ctx.trace_id,
+            operations=ctx.execution_plan.operations,
+            consent=consent,
+            dry_run=ctx.execution_plan.dry_run,
+        )
+        ctx.result = {
+            "status": "ok" if not ctx.execution_plan.dry_run else "dry_run",
+            "uws_envelopes": envelopes,
+        }
         return ctx
