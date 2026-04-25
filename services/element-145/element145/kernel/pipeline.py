@@ -19,6 +19,7 @@ from element145.governance.consent import ConsentKernel
 from element145.integrations.uws_adapter import to_uws_envelopes
 from element145.handlers.registry import HandlerRegistry
 from element145.classifier.engine import RuleEngine
+from element145.integrations.providers.registry import ProviderRegistry
 
 
 @dataclass
@@ -202,9 +203,17 @@ class DispatchStage:
             dry_run=ctx.execution_plan.dry_run,
         )
 
+        provider_registry = ProviderRegistry()
+        provider_results = []
+        for envelope in envelopes:
+            provider = provider_registry.get(envelope.get("provider", "local_stub"))
+            result = await provider.execute(envelope)
+            provider_results.append(result.__dict__)
+
         ctx.result = {
             "status": "ok" if not ctx.execution_plan.dry_run else "dry_run",
             "handler_results": handler_results,
             "uws_envelopes": envelopes,
+            "provider_results": provider_results,
         }
         return ctx
