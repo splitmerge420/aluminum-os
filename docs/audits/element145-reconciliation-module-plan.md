@@ -22,7 +22,26 @@ The maintainer may approve each next step with a simple "proceed".
 
 ---
 
+## Progress
+
+| Module | Status |
+|---|---|
+| Module 1 — Runtime Placement and Contract Spine | COMPLETE |
+| Module 2 — Low-Risk Kernel Utilities | COMPLETE |
+| Module 3 — Settings and Policy Surface | NEXT |
+| Module 4 — Provenance / GoldenTrace Hardening | PENDING |
+| Module 5 — Security and Consent Gate | PENDING |
+| Module 6 — Pipeline Core | PENDING |
+| Module 7 — Router and API Boot Repair | PENDING |
+| Module 8 — TransparencyPacket v0.2 | PENDING |
+| Module 9 — UWS Integration Boundary | PENDING |
+| Module 10 — Test Matrix and PR Audit | PENDING |
+
+---
+
 ## Module 1 — Runtime Placement and Contract Spine
+
+**Status:** COMPLETE
 
 **Goal:** Ensure Element 145 lives as the Aluminum OS runtime core under `services/element-145/` and preserve the canonical contract layer.
 
@@ -50,9 +69,11 @@ services/element-145/element145/contracts/
 
 ## Module 2 — Low-Risk Kernel Utilities
 
+**Status:** COMPLETE
+
 **Goal:** Import non-entrypoint runtime utilities from Copilot Phase-1.
 
-**Candidate files:**
+**Files added:**
 
 ```text
 services/element-145/element145/kernel/circuit_breaker.py
@@ -70,6 +91,8 @@ services/element-145/element145/security/permissions.py
 ---
 
 ## Module 3 — Settings and Policy Surface
+
+**Status:** NEXT
 
 **Goal:** Add Phase-1 settings and policy files with production-safety guardrails.
 
@@ -90,6 +113,8 @@ services/element-145/config/policies/security.yaml
 ---
 
 ## Module 4 — Provenance / GoldenTrace Hardening
+
+**Status:** PENDING
 
 **Goal:** Import and repair the ledger/Merkle implementation.
 
@@ -112,6 +137,8 @@ services/element-145/element145/provenance/merkle.py
 
 ## Module 5 — Security and Consent Gate
 
+**Status:** PENDING
+
 **Goal:** Integrate auth, permission, and ConsentKernel stubs.
 
 **Candidate files:**
@@ -132,6 +159,8 @@ services/element-145/element145/governance/consent.py
 ---
 
 ## Module 6 — Pipeline Core
+
+**Status:** PENDING
 
 **Goal:** Import and adapt the Copilot kernel pipeline to Aluminum OS contracts.
 
@@ -166,6 +195,8 @@ TransparencyStage
 
 ## Module 7 — Router and API Boot Repair
 
+**Status:** PENDING
+
 **Goal:** Patch `router/core.py`, `main.py`, middleware, and routes to boot cleanly.
 
 **Required fixes:**
@@ -178,6 +209,8 @@ TransparencyStage
 ---
 
 ## Module 8 — TransparencyPacket v0.2
+
+**Status:** PENDING
 
 **Goal:** Ensure routing output emits the canonical Aluminum OS receipt.
 
@@ -206,6 +239,8 @@ verification
 
 ## Module 9 — UWS Integration Boundary
 
+**Status:** PENDING
+
 **Goal:** Define how Element 145 dispatches through UWS without copying the entire `uws` repo.
 
 **Candidate files:**
@@ -224,6 +259,8 @@ services/element-145/element145/integrations/uws_adapter.py
 
 ## Module 10 — Test Matrix and PR Audit
 
+**Status:** PENDING
+
 **Goal:** Create merge-readiness checks.
 
 **Deliverables:**
@@ -240,9 +277,3 @@ docs/audits/element145-phase1-merge-readiness.md
 - Tests exist for contracts, boot import, and no-op routing.
 - Merge-readiness doc lists pass/fail/TODO.
 - PR can be opened as audited candidate Phase-1 runtime integration.
-
----
-
-## Current Sequence
-
-Start with Module 1, then proceed sequentially unless a blocker requires returning to an earlier module.
