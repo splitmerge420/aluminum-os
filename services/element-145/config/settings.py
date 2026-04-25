@@ -4,12 +4,13 @@ This module intentionally wraps the Copilot Phase-1 configuration shape with
 Aluminum OS safety defaults:
 - production rejects default secrets;
 - CORS is explicit in production;
-- token minting is disabled in production unless explicitly admin-gated.
+- token minting is disabled in production unless explicitly admin-gated;
+- live provider execution is opt-in and never silently falls back to stubs.
 """
 from __future__ import annotations
 
 from functools import lru_cache
-from typing import List
+from typing import List, Optional
 
 from pydantic import Field, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -42,6 +43,13 @@ class Settings(BaseSettings):
     token_minting_admin_only: bool = True
     cors_origins: List[str] = Field(default_factory=lambda: ["http://localhost:8145"])
     cors_allow_credentials: bool = False
+
+    # Provider execution
+    provider_mode: str = "stub"  # stub | live
+    default_provider: str = "local_stub"
+    gemini_api_key: Optional[str] = None
+    gemini_model: str = "gemini-2.5-flash"
+    gemini_timeout_s: float = 30.0
 
     # Storage
     ledger_backend: str = "sqlite"
@@ -79,6 +87,10 @@ class Settings(BaseSettings):
 
     @model_validator(mode="after")
     def enforce_production_safety(self) -> "Settings":
+        if self.provider_mode not in {"stub", "live"}:
+            raise ValueError("E145_PROVIDER_MODE must be 'stub' or 'live'")
+        if self.provider_mode == "live" and self.default_provider == "gemini" and not self.gemini_api_key:
+            raise ValueError("live Gemini mode requires E145_GEMINI_API_KEY")
         if self.is_production:
             if self.security_secret == DEFAULT_DEV_SECRET:
                 raise ValueError("production requires E145_SECURITY_SECRET to be set")
