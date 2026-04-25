@@ -17,6 +17,7 @@ from element145.contracts import (
 )
 from element145.governance.consent import ConsentKernel
 from element145.integrations.uws_adapter import to_uws_envelopes
+from element145.handlers.registry import HandlerRegistry
 
 
 @dataclass
@@ -175,15 +176,27 @@ class DispatchStage:
 
     async def execute(self, ctx: PipelineContext) -> PipelineContext:
         assert ctx.execution_plan is not None
+
+        registry = HandlerRegistry()
+        handler = registry.get("general")
+
+        handler_results = []
+        for op in ctx.execution_plan.operations:
+            result = await handler.handle(op)
+            handler_results.append(result.__dict__)
+
         consent = ctx.consent_decision.model_dump(mode="json") if ctx.consent_decision else {}
+
         envelopes = to_uws_envelopes(
             trace_id=ctx.trace_id,
             operations=ctx.execution_plan.operations,
             consent=consent,
             dry_run=ctx.execution_plan.dry_run,
         )
+
         ctx.result = {
             "status": "ok" if not ctx.execution_plan.dry_run else "dry_run",
+            "handler_results": handler_results,
             "uws_envelopes": envelopes,
         }
         return ctx
