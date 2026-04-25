@@ -14,6 +14,7 @@ from element145.kernel.pipeline import (
 )
 from element145.provenance.ledger import ProvenanceLedger
 from element145.provenance.models import ProvenanceRecord, ProvenanceQuery
+from element145.transparency.packet_v02 import build_packet_from_response
 
 router = APIRouter()
 
@@ -35,6 +36,8 @@ async def route(request: Request, body: dict):
     ctx = await pipeline.execute(body)
 
     ledger: ProvenanceLedger = request.app.state.ledger
+    ledger_record = None
+
     if ctx.sphere_query and ctx.result is not None:
         record = ProvenanceRecord(
             trace_id=ctx.trace_id,
@@ -44,9 +47,15 @@ async def route(request: Request, body: dict):
             output_hash="",  # TODO: hash output
             metadata={"halted": ctx.halted},
         )
-        ledger.append(record)
+        ledger_record = ledger.append(record)
 
-    return ctx.to_response()
+    response = ctx.to_response()
+
+    # Attach TransparencyPacket v0.2
+    packet = build_packet_from_response(response, ledger_record)
+    response["transparency_packet_v02"] = packet.model_dump(mode="json")
+
+    return response
 
 
 @router.get("/provenance")
