@@ -1,0 +1,23 @@
+# Security policy (Phase-1 seed)
+
+version: 0.1
+
+defaults:
+  allow_read: true
+  allow_write: false
+  allow_execute: false
+
+roles:
+  admin:
+    allow_write: true
+    allow_execute: true
+  operator:
+    allow_write: true
+    allow_execute: false
+  viewer:
+    allow_write: false
+    allow_execute: false
+
+constraints:
+  destructive_actions_require_consent: true
+  require_domain_for_sensitive: true
